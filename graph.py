@@ -5,7 +5,7 @@ Northwestern University
 
 Major needed attributes:
 
-- title
+- title  (Sam is attempting to code title as of 4/10, so dinnae t'uch, ken?
 - subtitle
 - xaxis
 - yaxis
