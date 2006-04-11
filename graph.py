@@ -5,8 +5,8 @@ Northwestern University
 
 Major needed attributes:
 
-- title  (Sam is attempting to code title as of 4/10, so dinnae t'uch, ken?
-- subtitle
+- title  (Sam attempted this, check out the xmg_string class)
+- subtitle  (ditto by Sam)
 - xaxis
 - yaxis
 - legend
@@ -16,6 +16,7 @@ Major needed attributes:
 """
 
 from dataset import DataSet
+from xmg_string import XMG_String
 
 INDEX_ORIGIN = 0  # zero or one (one is for losers)
 
@@ -23,9 +24,12 @@ class Graph:
     """Graph class
 
     """
-    def __init__(self, idNumber=-1,
-                 nDataSets=0):
-
+    def __init__(self, idNumber=-1,title=XMG_String(),
+                 subtitle=XMG_String(),nDataSets=0):
+        self.title=title
+        subtitle["label"]="AKA the best of the best"
+        subtitle["size"]=1.0
+        self.subtitle=subtitle
         self.idNumber = idNumber
         self.datasets = []
         self._datasetIndex = INDEX_ORIGIN
@@ -38,7 +42,14 @@ class Graph:
     def __repr__(self):
         lines = []
 
-        lines.append('# G' + str(self.idNumber) + ' formatting info')
+        lines.append('@g' + str(self.idNumber) + ' on')
+        lines.append('@with g' + str(self.idNumber))
+        lines.append('@    view xmin 0.150000')
+        lines.append('@    view xmax 1.150000')
+        lines.append('@    view ymin 0.150000')
+        lines.append('@    view ymax 0.850000')
+        lines.append(self.title.contents('@    title'))
+        lines.append(self.subtitle.contents('@    subtitle'))
         lines.extend(map(str,self.datasets))
 
 	return '\n'.join(lines)
