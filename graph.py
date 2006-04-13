@@ -28,19 +28,17 @@ class Graph:
     """Graph class
 
     """
-<<<<<<< .mine
-    def __init__(self, idNumber = -1,
-                 title = XMG_String(),
-                 subtitle = XMG_String(),
-                 frame = Frame(),
-                 nDataSets = 0):
-=======
     def __init__(self, idNumber=-1,title=Title(),
-                 subtitle=Subtitle(label='AKA the best of the best',size=1.0),
-                 xaxis=Axis(label=XMG_String(type='label',label='Waggle'),orientation='x'),
-                 yaxis=Axis(label=XMG_String(type='label',label='Wiggle'),orientation='y'),
+                 subtitle=Subtitle(label='AKA the best of the best',
+                                   size=1.0),
+                 xaxis=Axis(label=XMG_String(type='label',
+                                             label='Waggle'),
+                            orientation='x'),
+                 yaxis=Axis(label=XMG_String(type='label',
+                                             label='Wiggle'),
+                            orientation='y'),
+                 frame = Frame(),
                  nDataSets=0):
->>>>>>> .r10
         self.title=title
         self.subtitle=subtitle
         self.xaxis=xaxis
@@ -66,12 +64,9 @@ class Graph:
         lines.append('@    view ymax 0.850000')
         lines.append(self.title.contents('@    title'))
         lines.append(self.subtitle.contents('@    subtitle'))
-<<<<<<< .mine
         lines.append(str(self.frame))
-=======
         lines.append(self.xaxis.contents())
         lines.append(self.yaxis.contents())
->>>>>>> .r10
         lines.extend(map(str,self.datasets))
 
 	return '\n'.join(lines)
