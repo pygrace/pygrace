@@ -7,8 +7,8 @@ Major needed attributes:
 
 - title  (Sam attempted this, check out the xmg_string class)
 - subtitle  (ditto by Sam)
-- xaxis
-- yaxis
+- xaxis   (Sam is doing this
+- yaxis   and this)
 - legend
 - frame
 - datasets
