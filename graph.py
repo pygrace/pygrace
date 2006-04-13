@@ -19,6 +19,7 @@ from dataset import DataSet
 from axis import Axis
 from title import Title
 from subtitle import Subtitle
+from xmg_string import XMG_String
 
 INDEX_ORIGIN = 0  # zero or one (one is for losers)
 
@@ -27,14 +28,12 @@ class Graph:
 
     """
     def __init__(self, idNumber=-1,title=Title(),
-                 subtitle=Subtitle(label='AKA the best of the best',size=1.0)
-                 ,xaxis=Axis(orientation='x')
-                 ,yaxis=Axis(orientation='y')
-                 ,nDataSets=0):
+                 subtitle=Subtitle(label='AKA the best of the best',size=1.0),
+                 xaxis=Axis(label=XMG_String(type='label',label='Waggle'),orientation='x'),
+                 yaxis=Axis(label=XMG_String(type='label',label='Wiggle'),orientation='y'),
+                 nDataSets=0):
         self.title=title
         self.subtitle=subtitle
-        xaxis.label.label='Waggle'
-        yaxis.label.label='Wiggle'
         self.xaxis=xaxis
         self.yaxis=yaxis
         self.idNumber = idNumber

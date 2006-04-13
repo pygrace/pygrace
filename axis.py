@@ -18,6 +18,9 @@ class Axis:
         self.label=label
         self.orientation=orientation
 
+    def __getitem__(self, name): return getattr(self, name)
+    def __setitem__(self, name, value): setattr(self, name, value)
+    
     def _prefix(self):
         s='@    ' + self.orientation + 'axis'
         return s

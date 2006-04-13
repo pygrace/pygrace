@@ -49,7 +49,7 @@
 @timestamp rot 10
 @timestamp font "Helvetica"
 @timestamp char size 1.000000
-@timestamp def "Wed Apr 12 20:00:19 2006"
+@timestamp def "Thu Apr 13 10:08:56 2006"
 #
 # =========================================================== Graphs
 @g0 on
@@ -66,13 +66,13 @@
 @    subtitle color "black"
 @    subtitle size 1.0
 @    subtitle font "Helvetica"
-@    xaxis label "Wiggle"
+@    xaxis label "Waggle"
 @    xaxis label color "black"
-@    xaxis label char size 0.8
+@    xaxis label char size 1.5
 @    xaxis label font "Helvetica"
 @    yaxis label "Wiggle"
 @    yaxis label color "black"
-@    yaxis label char size 0.8
+@    yaxis label char size 1.5
 @    yaxis label font "Helvetica"
 #     S0 formatting info
 @g1 on
@@ -89,13 +89,13 @@
 @    subtitle color "black"
 @    subtitle size 1.0
 @    subtitle font "Helvetica"
-@    xaxis label "Wiggle"
+@    xaxis label "Waggle"
 @    xaxis label color "black"
-@    xaxis label char size 0.8
+@    xaxis label char size 1.5
 @    xaxis label font "Helvetica"
 @    yaxis label "Wiggle"
 @    yaxis label color "black"
-@    yaxis label char size 0.8
+@    yaxis label char size 1.5
 @    yaxis label font "Helvetica"
 #     S0 formatting info
 #     S1 formatting info
