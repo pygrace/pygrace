@@ -256,6 +256,9 @@ if __name__ == '__main__':
     g.add_dataset(d)
     x.add_graph(g)
 
+    g.frame.color = 'red'
+    g.frame['type'] = 1
+
     x.define_color('babybrown', (155, 135, 95))
     x['backgroundColor'] = 'babybrown'
 
@@ -273,4 +276,4 @@ if __name__ == '__main__':
     x.write_agr()
     x.write_file()
 
-
+    
