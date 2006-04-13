@@ -9,6 +9,7 @@ Generic xmgrace string class that only has 4 attributes:
 -font
 -color
 -size
+-type  (this is used to discern between title or label type string, important for some outputs)
 
 can be used as a whole or inherited from
 """
@@ -18,11 +19,12 @@ class XMG_String:
 
     """
     def __init__(self, label='The Dogs Bollocks',font='Helvetica',
-                 color='black',size=1.5):
+                 color='black',size=1.5,type='title'):
         self.font=font
         self.color=color
         self.size=size
         self.label=label
+        self.type=type
 
     def __getitem__(self, name): return getattr(self, name)
     def __setitem__(self, name, value): setattr(self, name, value)
@@ -32,7 +34,12 @@ class XMG_String:
 
         lines.append(prefix + ' "'+ str(self.label)+'"')
         lines.append(prefix + ' color "' + str(self.color)+'"')
-        lines.append(prefix + ' size ' + str(self.size))
+        if(self.type == 'title'):
+            lines.append(prefix + ' size ' + str(self.size))
+
+        if(self.type == 'label'):
+            lines.append(prefix + ' char size ' + str(self.size))
+        
         lines.append(prefix + ' font "' + str(self.font)+'"')
 
         return '\n'.join(lines)

@@ -16,7 +16,9 @@ Major needed attributes:
 """
 
 from dataset import DataSet
-from xmg_string import XMG_String
+from axis import Axis
+from title import Title
+from subtitle import Subtitle
 
 INDEX_ORIGIN = 0  # zero or one (one is for losers)
 
@@ -24,12 +26,17 @@ class Graph:
     """Graph class
 
     """
-    def __init__(self, idNumber=-1,title=XMG_String(),
-                 subtitle=XMG_String(),nDataSets=0):
+    def __init__(self, idNumber=-1,title=Title(),
+                 subtitle=Subtitle(label='AKA the best of the best',size=1.0)
+                 ,xaxis=Axis(orientation='x')
+                 ,yaxis=Axis(orientation='y')
+                 ,nDataSets=0):
         self.title=title
-        subtitle["label"]="AKA the best of the best"
-        subtitle["size"]=1.0
         self.subtitle=subtitle
+        xaxis.label.label='Waggle'
+        yaxis.label.label='Wiggle'
+        self.xaxis=xaxis
+        self.yaxis=yaxis
         self.idNumber = idNumber
         self.datasets = []
         self._datasetIndex = INDEX_ORIGIN
@@ -50,6 +57,8 @@ class Graph:
         lines.append('@    view ymax 0.850000')
         lines.append(self.title.contents('@    title'))
         lines.append(self.subtitle.contents('@    subtitle'))
+        lines.append(self.xaxis.contents())
+        lines.append(self.yaxis.contents())
         lines.extend(map(str,self.datasets))
 
 	return '\n'.join(lines)
