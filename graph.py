@@ -88,7 +88,6 @@ class Graph:
         return idNumber
 
 # =============================================================== Test function
-# can dean check this in?  Mos Def!
 if __name__ == '__main__':
     print DataSet()
 
