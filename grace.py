@@ -125,9 +125,10 @@ class Grace:
         for graph in self.graphs:
             for dataset in graph.datasets:
                 idNumbers = (graph.idNumber, dataset.idNumber)
-                lines.append('# @target G%i.S%i' % idNumbers)
-                lines.append('# @type ' + dataset.datatype)
+                lines.append('@target G%i.S%i' % idNumbers)
+                lines.append('@type ' + dataset.datatype)
                 lines.append(dataset._repr_data())
+                lines.append('&');
 
         return '\n'.join(lines)
 
@@ -249,7 +250,7 @@ class Grace:
 # =============================================================== Test function
 if __name__ == '__main__':
     
-    d = DataSet()
+    d = DataSet([[0,0],[1,-1]])
     g = Graph()
     x = Grace()
 
@@ -265,7 +266,7 @@ if __name__ == '__main__':
     x.timestamp['onoroff'] = 'on'
     x.timestamp['angle'] = 10
 
-    d1, d2 = DataSet(), DataSet()
+    d1, d2 = DataSet([[0,0],[1,1]]), DataSet([[0,0],[-1,-1]])
     g1 = Graph()
 
     g1.add_dataset(d1)
