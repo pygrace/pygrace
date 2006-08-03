@@ -69,5 +69,5 @@ for name in _DEFAULT_COLOR_DICTIONARY:
 if __name__ == '__main__':
     print Color(0, 'colorOne', (255,155,55))
     print Color(42, 'colorFortyTwo', (33,133,233))
-
+    
 

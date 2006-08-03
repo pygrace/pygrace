@@ -13,36 +13,89 @@ Generic xmgrace string class that only has 4 attributes:
 
 can be used as a whole or inherited from
 """
+import sys
+
+from xmg_exceptions import SetItemError,AttrError
 
 class XMG_String:
     """
 
     """
-    def __init__(self, label='The Dogs Bollocks',font='Helvetica',
-                 color='black',size=1.5,type='title'):
-        self.font=font
-        self.color=color
-        self.size=size
-        self.label=label
-        self.type=type
+    def __init__(self, colors, fonts,label='',font='Helvetica',
+                 color='black',size=1.0,type='title'):
+        self._colors = colors
+        self._fonts = fonts
+        self['font']=font
+        self['color']=color
+        self['size']=size
+        self['label']=label
+        self['type']=type
 
     def __getitem__(self, name): return getattr(self, name)
-    def __setitem__(self, name, value): setattr(self, name, value)
-    
+
+    #--------------------------------#
+    def __setitem__(self, name, value):
+
+        if type(value) == str and not name == 'label':
+            value = value.replace('"','')
+
+        if name == 'font':
+            try:
+                if self._fonts.has_key(value):
+                    self.font = value
+                else:
+                    intRepr = int(value)
+                    if intRepr >= len(self._fonts.keys()):
+                        raise
+                    else:
+                        self.font = intRepr
+            except: SetItemError(self.__class__,name,value)
+        elif name == 'color':
+            try:
+                if self._colors.has_key(value):
+                    self.color = value
+                else:
+                    intRepr = int(value)
+                    if intRepr >= len(self._colors.keys()):
+                        raise
+                    else:
+                        self.color = intRepr
+            except:
+                SetItemError(self.__class__,name,value)
+        elif name == 'size':
+            try: self.size = float(value)
+            except: SetItemError(self.__class__,name,value)
+        elif name == 'label':
+            try: self.label = value
+            except: SetItemError(self.__class__,name,value)
+                
+        elif name == 'type':
+            try: self.type = value
+            except: SetItemError(self.__class__,name,value)
+        else:
+            AttrError(self.__class__,name)
+        
+
+    #--------------------------------#  
     def contents(self,prefix):
         lines = []
 
         lines.append(prefix + ' "'+ str(self.label)+'"')
-        lines.append(prefix + ' color "' + str(self.color)+'"')
+        lines.append(prefix + ' color %s' %
+                     (type(self.color)==str and ("\"%s\"" % self.color) or self.color))
         if(self.type == 'title'):
             lines.append(prefix + ' size ' + str(self.size))
 
         if(self.type == 'label'):
             lines.append(prefix + ' char size ' + str(self.size))
         
-        lines.append(prefix + ' font "' + str(self.font)+'"')
+        lines.append(prefix + ' font %s' %
+                     (type(self.font)==str and ("\"%s\"" % self.font) or self.font))
 
         return '\n'.join(lines)
+
+
+
 
     """
     Strictly speaking, the __repr__ function should not be used from this class

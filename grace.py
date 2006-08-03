@@ -2,7 +2,7 @@
 """
 Amaral Group
 Northwestern University
-4/4/2006
+8/1/2006
 
 This module contains classes for creating, formatting, and writing xmgrace
 plots from within Python.
@@ -17,12 +17,16 @@ Notes:
 from os import popen
 
 # import from supporting modules
+import sys
 from other import Divider
 from colors import DEFAULT_COLORS, Color
 from fonts import DEFAULT_FONTS, Font
 from timestamp import Timestamp
 from graph import Graph
+from view import View,World
 from dataset import DataSet
+from sizeAdjust import adjust_labels
+from xmg_exceptions import SetItemError, AttrError
 
 HEADER_COMMENT = '# Amaral Group python interface for xmgrace. OH YEAH!'
 INDEX_ORIGIN = 0  # zero or one (one is for losers)
@@ -44,8 +48,8 @@ class Grace:
 	# initialize defaults as class attributes
         self.version = version
         self.width, self.height = width, height
-        self.backgroundColor = backgroundColor
-        self.backgroundFill = backgroundFill        
+        self.background_color = backgroundColor
+        self.background_fill = backgroundFill        
 
 	# initialize default colors and fonts
         self._colors = DEFAULT_COLORS
@@ -54,20 +58,73 @@ class Grace:
         self._fontIndex = len(self._fonts)
 
 	# initialize grace objects
-	self.timestamp = Timestamp()
+	self.timestamp = Timestamp(self._colors,self._fonts)
 
 	self.graphs = []
+        
+        #--FOR MULTI Graphs--#
+        self.graphs_rc = [] #graphs by row and column
+
+        self.xoffset = .1
+        self.rows = 1
+        self.cols = 1
+
+        #------------------# frame ratios
+        self.frame_height = 1
+        self.frame_length = .6
+        #------------------#
+        #For formatting multiple graphs 
+        self.hgap = .1     #horizontal gap between graphs
+        self.vgap = .15    #vertical gap between graphs
+        #--------------#
+
         self._graphIndex = INDEX_ORIGIN
         for i in range(nGraphs):
             self.add_graph()
+        self.drawing_objects = []  #list of strings, lines, boxes and ellipses
 
     # ------------------------------------------------ Grace accessor functions
     # these two function allow access to class attributes just like a
     # dictionary (eg. instance['width'] = 424)
 
     def __getitem__(self, name): return getattr(self, name)
-    def __setitem__(self, name, value): setattr(self, name, value)
+    def __setitem__(self, name, value):
 
+        if type(value) == str:
+            value = value.replace('"','')
+
+        if name == 'version':
+            self.version = value
+        elif name == 'width':
+            try: self.width = int(value)
+            except: SetItemError(self.__class__, value, name)
+        elif name == 'height':
+            try: self.height = int(value)
+            except: SetItemError(self.__class__, value, name)
+        elif name == 'background_color':
+            try:
+                if self._colors.has_key(value):
+                    self.background_color = value
+                else:
+                    intRepr = int(value)
+                    if intRepr >= len(self._colors.keys()):
+                        raise
+                    else:
+                        self.background_color = int(value)
+            except:
+               SetItemError(self.__class__,value,name)
+        elif name == 'background_fill':
+            self.background_fill = value
+        elif name == 'timestamp':
+            if not value.__class__ == Timestamp:
+                SetItemError(self.__class__, value, name)
+            else:
+                self.timestamp = value
+
+        #set 'graphs' attribute?
+         
+        else:
+            AttrError(self.__class__, name)
     # ------------------------------------------------- Grace private functions
     # these functions are used internally by the grace class - there should be
     # no need to use these externally.
@@ -97,12 +154,14 @@ class Grace:
 
         lines.append('@version %s' % self.version)
         lines.append('@page size %i, %i' % (self.width, self.height))
-        lines.append('@page background fill %s' % self.backgroundFill)
+        lines.append('@page background fill %s' % self.background_fill)
         lines.append(str(Divider('Font Definitions','-', 68)))
         lines.extend(map(str,self._sorted_fonts()))
         lines.append(str(Divider('Color Definitions','-', 68)))
         lines.extend(map(str, self._sorted_colors()))
-        lines.append('@background color "%s"' % self.backgroundColor)
+        lines.append('@background color %s' %
+                     (type(self.background_color)==str and ("\"%s\"" % self.background_color) \
+                      or self.background_color))
         lines.append(str(Divider('Timestamp','-', 68)))
 	lines.append(str(self.timestamp))
 
@@ -119,6 +178,8 @@ class Grace:
         lines.append(HEADER_COMMENT)
         lines.append(str(Divider('Header', '=', 68)))
 	lines.append(self._header_string())
+        for drawobj in self.drawing_objects:
+            lines.append(str(drawobj))
         lines.append(str(Divider('Graphs', '=', 68)))
 	lines.extend(map(str,self.graphs))
         lines.append(str(Divider('Data', '=', 68)))
@@ -126,9 +187,9 @@ class Grace:
             for dataset in graph.datasets:
                 idNumbers = (graph.idNumber, dataset.idNumber)
                 lines.append('@target G%i.S%i' % idNumbers)
-                lines.append('@type ' + dataset.datatype)
+                lines.append('@type ' + dataset.type)
                 lines.append(dataset._repr_data())
-                lines.append('&');
+        
 
         return '\n'.join(lines)
 
@@ -230,7 +291,7 @@ class Grace:
         """
         self._fonts[nickName] = Font(self._fontIndex, nickName, officialName)
 	self._fontIndex += 1
-
+        
     def add_graph(self, graph=False):
         """add_graph() -> none
 
@@ -247,34 +308,135 @@ class Grace:
         self._graphIndex += 1
         return idNumber
 
+    def get_graph(self,id):
+        if id >= len(self.graphs):
+            return None
+        else:
+            return self.graphs[id]
+
+    def add_drawing_object(self,obj):
+        self.drawing_objects.append(obj)
+
+    def reset_colors(self):
+        self._colors = {}
+        self._colorIndex = 0
+    def reset_fonts(self):
+        self._fonts = {}
+        self._fontIndex = 0
+
+
+#------------------ FORMAT MULTIPLE GRAPHS -------------------------#
+
+    def multi(self, rows, cols, xoffset=0.2, hgap=None, vgap=None):
+        """Create a grid of graphs with the given number of <rows> and <cols>
+           Makes graph frames all the same size.
+        """
+        self.graphs_rc = [[None for i in range(cols)] for j in range(rows)]
+
+        
+        if not hgap:
+            hgap = .25/cols
+        if not vgap:
+            vgap = .2/rows
+
+        self.hgap = hgap
+        self.vgap = vgap
+        self.xoffset = xoffset
+        self.rows = rows
+        self.cols = cols
+
+        #------ FRAME SIZING-----#
+        if rows > cols:    
+            self.frame_height = (1.0 - (2*vgap+(rows-1)*vgap))/rows
+            self.frame_length = 1.66*self.frame_height 
+        else:
+            self.frame_length = (self.width/self.height - (2*hgap+(cols-1)*hgap))/cols
+            self.frame_height = .6*self.frame_length
+
+        #------------------------#
+
+        if rows*cols >= len(self.graphs):
+            nPlots = len(self.graphs)
+        else:
+            nPlots = rows*cols
+
+        r=0;c=0
+        for i in range(nPlots):
+            self.put(self.graphs[i],r,c)
+            c += 1
+            if c>=cols:
+                c=0
+                r+=1
+                
+    def put(self,g, row, col): # ZERO BASED INDEXING.  Places a graph at postion [row][col]
+        if row >= self.rows:
+            raise
+        if col >= self.cols:
+            raise
+
+        self.graphs_rc[row][col] = g
+
+        
+        
+        g['view']['xmin'] = self.xoffset+(self.hgap+self.frame_length)*col
+        g['view']['ymin'] = 1- ((self.vgap+self.frame_height)*(row+1))
+        g['view']['xmax'] = g['view']['xmin'] + self.frame_length
+        g['view']['ymax'] = g['view']['ymin'] + self.frame_height
+
+        ## sys.stderr.write(str(row)+ ' ' + str(col)+'\n')
+##         sys.stderr.write(str(g['view']['xmin'])+'\n')
+##         sys.stderr.write(str(g['view']['ymin'])+'\n')
+        
+    def get_rc(self,row,col):
+        """Returns the graph in position [row][col]"""
+        return self.graphs_rc[row][col]
+        
 # =============================================================== Test function
 if __name__ == '__main__':
     
-    d = DataSet([[0,0],[1,-1]])
-    g = Graph()
+    
     x = Grace()
+    d = DataSet([(-1,-2),(1,1),(2,3)], x._colors, x._fonts)
+    e = DataSet([(0,0),(1.5,2),(2,2.8)],x._colors, x._fonts)
+    g = Graph(x._colors,x._fonts)
+    g.world = World((.1,.1),(2,3))
+    #g.yaxis['scale'] = 'Logarithmic'
 
     g.add_dataset(d)
+    g.add_dataset(e)
     x.add_graph(g)
+    #d.legend = 'blah'
 
-    g.frame.color = 'red'
-    g.frame['type'] = 1
+    #g.legend['loc'] = (.8,.8)
+
+    #g.legend['color'] = 'red'
+    #g.legend['font'] = "Helvetica"
+    
+    #g.frame.color = 'red'
+    #g.frame['type'] = 1
+
+
 
     x.define_color('babybrown', (155, 135, 95))
-    x['backgroundColor'] = 'babybrown'
+    #x['backgroundColor'] = 'babybrown'
+    #sys.err.write(_colors["red"])
 
-    x.timestamp['onoroff'] = 'on'
-    x.timestamp['angle'] = 10
+    x.timestamp['onoff'] = 'on'
+    x.timestamp['rot'] = 5
 
-    d1, d2 = DataSet([[0,0],[1,1]]), DataSet([[0,0],[-1,-1]])
-    g1 = Graph()
+##     d1, d2 = DataSet(), DataSet()
+##     g1 = Graph()
 
-    g1.add_dataset(d1)
-    g1.add_dataset(d2)
-    x.add_graph(g1)
+##     g1.add_dataset(d1)
+##     g1.add_dataset(d2)
+
+##     x.add_graph(g1)
+
+    #adjust_labels(g,.5)
     
     print x
     x.write_agr()
     x.write_file()
 
     
+
