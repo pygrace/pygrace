@@ -35,11 +35,10 @@ def default_style(grace,scale_type): # For one graph, with approx. golden ratio 
         graph['yaxis']['label']['label']['font'] = 'Helvetica'
         graph['xaxis']['ticklabel']['font'] = 'Helvetica'
         graph['yaxis']['ticklabel']['font'] = 'Helvetica'
-       
-        #--------------------------------------------#
         graph['xaxis']['ticklabel']['char_size'] = 1.4
         graph['yaxis']['ticklabel']['char_size'] = 1.4
-        #--------Tick and Frame Widths--------------#
+
+        #--------Tick and Frame Line Widths--------------#
         graph['frame']['linewidth'] = 2
         graph['xaxis']['bar']['linewidth'] = 2
         graph['yaxis']['bar']['linewidth'] = 2
@@ -50,14 +49,12 @@ def default_style(grace,scale_type): # For one graph, with approx. golden ratio 
         graph['legend']['box_linewidth'] = 2
 
         #---------Title and Axis Label Sizes----------#
-        
         graph['title']['size'] = 2.2        
         graph['subtitle']['size'] = 1.4
         graph['xaxis']['label']['label']['size'] = 1.8
         graph['yaxis']['label']['label']['size'] = 1.8
 
         #----------- Data Linewidth ------------------#
-
         color_index = 1
 
         for dataset in graph.datasets:

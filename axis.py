@@ -216,10 +216,10 @@ class XMG_Tick:
         self['minor_linestyle'] = minor_linestyle
         self['minor_grid']=minor_grid
         self['place'] = place
-        self['spec'] = spec
+        self.spec_ticks = []
+        self['spec'] = len(self.spec_ticks)
         self['spec_type'] = spec_type
 
-        self.spec_ticks = []
 
     def __getitem__(self,name): return getattr(self,name)
 
@@ -623,12 +623,12 @@ class Axis:
         lines.extend(self.ticklabel.repr(self.orientation))
         lines.append('@    '+self.orientation+'axis  tick place ' + str(self.tick['place']))
         lines.append('@    '+self.orientation+'axis  tick spec type ' + str(self.tick['spec_type']))
-        lines.append('@    '+self.orientation+'axis  tick spec ' + str(self.tick['spec']))
+        lines.append('@    '+self.orientation+'axis  tick spec ' + str(len(self.tick.spec_ticks)))
 
         #-----special ticks-------#
         for item in self.tick.spec_ticks:
             if item[0] == 'ticklabel':
-                lines.append('@    '+self.orientation+'axis  ticklabel ' + str(item[1]) + ', ' + str(item[2]) +'')
+                lines.append('@    '+self.orientation+'axis  ticklabel ' + str(item[1]) + ', "' + str(item[2]) +'"')
             else:
                 lines.append('@    '+self.orientation+'axis  tick ' + str(item[0]) + ' ' + str(item[1]) + ',' + str(item[2]))
         #-------------------------#

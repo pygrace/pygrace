@@ -63,7 +63,7 @@ class XMG_Symbol:
                  linewidth = 1.0,
                  linestyle = 1,
                  char = 65,
-                char_font = 0,
+                 char_font = 0,
                  skip = 0):
         self._colors = colors
         self._fonts = fonts

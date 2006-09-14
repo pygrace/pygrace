@@ -69,15 +69,21 @@ class Grace:
         self.rows = 1
         self.cols = 1
 
-        #------------------# frame ratios
-        self.frame_height = 1
-        self.frame_length = .6
-        #------------------#
-        #For formatting multiple graphs 
-        self.hgap = .1     #horizontal gap between graphs
-        self.vgap = .15    #vertical gap between graphs
-        #--------------#
+        # maximum frame ratios in viewport units
+        if height>width:
+            self.max_frame_width = 1.0;
+            self.max_frame_height = float(height)/float(width);
+        else:
+            self.max_frame_width = float(width)/float(height);
+            self.max_frame_height = 1.0;
 
+        # used for fomatting multiple graphs
+        self.frame_height = None   # height of one graph
+        self.frame_width = None    # width of one graph
+        self.hgap = None           # horizontal gap between graphs
+        self.vgap = None           # vertical gap between graphs
+
+        #--------------#
         self._graphIndex = INDEX_ORIGIN
         for i in range(nGraphs):
             self.add_graph()
@@ -327,32 +333,36 @@ class Grace:
 
 #------------------ FORMAT MULTIPLE GRAPHS -------------------------#
 
-    def multi(self, rows, cols, xoffset=0.2, hgap=None, vgap=None):
+    def multi(self, rows, cols, hoffset=0.2, voffset=0.2,hgap=0.1, vgap=0.1):
         """Create a grid of graphs with the given number of <rows> and <cols>
            Makes graph frames all the same size.
         """
         self.graphs_rc = [[None for i in range(cols)] for j in range(rows)]
 
-        
-        if not hgap:
-            hgap = .25/cols
-        if not vgap:
-            vgap = .2/rows
-
         self.hgap = hgap
         self.vgap = vgap
-        self.xoffset = xoffset
+        self.hoffset = hoffset
+        self.voffset = voffset
         self.rows = rows
         self.cols = cols
 
         #------ FRAME SIZING-----#
-        if rows > cols:    
-            self.frame_height = (1.0 - (2*vgap+(rows-1)*vgap))/rows
-            self.frame_length = 1.66*self.frame_height 
-        else:
-            self.frame_length = (self.width/self.height - (2*hgap+(cols-1)*hgap))/cols
-            self.frame_height = .6*self.frame_length
+        # want to have frames all the same size, but also need to take
+        # advantage of the entire canvas.  first check to see which
+        # dimension will be more prohibitive (desired ratio is
+        # width/height = 1.66)
 
+        # proposed frame height and width of each graph
+        self.frame_height = (self.max_frame_height - (2*voffset+(rows-1)*vgap))/rows
+        self.frame_width =  (self.max_frame_width - (2*hoffset+(cols-1)*hgap))/cols
+
+        # want a height/width ratio of 1/1.66, see which dimension is
+        # more prohibitive and change it
+        if self.frame_width/self.frame_height > 1.66:
+            self.frame_width = 1.66*self.frame_height
+        else:
+            self.frame_height = self.frame_width/1.66;
+        
         #------------------------#
 
         if rows*cols >= len(self.graphs):
@@ -376,11 +386,9 @@ class Grace:
 
         self.graphs_rc[row][col] = g
 
-        
-        
-        g['view']['xmin'] = self.xoffset+(self.hgap+self.frame_length)*col
-        g['view']['ymin'] = 1- ((self.vgap+self.frame_height)*(row+1))
-        g['view']['xmax'] = g['view']['xmin'] + self.frame_length
+        g['view']['xmin'] = self.hoffset+(self.hgap+self.frame_width)*col
+        g['view']['ymin'] = self.max_frame_height - self.voffset - ((self.vgap+self.frame_height)*(row+1))
+        g['view']['xmax'] = g['view']['xmin'] + self.frame_width
         g['view']['ymax'] = g['view']['ymin'] + self.frame_height
 
         ## sys.stderr.write(str(row)+ ' ' + str(col)+'\n')
@@ -391,6 +399,25 @@ class Grace:
         """Returns the graph in position [row][col]"""
         return self.graphs_rc[row][col]
         
+
+    def set_fonts(self,font_type):
+        """Set all fonts in grace object to be font_type
+        """
+
+        self.timestamp.font = font_type;
+        for graph in self.graphs:
+            graph.title.font = font_type
+            graph.subtitle.font = font_type;
+            graph.legend.font = font_type
+            graph.xaxis.label.label.font = font_type;
+            graph.yaxis.label.label.font = font_type;
+            graph.xaxis.ticklabel.font = font_type;
+            graph.yaxis.ticklabel.font = font_type;
+
+            for dataset in graph.datasets:
+                dataset.symbol.char_font = font_type;
+                dataset.avalue.font = font_type
+                
 # =============================================================== Test function
 if __name__ == '__main__':
     

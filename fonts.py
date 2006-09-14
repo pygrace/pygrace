@@ -42,7 +42,7 @@ class Font:
     object (eg. @timestamp font 0, NOT @timestamp font \"smarmy\")
     """
     def __init__(self,
-                 index = 0,
+                 index = 4,
                  nickName = '',
                  officialName = ''
                  ):
