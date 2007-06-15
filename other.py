@@ -25,7 +25,7 @@ class Divider:
     # ********************************** Great
     
     """
-    def __init__(self, label, symbol='=', length=60, commentChar='#'):
+    def __init__(self, label, symbol='=', length=79, commentChar='#'):
 	self.chars = ['#\n#',' ']
 	self.chars.extend([char for char in ' ' + label])
 	while len(self.chars) < length:
@@ -36,7 +36,7 @@ class Divider:
 
 # =============================================================== Test function
 if __name__ == '__main__':
-    print Divider('Gomer', '-', 79)
+    print Divider('Gomer')
     print Divider('DividerMaster2000', '*', 79)
     print Divider('Shorty', '>', 40)
 

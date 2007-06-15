@@ -142,7 +142,7 @@ class Text:
                  color = 1,
                  rot = 0,
                  font = 1,
-                 just = 10, #?
+                 just = 0, #?
                  char_size = 1.0,
                  text = ""):
         self._colors = colors

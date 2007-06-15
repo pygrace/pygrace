@@ -22,7 +22,7 @@ from other import Divider
 from colors import DEFAULT_COLORS, Color
 from fonts import DEFAULT_FONTS, Font
 from timestamp import Timestamp
-from graph import Graph
+from grace_graph import Graph
 from view import View,World
 from dataset import DataSet
 from sizeAdjust import adjust_labels
@@ -207,7 +207,7 @@ class Grace:
         # format filename (include the correct file extension)
         if not filename.split('.')[-1].upper() == 'AGR':
             filename = filename + '.agr'
-
+        
         # write file
 	outfile = open(filename,'w')
 	outfile.write(str(self))
@@ -232,7 +232,7 @@ class Grace:
 
         # make command that will be piped to
         command = 'xmgrace -hardcopy -hdevice ' + filetype.upper() + \
-                  ' -printfile ' + filename + ' -pipe'
+                  ' -printfile "' + filename + '" -pipe'
 
         # set up a file as an INPUT pipe to command
         pipeInput = popen(command, 'w')
