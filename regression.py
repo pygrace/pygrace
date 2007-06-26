@@ -32,7 +32,7 @@ def linreg(X, Y):
     return slope, intercept, R, reg
 
 def expreg(X, Y):
-    from math import exp,log
+    from math import exp,log,sqrt
     if len(X) != len(Y): raise ValueError, 'unequal length'
     N = len(X)
     y2=[]
