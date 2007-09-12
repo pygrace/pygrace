@@ -212,8 +212,8 @@ class XMG_Line:
         
         if name == 'type':
             try:
-                if linestyles.has_key(value):
-                    self.type = linestyles[value]
+                if linetypes.has_key(value):
+                    self.type = linetypes[value]
                 else:
                     self.type = int(value)
             except: SetItemError(self.__class__, name, value)

@@ -42,7 +42,7 @@ class Grace:
     def __init__(self, nGraphs=0,
 		 version='50114',
 		 width=792, height=612,
-		 backgroundColor='white', backgroundFill='on'
+		 backgroundColor='white', backgroundFill='off'
 		 ):
 
 	# initialize defaults as class attributes
@@ -213,8 +213,8 @@ class Grace:
 	outfile.write(str(self))
 	outfile.close()
 
-    def write_file(self, filename='temp.eps', filetype='eps'):
-        """write_file(filename='temp.eps', filetype='eps') -> none.
+    def write_file(self, filename='temp.eps', filetype='EPS'):
+        """write_file(filename='temp.eps', filetype='EPS') -> none.
 
         This function uses xmgrace to output a image file of the specified
         type.  Here are the allowed types (for version 5.1.14):
@@ -226,12 +226,12 @@ class Grace:
         returns a file object in write mode, that will be sent to the command
         once the file object is closed (after writing stuff to it).
         """
-        # format filename (include correct file extension)
-        if not filename.split('.')[-1].upper() == filetype.upper():
-            filename = filename + '.' + filetype.lower()
+##         # format filename (include correct file extension)
+##         if not filename.split('.')[-1].upper() == filetype.upper():
+##             filename = filename + '.' + filetype.lower()
 
         # make command that will be piped to
-        command = 'xmgrace -hardcopy -hdevice ' + filetype.upper() + \
+        command = 'xmgrace -hardcopy -hdevice ' + filetype + \
                   ' -printfile "' + filename + '" -pipe'
 
         # set up a file as an INPUT pipe to command
@@ -333,7 +333,8 @@ class Grace:
 
 #------------------ FORMAT MULTIPLE GRAPHS -------------------------#
 
-    def multi(self, rows, cols, hoffset=0.2, voffset=0.2,hgap=0.1, vgap=0.1):
+    def multi(self, rows, cols, hoffset=0.2, voffset=0.2,hgap=0.1, vgap=0.1,
+              width_to_height_ratio=1.66):
         """Create a grid of graphs with the given number of <rows> and <cols>
            Makes graph frames all the same size.
         """
@@ -353,15 +354,17 @@ class Grace:
         # width/height = 1.66)
 
         # proposed frame height and width of each graph
-        self.frame_height = (self.max_frame_height - (2*voffset+(rows-1)*vgap))/rows
-        self.frame_width =  (self.max_frame_width - (2*hoffset+(cols-1)*hgap))/cols
+        self.frame_height = (self.max_frame_height - 2*voffset \
+                             - (rows-1)*vgap)/rows
+        self.frame_width = (self.max_frame_width - 2*hoffset \
+                            - (cols-1)*hgap)/cols
 
-        # want a height/width ratio of 1/1.66, see which dimension is
+        # want a width/height ratio of 1.66, see which dimension is
         # more prohibitive and change it
-        if self.frame_width/self.frame_height > 1.66:
-            self.frame_width = 1.66*self.frame_height
+        if self.frame_width/self.frame_height > width_to_height_ratio:
+            self.frame_width = width_to_height_ratio*self.frame_height
         else:
-            self.frame_height = self.frame_width/1.66;
+            self.frame_height = self.frame_width/width_to_height_ratio;
         
         #------------------------#
 
@@ -387,7 +390,8 @@ class Grace:
         self.graphs_rc[row][col] = g
 
         g['view']['xmin'] = self.hoffset+(self.hgap+self.frame_width)*col
-        g['view']['ymin'] = self.max_frame_height - self.voffset - ((self.vgap+self.frame_height)*(row+1))
+        g['view']['ymin'] = self.max_frame_height - self.voffset - \
+                            self.vgap*row - self.frame_height*(row+1)
         g['view']['xmax'] = g['view']['xmin'] + self.frame_width
         g['view']['ymax'] = g['view']['ymin'] + self.frame_height
 
@@ -418,6 +422,28 @@ class Grace:
                 dataset.symbol.char_font = font_type;
                 dataset.avalue.font = font_type
                 
+    def get_eps_frame_coords(self):
+        """For each graph, obtain the eps coordinates of the frame
+        within the figure.  This is useful for aligning things in
+        external programs such as xfig.
+        """
+        eps_frame_coords = []
+        for graph in self.graphs:
+
+            # height is the limiting dimension in viewport coordinates
+            if self.width>self.height:
+                lim_dimension = float(self.height)
+            else:
+                lim_dimension = float(self.width)
+            xmin = graph.view.xmin*lim_dimension
+            xmax = graph.view.xmax*lim_dimension
+            ymin = graph.view.ymin*lim_dimension
+            ymax = graph.view.ymax*lim_dimension
+            eps_frame_coords.append((xmin,xmax,ymin,ymax))
+        return eps_frame_coords
+            
+        
+
 # =============================================================== Test function
 if __name__ == '__main__':
     
@@ -426,7 +452,7 @@ if __name__ == '__main__':
     d = DataSet([(-1,-2),(1,1),(2,3)], x._colors, x._fonts)
     e = DataSet([(0,0),(1.5,2),(2,2.8)],x._colors, x._fonts)
     g = Graph(x._colors,x._fonts)
-    g.world = World((.1,.1),(2,3))
+##     g.world = World((.1,.1),(2,3))
     #g.yaxis['scale'] = 'Logarithmic'
 
     g.add_dataset(d)
@@ -448,8 +474,8 @@ if __name__ == '__main__':
     #x['backgroundColor'] = 'babybrown'
     #sys.err.write(_colors["red"])
 
-    x.timestamp['onoff'] = 'on'
-    x.timestamp['rot'] = 5
+##     x.timestamp['onoff'] = 'on'
+##     x.timestamp['rot'] = 5
 
 ##     d1, d2 = DataSet(), DataSet()
 ##     g1 = Graph()
@@ -464,6 +490,5 @@ if __name__ == '__main__':
     print x
     x.write_agr()
     x.write_file()
-
     
 
