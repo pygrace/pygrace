@@ -175,7 +175,8 @@ class XMG_Symbol:
         lines.append('@    s' + str(id) + ' symbol color %s' %
                      (type(self.color)==str and ("\"%s\"" % self.color) or self.color));
         lines.append('@    s' + str(id) + ' symbol pattern ' + str(self.pattern));
-        lines.append('@    s' + str(id) + ' symbol fill color ' + str(self.fill_color));
+        lines.append('@    s' + str(id) + ' symbol fill color %s' %
+                     (type(self.fill_color)==str and ("\"%s\"" % self.fill_color) or self.fill_color));
         lines.append('@    s' + str(id) + ' symbol fill pattern ' + str(self.fill_pattern));
         lines.append('@    s' + str(id) + ' symbol linewidth ' + str(self.linewidth));
         lines.append('@    s' + str(id) + ' symbol linestyle ' + str(self.linestyle));

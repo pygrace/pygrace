@@ -17,17 +17,17 @@ from xmg_exceptions import SetItemError,AttrError
 # useful data structures
 #---------------------------------------------------------------------------
 shapes = {"None":0,
-          "Circle":1,
-          "Square":2,
-          "Diamond":3,
-          "Triangle up":4,
-          "Triangle left":5,
-          "Triangle down":6,
-          "Triangle right":7,
-          "Plus":8,
-          "X":9,
-          "Star":10,
-          "Char":11};
+        "Circle":1,
+        "Square":2,
+        "Diamond":3,
+        "Triangle up":4,
+        "Triangle left":5,
+        "Triangle down":6,
+        "Triangle right":7,
+        "Plus":8,
+        "X":9,
+        "Star":10,
+        "Char":11};
 
 linetypes = {"None":0,
              "Straight":1,
@@ -55,13 +55,14 @@ class XMG_Bar:
                  onoff='on',
                  color='black',
                  linestyle='. . ',
-                 linewidth=1.0):
+                 linewidth=1.0,
+                 ):
         self._colors=colors
         self['onoff'] = onoff
         self['color'] = color
         self['linestyle'] = linestyle
         self['linewidth'] = linewidth
-
+        
     def __getitem__(self,name): return getattr(self,name)
 
     def __setitem__(self, name, value):
@@ -98,15 +99,14 @@ class XMG_Bar:
             AttrError(self.__class__, name)
 
 
-    def repr(self, orientation):
-
+    def repr(self, orientation, alt=''):
         lines = []
 
-        lines.append('@    ' + orientation +'axis  bar '  + str(self.onoff))
-        lines.append('@    ' + orientation +'axis  bar color %s' %
+        lines.append('@    ' + alt+orientation +'axis  bar '  + str(self.onoff))
+        lines.append('@    ' + alt+orientation +'axis  bar color %s' %
                      (type(self.color)==str and ("\"%s\"" % self.color) or self.color));
-        lines.append('@    ' + orientation +'axis  bar linestyle '  + str(self.linestyle))
-        lines.append('@    ' + orientation +'axis  bar linewidth '  + str(self.linewidth))
+        lines.append('@    ' + alt+orientation +'axis  bar linestyle '  + str(self.linestyle))
+        lines.append('@    ' + alt+orientation +'axis  bar linewidth '  + str(self.linewidth))
         
         return lines
 #---------------------------------------------------------------------
@@ -118,7 +118,8 @@ class XMG_Label:
     def __init__(self, colors, fonts,
                  label=None,
                  layout = 'para',
-                 place = 'auto'):
+                 place = 'auto',
+                 ):
         self._colors = colors
         self._fonts = fonts
         if label:
@@ -127,6 +128,7 @@ class XMG_Label:
             self['label'] = XMG_String(colors = self._colors, fonts=self._fonts,type='label')
         self['layout'] = layout
         self['place'] = place
+
         self.place_tup = None #this should be a tuple type
 
     def __getitem__(self,name): return getattr(self,name)
@@ -158,10 +160,10 @@ class XMG_Label:
             AttrError(self.__class__,name)
 
 
-    def repr(self, orientation):
+    def repr(self, orientation, alt=''):
 
         lines = []
-        prefix = '@    ' + orientation + 'axis  label'
+        prefix = '@    ' + alt+orientation + 'axis  label'
 
         lines.append(prefix + ' layout ' + str(self.layout))
         lines.append(prefix + ' place ' + str(self.place))
@@ -197,7 +199,8 @@ class XMG_Tick:
                  minor_grid='off',
                  place='both',
                  spec=0,
-                 spec_type='none'):
+                 spec_type='none',
+                 ):
         self._colors = colors
         self['onoff'] = onoff
         self['major'] = major
@@ -219,7 +222,6 @@ class XMG_Tick:
         self.spec_ticks = []
         self['spec'] = len(self.spec_ticks)
         self['spec_type'] = spec_type
-
 
     def __getitem__(self,name): return getattr(self,name)
 
@@ -326,28 +328,27 @@ class XMG_Tick:
             SetItemError(self.__class__,'spec_ticks',attr)
 
         
-    def repr(self, orientation):
-
+    def repr(self, orientation, alt=''):
         lines = []
 
-        lines.append('@    ' + orientation +'axis  tick '  + str(self.onoff))
-        lines.append('@    ' + orientation +'axis  tick major '  + str(self.major))
-        lines.append('@    ' + orientation +'axis  tick minor ticks '  + str(self.minor_ticks))
-        lines.append('@    ' + orientation +'axis  tick default '  + str(self.default))
-        lines.append('@    ' + orientation +'axis  tick place rounded '  + str(self.place_rounded))
-        lines.append('@    ' + orientation +'axis  tick '  + str(self.inout))
-        lines.append('@    ' + orientation +'axis  tick major size '  + str(self.major_size))
-        lines.append('@    ' + orientation +'axis  tick major color %s' % 
+        lines.append('@    ' + alt+orientation +'axis  tick '  + str(self.onoff))
+        lines.append('@    ' + alt+orientation +'axis  tick major '  + str(self.major))
+        lines.append('@    ' + alt+orientation +'axis  tick minor ticks '  + str(self.minor_ticks))
+        lines.append('@    ' + alt+orientation +'axis  tick default '  + str(self.default))
+        lines.append('@    ' + alt+orientation +'axis  tick place rounded '  + str(self.place_rounded))
+        lines.append('@    ' + alt+orientation +'axis  tick '  + str(self.inout))
+        lines.append('@    ' + alt+orientation +'axis  tick major size '  + str(self.major_size))
+        lines.append('@    ' + alt+orientation +'axis  tick major color %s' % 
                      (type(self.major_color)==str and ("\"%s\"" % self.major_color) or self.major_color));
-        lines.append('@    ' + orientation +'axis  tick major linewidth '  + str(self.major_linewidth))
-        lines.append('@    ' + orientation +'axis  tick major linestyle '  + str(self.major_linestyle))
-        lines.append('@    ' + orientation +'axis  tick major grid '  + str(self.major_grid))
-        lines.append('@    ' + orientation +'axis  tick minor color %s' % 
+        lines.append('@    ' + alt+orientation +'axis  tick major linewidth '  + str(self.major_linewidth))
+        lines.append('@    ' + alt+orientation +'axis  tick major linestyle '  + str(self.major_linestyle))
+        lines.append('@    ' + alt+orientation +'axis  tick major grid '  + str(self.major_grid))
+        lines.append('@    ' + alt+orientation +'axis  tick minor color %s' % 
                      (type(self.minor_color)==str and ("\"%s\"" % self.minor_color) or self.minor_color));
-        lines.append('@    ' + orientation +'axis  tick minor linewidth '  + str(self.minor_linewidth))
-        lines.append('@    ' + orientation +'axis  tick minor linestyle '  + str(self.minor_linestyle))
-        lines.append('@    ' + orientation +'axis  tick minor grid '  + str(self.minor_grid))
-        lines.append('@    ' + orientation +'axis  tick minor size '  + str(self.minor_size))
+        lines.append('@    ' + alt+orientation +'axis  tick minor linewidth '  + str(self.minor_linewidth))
+        lines.append('@    ' + alt+orientation +'axis  tick minor linestyle '  + str(self.minor_linestyle))
+        lines.append('@    ' + alt+orientation +'axis  tick minor grid '  + str(self.minor_grid))
+        lines.append('@    ' + alt+orientation +'axis  tick minor size '  + str(self.minor_size))
         
         return lines
 #---------------------------------------------------------------------
@@ -375,7 +376,8 @@ class XMG_Ticklabel:
                  stop = 0.00000,
                  char_size = 1.00000,
                  font=0,
-                 color=1):
+                 color=1,
+                 ):
         self._colors = colors
         self._fonts = fonts
         self['onoff'] = onoff
@@ -486,30 +488,29 @@ class XMG_Ticklabel:
         else:
             AttrError(self.__class__,name)
 
-    def repr(self, orientation):
-
+    def repr(self, orientation, alt=''):
         lines = []
 
-        lines.append('@    ' + orientation +'axis  ticklabel '  + str(self.onoff))
-        lines.append('@    ' + orientation +'axis  ticklabel format '  + str(self.format))
-        lines.append('@    ' + orientation +'axis  ticklabel prec '  + str(self.prec))
-        lines.append('@    ' + orientation +'axis  ticklabel formula "%s"'  % self.formula)
-        lines.append('@    ' + orientation +'axis  ticklabel append "%s"' % self.append)
-        lines.append('@    ' + orientation +'axis  ticklabel prepend "%s"' % self.prepend)
-        lines.append('@    ' + orientation +'axis  ticklabel angle '  + str(self.angle))
-        lines.append('@    ' + orientation +'axis  ticklabel skip '  + str(self.skip))
-        lines.append('@    ' + orientation +'axis  ticklabel stagger '  + str(self.stagger))
-        lines.append('@    ' + orientation +'axis  ticklabel place '  + str(self.place))
-        lines.append('@    ' + orientation +'axis  ticklabel offset '  + str(self.offset1))
-        lines.append('@    ' + orientation +'axis  ticklabel offset '  + str(self.offset2)[1:-1])
-        lines.append('@    ' + orientation +'axis  ticklabel start type '  + str(self.start_type))
-        lines.append('@    ' + orientation +'axis  ticklabel start '  + str(self.start))
-        lines.append('@    ' + orientation +'axis  ticklabel stop type '  + str(self.stop_type))
-        lines.append('@    ' + orientation +'axis  ticklabel stop '  + str(self.stop))
-        lines.append('@    ' + orientation +'axis  ticklabel char size '  + str(self.char_size))
-        lines.append('@    ' + orientation +'axis  ticklabel font %s' % 
+        lines.append('@    ' + alt+orientation +'axis  ticklabel '  + str(self.onoff))
+        lines.append('@    ' + alt+orientation +'axis  ticklabel format '  + str(self.format))
+        lines.append('@    ' + alt+orientation +'axis  ticklabel prec '  + str(self.prec))
+        lines.append('@    ' + alt+orientation +'axis  ticklabel formula "%s"'  % self.formula)
+        lines.append('@    ' + alt+orientation +'axis  ticklabel append "%s"' % self.append)
+        lines.append('@    ' + alt+orientation +'axis  ticklabel prepend "%s"' % self.prepend)
+        lines.append('@    ' + alt+orientation +'axis  ticklabel angle '  + str(self.angle))
+        lines.append('@    ' + alt+orientation +'axis  ticklabel skip '  + str(self.skip))
+        lines.append('@    ' + alt+orientation +'axis  ticklabel stagger '  + str(self.stagger))
+        lines.append('@    ' + alt+orientation +'axis  ticklabel place '  + str(self.place))
+        lines.append('@    ' + alt+orientation +'axis  ticklabel offset '  + str(self.offset1))
+        lines.append('@    ' + alt+orientation +'axis  ticklabel offset '  + str(self.offset2)[1:-1])
+        lines.append('@    ' + alt+orientation +'axis  ticklabel start type '  + str(self.start_type))
+        lines.append('@    ' + alt+orientation +'axis  ticklabel start '  + str(self.start))
+        lines.append('@    ' + alt+orientation +'axis  ticklabel stop type '  + str(self.stop_type))
+        lines.append('@    ' + alt+orientation +'axis  ticklabel stop '  + str(self.stop))
+        lines.append('@    ' + alt+orientation +'axis  ticklabel char size '  + str(self.char_size))
+        lines.append('@    ' + alt+orientation +'axis  ticklabel font %s' % 
                      (type(self.font)==str and ("\"%s\"" % self.font) or self.font));
-        lines.append('@    ' + orientation +'axis  ticklabel color %s' % 
+        lines.append('@    ' + alt+orientation +'axis  ticklabel color %s' % 
                      (type(self.color)==str and ("\"%s\"" % self.color) or self.color));
         return lines
             
@@ -529,7 +530,8 @@ class Axis:
                  label = None,
                  tick = None,
                  ticklabel = None,
-                 orientation = 'x'):
+                 orientation = 'x',
+                 alt=None):
 
         self._colors = colors
         self._fonts = fonts
@@ -538,6 +540,11 @@ class Axis:
         self['onoff'] = onoff
         self['type_zero']=type_zero
         self['offset']=offset
+        if alt:
+            self['alt'] = 'alt'
+            self['onoff'] = 'off'
+        else:
+            self['alt'] = ''
         if bar:
             self['bar'] = bar
         else:
@@ -587,6 +594,8 @@ class Axis:
                 SetItemError(self.__class__,name,value)
             else:
                 self.bar = value
+        elif name =='alt':
+            self.alt = value
         elif name == 'label':
             if not value.__class__ == XMG_Label:
                 SetItemError(self.__class__,name,value)
@@ -611,26 +620,27 @@ class Axis:
 
 
     def __repr__(self):
+        alt=self.alt
         lines = []
         lines.append('@    '+self.orientation+'axes  scale ' + str(self['scale']))
         lines.append('@    '+self.orientation+'axes  invert ' + str(self['invert']))
-        lines.append('@    '+self.orientation+'axis  ' + str(self['onoff']))
-        lines.append('@    '+self.orientation+'axis  type zero ' + str(self['type_zero']))
-        lines.append('@    '+self.orientation+'axis  offset ' + str(self.offset)[1:-1])
-        lines.extend(self.bar.repr(self.orientation))
-        lines.extend(self.label.repr(self.orientation))
-        lines.extend(self.tick.repr(self.orientation))
-        lines.extend(self.ticklabel.repr(self.orientation))
-        lines.append('@    '+self.orientation+'axis  tick place ' + str(self.tick['place']))
-        lines.append('@    '+self.orientation+'axis  tick spec type ' + str(self.tick['spec_type']))
-        lines.append('@    '+self.orientation+'axis  tick spec ' + str(len(self.tick.spec_ticks)))
+        lines.append('@    '+alt+self.orientation+'axis  ' + str(self['onoff']))
+        lines.append('@    '+alt+self.orientation+'axis  type zero ' + str(self['type_zero']))
+        lines.append('@    '+alt+self.orientation+'axis  offset ' + str(self.offset)[1:-1])
+        lines.extend(self.bar.repr(self.orientation, alt))
+        lines.extend(self.label.repr(self.orientation, alt))
+        lines.extend(self.tick.repr(self.orientation, alt))
+        lines.extend(self.ticklabel.repr(self.orientation, alt))
+        lines.append('@    '+alt+self.orientation+'axis  tick place ' + str(self.tick['place']))
+        lines.append('@    '+alt+self.orientation+'axis  tick spec type ' + str(self.tick['spec_type']))
+        lines.append('@    '+alt+self.orientation+'axis  tick spec ' + str(len(self.tick.spec_ticks)/2))
 
         #-----special ticks-------#
         for item in self.tick.spec_ticks:
             if item[0] == 'ticklabel':
-                lines.append('@    '+self.orientation+'axis  ticklabel ' + str(item[1]) + ', "' + str(item[2]) +'"')
+                lines.append('@    '+alt+self.orientation+'axis  ticklabel ' + str(item[1]) + ', "' + str(item[2]) +'"')
             else:
-                lines.append('@    '+self.orientation+'axis  tick ' + str(item[0]) + ' ' + str(item[1]) + ',' + str(item[2]))
+                lines.append('@    '+alt+self.orientation+'axis  tick ' + str(item[0]) + ' ' + str(item[1]) + ',' + str(item[2]))
         #-------------------------#
 
         

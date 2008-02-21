@@ -33,7 +33,21 @@ _DEFAULT_COLOR_DICTIONARY = {
     "mjs_dark_red":      [18,    (160,   5,   0)],
     "mjs_dark_grey":     [19,    (127, 127, 127)],
     "mjs_light_orange":  [20,    (255, 220, 120)],
+    "mjs_color_2":       [21,    (190, 65, 65)],
+    "mjs_color_1":       [22,    (65, 190, 65)],
+    "mjs_color_0":       [23,    (65, 65, 190)],
+    "mjs_color_3":       [24,    (0, 0, 0)],
+    "mjs_dark_green":   [25,    (0, 110, 0)],
     }
+
+#map color 9 to (220, 255, 210), 
+#map color 10 to (0, 85, 0), "mjs_dark_green"
+#map color 11 to (230, 230, 255), "mjs_light_blue"
+#map color 12 to (0, 0, 110), "mjs_dark_blue"
+#map color 13 to (255, 220, 120), "mjs_light_orange"
+#map color 14 to (160, 25, 0), "mjs_dark_red"
+#map color 15 to (170, 170, 170), "mjs_mid_grey"
+#map color 16 to (85, 85, 85), "mjs_dark_grey"
 
 # ================================================================= Color class
 class Color:
