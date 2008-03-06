@@ -24,8 +24,8 @@ from fonts import DEFAULT_FONTS, Font
 from timestamp import Timestamp
 from grace_graph import Graph
 from view import View,World
-from dataset import DataSet
-from sizeAdjust import adjust_labels
+from dataset import *
+##from sizeAdjust import adjust_labels
 from xmg_exceptions import SetItemError, AttrError
 
 HEADER_COMMENT = '# Amaral Group python interface for xmgrace. OH YEAH!'
