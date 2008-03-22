@@ -10,7 +10,7 @@ default color dictionary.
 """
 
 _DEFAULT_COLOR_DICTIONARY = {
-#   "name":              [index, (R,   G,   B  )]        
+#   "name":              [index, (R,   G,   B  )]
     "white":             [0,     (255, 255, 255)],
     "black":             [1,     (0  , 0  , 0  )],
     "red":               [2,     (255, 0  , 0  )],
@@ -38,6 +38,27 @@ _DEFAULT_COLOR_DICTIONARY = {
     "mjs_color_0":       [23,    (65, 65, 190)],
     "mjs_color_3":       [24,    (0, 0, 0)],
     "mjs_dark_green":   [25,    (0, 110, 0)],
+    }
+
+# _DEFAULT_COLOR_DICTIONARY = {
+# #   "name":              [index, (R,   G,   B  )]
+#     "white":             [0,     (255, 255, 255)],
+#     "black":             [1,     (0  , 0  , 0  )],
+#     }
+
+color_brewer = {
+#   "name":              [index, (R,   G,   B  )]
+    "white":             [0,  (255, 255, 255)],
+    "black":             [1,  (  0,   0,   0)],
+    "red":               [2,  (228,  26,  28)],
+    "blue":              [3,  ( 55, 126, 184)],
+    "green":             [4,  ( 77, 175,  74)],
+    "violet":            [5,  (152,  78, 163)],
+    "orange":            [6,  (255, 127,   0)],
+    "yellow":            [7,  (255, 255,  51)],
+    "brown":             [8,  (166,  86,  40)],
+    "pink":              [9,  (247, 129, 191)],
+    "grey":              [10, (153, 153, 153)],
     }
 
 #map color 9 to (220, 255, 210), 

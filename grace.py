@@ -18,6 +18,7 @@ from os import popen
 
 # import from supporting modules
 import sys
+from copy import deepcopy
 from other import Divider
 from colors import DEFAULT_COLORS, Color
 from fonts import DEFAULT_FONTS, Font
@@ -52,9 +53,9 @@ class Grace:
         self.background_fill = backgroundFill        
 
 	# initialize default colors and fonts
-        self._colors = DEFAULT_COLORS
+        self._colors = deepcopy(DEFAULT_COLORS)
         self._colorIndex = len(self._colors)
-        self._fonts = DEFAULT_FONTS
+        self._fonts = deepcopy(DEFAULT_FONTS)
         self._fontIndex = len(self._fonts)
 
 	# initialize grace objects
