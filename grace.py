@@ -234,7 +234,7 @@ class Grace:
         if filetype=='eps': filetype='EPS'
 
         # make command that will be piped to
-        command = 'xmgrace -hardcopy -hdevice ' + filetype + \
+        command = 'gracebat -hardcopy -hdevice ' + filetype + \
                   ' -printfile "' + filename + '" -pipe'
 
         # set up a file as an INPUT pipe to command

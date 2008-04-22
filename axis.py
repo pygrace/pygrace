@@ -324,9 +324,15 @@ class XMG_Tick:
             if not attr[0] == 'ticklabel':
                 attr[2] = float(attr[2])
             self.spec_ticks.append(attr)
+            self.spec += 1
         except:
             SetItemError(self.__class__,'spec_ticks',attr)
 
+    # Add a special ticklabel and its tick
+    def add_spec_ticklabel(self, position, ticklabel=''):
+        self.spec_ticks.append(('major', self.spec, position))
+        self.spec_ticks.append(('ticklabel', self.spec, ticklabel))
+        self.spec += 1
         
     def repr(self, orientation, alt=''):
         lines = []
@@ -633,7 +639,7 @@ class Axis:
         lines.extend(self.ticklabel.repr(self.orientation, alt))
         lines.append('@    '+alt+self.orientation+'axis  tick place ' + str(self.tick['place']))
         lines.append('@    '+alt+self.orientation+'axis  tick spec type ' + str(self.tick['spec_type']))
-        lines.append('@    '+alt+self.orientation+'axis  tick spec ' + str(len(self.tick.spec_ticks)/2))
+        lines.append('@    '+alt+self.orientation+'axis  tick spec ' + str(self.tick.spec))
 
         #-----special ticks-------#
         for item in self.tick.spec_ticks:
