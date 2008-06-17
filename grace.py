@@ -227,9 +227,9 @@ class Grace:
         returns a file object in write mode, that will be sent to the command
         once the file object is closed (after writing stuff to it).
         """
-        # format filename (include correct file extension)
-        if not filename.split('.')[-1].upper() == filetype.upper():
-            filename = filename + '.' + filetype.lower()
+##         # format filename (include correct file extension)
+##         if not filename.split('.')[-1].upper() == filetype.upper():
+##             filename = filename + '.' + filetype.lower()
 
         if filetype=='eps': filetype='EPS'
 
@@ -445,8 +445,6 @@ class Grace:
             eps_frame_coords.append((xmin,xmax,ymin,ymax))
         return eps_frame_coords
             
-        
-
 # =============================================================== Test function
 if __name__ == '__main__':
     

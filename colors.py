@@ -10,7 +10,7 @@ default color dictionary.
 """
 
 _DEFAULT_COLOR_DICTIONARY = {
-#   "name":              [index, (R,   G,   B  )]
+#   "name":              [index, (R,   G,   B  )]        
     "white":             [0,     (255, 255, 255)],
     "black":             [1,     (0  , 0  , 0  )],
     "red":               [2,     (255, 0  , 0  )],
@@ -33,11 +33,6 @@ _DEFAULT_COLOR_DICTIONARY = {
     "mjs_dark_red":      [18,    (160,   5,   0)],
     "mjs_dark_grey":     [19,    (127, 127, 127)],
     "mjs_light_orange":  [20,    (255, 220, 120)],
-    "mjs_color_2":       [21,    (190, 65, 65)],
-    "mjs_color_1":       [22,    (65, 190, 65)],
-    "mjs_color_0":       [23,    (65, 65, 190)],
-    "mjs_color_3":       [24,    (0, 0, 0)],
-    "mjs_dark_green":   [25,    (0, 110, 0)],
     }
 
 # _DEFAULT_COLOR_DICTIONARY = {

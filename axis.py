@@ -17,17 +17,17 @@ from xmg_exceptions import SetItemError,AttrError
 # useful data structures
 #---------------------------------------------------------------------------
 shapes = {"None":0,
-        "Circle":1,
-        "Square":2,
-        "Diamond":3,
-        "Triangle up":4,
-        "Triangle left":5,
-        "Triangle down":6,
-        "Triangle right":7,
-        "Plus":8,
-        "X":9,
-        "Star":10,
-        "Char":11};
+          "Circle":1,
+          "Square":2,
+          "Diamond":3,
+          "Triangle up":4,
+          "Triangle left":5,
+          "Triangle down":6,
+          "Triangle right":7,
+          "Plus":8,
+          "X":9,
+          "Star":10,
+          "Char":11};
 
 linetypes = {"None":0,
              "Straight":1,
@@ -626,6 +626,13 @@ class Axis:
 
 
     def __repr__(self):
+
+        # count the number of special ticks
+        spec = 0
+        for spec_tick in self.tick.spec_ticks:
+            if spec_tick[0]!="ticklabel":
+                spec += 1
+
         alt=self.alt
         lines = []
         lines.append('@    '+self.orientation+'axes  scale ' + str(self['scale']))

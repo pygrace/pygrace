@@ -56,7 +56,7 @@ class XMG_Symbol:
     def __init__(self, colors, fonts,
                  shape = 'None',
                  size = 1.0,
-                 color = 3,
+                 color = 0,
                  pattern = 1,
                  fill_color = 1,
                  fill_pattern = 0,
@@ -600,7 +600,7 @@ class DataSet:
                  type='xy',
                  symbol=None,
                  line=None,
-                 baseline=XMG_Baseline(),
+                 baseline=None,
                  dropline="off",
                  fill=None,
                  avalue=None,
@@ -613,7 +613,10 @@ class DataSet:
         self['idNumber'] = idNumber
         self['hidden'] = hidden
         self['type'] = type
-        self['baseline'] = baseline
+        if not baseline:
+            self.baseline = XMG_Baseline()
+        else:
+            self.baseline = baseline
         self['dropline'] = dropline
         self['comment'] = comment
         if not legend:
