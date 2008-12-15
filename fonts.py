@@ -1,74 +1,34 @@
-#!/usr/bin/env python
-"""
-Amaral Group
-Northwestern University
-4/5/2006
+from base import BaseSet
 
-This module holds the Font class and the dictionary of DEFAULT_FONTS that is
-used in the grace.py module.  To include more default fonts, just change the
-default font dictionary.
-"""
-
-_DEFAULT_FONT_DICTIONARY = {
-#   "nick name":             [index, "official name"]        
-    "Times-Roman":           [0,     "Times-Roman"],
-    "Times-Italic":          [1,     "Times-Italic"],
-    "Times-Bold":            [2,     "Times-Bold"],
-    "Times-BoldItalic":      [3,     "Times-BoldItalic"],
-    "Helvetica":             [4,     "Helvetica"],
-    "Helvetica-Oblique":     [5,     "Helvetica-Oblique"],
-    "Helvetica-Bold":        [6,     "Helvetica-Bold"],
-    "Helvetica-BoldOblique": [7,     "Helvetica-BoldOblique"],
-    "Courier":               [8,     "Courier"],
-    "Courier-Oblique":       [9,     "Courier-Oblique"],
-    "Courier-Bold":          [10,    "Courier-Bold"],
-    "Courier-BoldOblique":   [11,    "Courier-BoldOblique"],
-    "Symbol":                [12,    "Symbol"],
-    "ZapfDingbats":          [13,    "ZapfDingbats"]
-    }
-
-# ================================================================== Font class
-class Font:
-    """Font class
-
-    Used to map fonts to names in xmgrace (NAMES DO NOT WORK, THOUGH).
-
-    Example:
-
-    >> print Font(42, 'smarmy', 'Helvetica')
-    @map color 42 to 'Helvetica', \"smarmy\"
-
-    Later, either 42 or \"smarmy\" can be used to set the font of an xmgrace
-    object (eg. @timestamp font 0, NOT @timestamp font \"smarmy\")
-    """
-    def __init__(self,
-                 index = 4,
-                 nickName = '',
-                 officialName = ''
-                 ):
+class Font(object):
+    """Object that stores a mapping between an index an a name for a font,
+    and outputs a string representation suitable for XMGrace."""
+    def __init__(self, index, name):
         self.index = index
-        self.nickName = nickName
-	self.officialName = officialName
+        self.name = name
 
-    def __getitem__(self, name):
-        return getattr(self, name)
+    def __str__(self):
+        return '@map font %i to "%s", "%s"' % (self.index,self.name,self.name)
 
-    def __setitem__(self, name, value):
-        setattr(self, name, value)
+class FontSet(BaseSet):
+    """A dummy subclass for storing fonts. Perhaps there will be some way to
+    modify fonts in the future."""
+    pass
 
-    def __repr__(self):
-        return '@map font %i to "%s", "%s"'\
-               % (self.index, self.officialName, self.nickName)
-
-# Build list of default Colors from dictionary
-DEFAULT_FONTS = {}
-for nickName in _DEFAULT_FONT_DICTIONARY:
-    index, officialName = _DEFAULT_FONT_DICTIONARY[nickName]
-    DEFAULT_FONTS[nickName] = Font(index, nickName, officialName)
-
-# =============================================================== Test function
-if __name__ == '__main__':
-    print Font(0, 'fontOne', 'Times-Roman')
-    print Font(42, 'fontFortyTwo', 'ZapfDingbats')
-
-
+# this is the default font mapping in XMGrace
+default = FontSet([Font(*params) for params in (
+            (0, 'Times-Roman'),
+            (1, 'Times-Italic'),
+            (2, 'Times-Bold'),
+            (3, 'Times-BoldItalic'),
+            (4, 'Helvetica'),
+            (5, 'Helvetica-Oblique'),
+            (6, 'Helvetica-Bold'),
+            (7, 'Helvetica-BoldOblique'),
+            (8, 'Courier'),
+            (9, 'Courier-Oblique'),
+            (10, 'Courier-Bold'),
+            (11, 'Courier-BoldOblique'),
+            (12, 'Symbol'),
+            (13, 'ZapfDingbats'),
+            )])

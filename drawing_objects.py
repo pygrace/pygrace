@@ -1,252 +1,148 @@
-#!/usr/bin/env python
-"""
-Amaral Group
-Northwestern University
+from base import GraceObject 
 
-All classes and data structures required for the dataset class.
+DRAWTEXT_JUSTIFICATIONS = {"l":0,
+                           "r":1,
+                           "c":2,
+##                            "XXXX":3,
+                           "ll":4,
+                           "lr":5,
+                           "lc":6,
+##                            "XXXX":7,
+                           "ul":8,
+                           "ur":9,
+                           "uc":10,
+##                            "XXXX":11,
+                           "ml":12,
+                           "mr":13,
+                           "mc":14,
+                           }
 
-"""
+class DrawingObject(GraceObject):
+    _staticType = 'DrawingObject'
+    def __init__(self, parent, attrs, *args, **kwargs):
+        GraceObject.__init__(self, parent, attrs, *args, **kwargs)
 
-import sys
-from xmg_exceptions import SetItemError,AttrError
-from fonts import DEFAULT_FONTS
-from colors import DEFAULT_COLORS
+        # these are needed for the parent checking by drawing objects, but
+        # should not be imported everything else has been (to avoid a cycle
+        # in the dependency graph)
+        import graph
+        import grace
 
-#-------------- Box Class ------------------#
+        # if the drawing object is added by a Graph, then record the index of
+        # the graph.  Otherwise the parent of the drawing object is the grace.
+        if isinstance(self.parent, grace.Grace):
+            self._linked_graph = None
+        elif isinstance(self.parent, graph.Graph):
+            self._linked_graph = self.parent.index
+        else:
+            message = 'parent of drawing object (%s) is not graph or grace.' %\
+                      type(self.parent)
+            raise TypeError(message)
 
-class Box:
+    def _make_header(self, objectString):
 
-    def __init__(self, colors=DEFAULT_COLORS, fonts=DEFAULT_FONTS,
+        # create header with correct graph association
+        headerList = ['@with %s' % objectString]
+        if not self._linked_graph is None:
+            template = '@    %s g%%s' % objectString
+            headerList.append(template % self._linked_graph)
+        return '\n'.join(headerList)
+
+    def limits(self):
+        """This method must be overwritten in all subclasses of
+        DrawingObject for autoscale features to work properly.
+        """
+        pass
+        
+    def smallest_positive(self):
+        """Find the smallest positive coordinate of each drawing
+        object.
+        """
+        xmin,ymin,xmax,ymax = self.limits()
+        if xmin>0.0:
+            x = xmin
+        else:
+            x = None
+        if ymin>0.0:
+            y = ymin
+        else:
+            y = None
+        return x,y        
+        
+class DrawBox(DrawingObject):
+    def __init__(self, parent,
                  onoff = 'on',
                  loctype = 'view',
-                 lowleft = (0,0),
-                 upright = (1,1),
+                 lowleft = (0, 0),
+                 upright = (1, 1),
                  linestyle = 1,
                  linewidth = 2.0,
                  color = 1,
                  fill_color = 1,
-                 fill_pattern = 1):
-        self._colors = colors
-        self._fonts = fonts
-        self['onoff'] = onoff
-        self['loctype'] = loctype
-        self['lowleft'] = lowleft
-        self['upright'] = upright
-        self['linestyle'] = linestyle
-        self['linewidth'] = linewidth
-        self['color'] = color
-        self['fill_color'] = fill_color
-        self['fill_pattern'] = fill_pattern
-
-    def __getitem__(self, name): return getattr(self, name)
-    def __setitem__(self, name, value):
-
-        if type(value) == str:
-            value = value.replace('"','')
-
-        if name == 'onoff':
-            try: self.onoff = value
-            except: SetItemError(self.__class__, name, value)
+                 fill_pattern = 1
+                 ):
+        DrawingObject.__init__(self, parent, locals())
+        self._formatting_template = {'lowleft': '%.20f, %.20f',
+                                     'upright': '%.20f, %.20f'}
+    def __str__(self):
+        self._header = self._make_header('box')
+        return \
+"""%(_header)s
+@    box %(onoff)s
+@    box loctype %(loctype)s
+@    box %(lowleft)s, %(upright)s
+@    box linestyle %(linestyle)s
+@    box linewidth %(linewidth)s
+@    box color %(color)s
+@    box fill color %(fill_color)s
+@    box fill pattern %(fill_pattern)s
+@box def""" % self
             
-        elif name == 'loctype':
-            try: self.loctype = value
-            except: SetItemError(self.__class__, name, value)
+    def limits(self):
+        """Find the limits of a DrawBox for autoscaling axes (among
+        other things?)
+        """
+        x,y = zip(self.lowleft, self.upright)
+        return min(x), min(y), max(x), max(y)
 
-        elif name == 'linestyle':
-            try: self.linestyle = int(value)
-            except: SetItemError(self.__class__, name, value)
-
-        elif name == 'lowleft':
-            try:
-                if not type(value) == tuple:
-                    raise
-                else:
-                    self.lowleft = value
-            except: SetItemError(self.__class__, name, value)
-                
-        elif name == 'upright':
-            try:
-                if not type(value) == tuple:
-                    raise
-                else:
-                    self.upright = value
-            except: SetItemError(self.__class__, name, value)
-            
-        elif name == 'linewidth':
-            try: self.linewidth = float(value)
-            except: SetItemError(self.__class__,name, value)
-            
-        elif name == 'color':
-            try:
-                if self._colors.has_key(value):
-                    self.color = value
-                else:
-                    intRepr = int(value)
-                    if intRepr >= len(self._colors.keys()):
-                        raise
-                    else:
-                        self.color = int(value)
-            except:
-                SetItemError(self.__class__,name, value)
-               
-        elif name == 'fill_color': 
-            try:
-                if self._colors.has_key(value):
-                    self.fill_color = value
-                else:
-                    intRepr = int(value)
-                    if intRepr >= len(self._colors.keys()):
-                        raise
-                    else:
-                        self.fill_color = intRepr
-            except:
-                SetItemError(self.__class__,name, value)
-                
-        elif name == 'fill_pattern': 
-            try: self.fill_pattern = int(value)
-            except: SetItemError(self.__class__,name, value)
-
-        else:
-            AttrError(self.__class__, name)
-
-    def __repr__(self):
-        
-        lines = []
-
-        lines.append('@with box')
-        lines.append('@    box %s' % self.onoff)
-        lines.append('@    box loctype %s' % self.loctype)
-        lines.append('@    box %.8f, %.8f, %.8f, %.8f' % (self.lowleft[0],self.lowleft[1],
-                                                          self.upright[0],self.upright[1]))
-        lines.append('@    box linestyle %s' % self.linestyle)
-        lines.append('@    box linewidth %s' % self.linewidth)
-        lines.append('@    box color %s' %             
-                     (type(self.color)==str and ("\"%s\"" % self.color) or self.color))
-        lines.append('@    box fill color %s' %             
-                     (type(self.fill_color)==str and ("\"%s\"" % self.fill_color) or self.fill_color))
-        lines.append('@    box fill pattern %s' % self.fill_pattern)
-        lines.append('@box def')
-
-        return '\n'.join(lines)
-            
-            
-#-------------- String Class ------------------#
-
-class Text:
-
-    def __init__(self, colors=DEFAULT_COLORS, fonts=DEFAULT_FONTS,
+class DrawText(DrawingObject):
+    def __init__(self, parent,
                  onoff = 'on',
                  loctype = 'view',
                  x = 0,
                  y = 0,
                  color = 1,
                  rot = 0,
-                 font = 1,
-                 just = 0, #?
-                 char_size = 1.0,
-                 text = ""):
-        self._colors = colors
-        self._fonts = fonts
-        self['onoff'] = onoff
-        self['loctype'] = loctype
-        self['x'] = x
-        self['y'] = y 
-        self['color'] = color
-        self['rot'] = rot
-        self['font'] = font 
-        self['just'] = just
-        self['char_size'] = char_size
-        self['text'] = text
+                 font = 4,
+                 just = 0,
+                 char_size = 1.65,
+                 text = 'DrawObjText'
+                 ):
+        DrawingObject.__init__(self, parent, locals())
 
-    def __getitem__(self, name): return getattr(self, name)
-    def __setitem__(self, name, value):
-
-        if type(value) == str and not name == 'text':
-            value = value.replace('"','')
-            
-        if name == 'onoff':
-            try: self.onoff = value
-            except: SetItemError(self.__class__, name, value)
-            
-        elif name == 'loctype':
-            try: self.loctype = value
-            except: SetItemError(self.__class__, name, value)
-
-        elif name == 'x':
-            try: self.x = float(value)
-            except: SetItemError(self.__class__, name, value)
-            
-        elif name == 'y':
-            try: self.y = float(value)
-            except: SetItemError(self.__class__, name, value)
-
-        elif name == 'color':
-            try:
-                if self._colors.has_key(value):
-                    self.color = value
-                else:
-                    intRepr = int(value)
-                    if intRepr >= len(self._colors.keys()):
-                        raise
-                    else:
-                        self.color = int(value)
-            except:
-               SetItemError(self.__class__,name, value)
-
-        elif name == 'rot':
-            try: self.rot = int(value)
-            except: SetItemError(self.__class__, name, value)
-
-        elif name == 'font':
-            try:
-                if self._fonts.has_key(value):
-                    self.font = value
-                else:
-                    intRepr = int(value)
-                    if intRepr >= len(self._fonts.keys()):
-                        raise
-                    else:
-                        self.font = intRepr
-            except: SetItemError(self.__class__,name, value)
-
-        elif name == 'just':
-           try: self.just = int(value)
-           except: SetItemError(self.__class__, name, value)
-
-        elif name == 'char_size':
-            try: self.char_size = float(value)
-            except: SetItemError(self.__class__, name, value)
-
-        elif name == 'text':
-            try: self.text = value
-            except: SetItemError(self.__class__, name, value)
-        else:
-            AttrError(self.__class__,name)
-
-    def __repr__(self):
+    def __str__(self):
+        self._header = self._make_header('string')
+        return \
+"""%(_header)s
+@    string %(onoff)s
+@    string loctype %(loctype)s
+@    string %(x)s, %(y)s
+@    string color %(color)s
+@    string rot %(rot)s
+@    string font %(font)s
+@    string just %(just)s
+@    string char size %(char_size)s
+@string def "%(text)s" """ % self
         
-        lines = []
+    def limits(self):
+        """Find the limits of a DrawBox for autoscaling axes (among
+        other things?)
+        """
+        return self.x, self.y, self.x, self.y
 
-        lines.append('@with string')
-        lines.append('@    string %s' % self.onoff)
-        lines.append('@    string loctype %s' % self.loctype)
-        lines.append('@    string %.8f, %.8f' % (self.x,self.y))
-        lines.append('@    string color %s' %             
-                     (type(self.color)==str and ("\"%s\"" % self.color) or self.color))
-        lines.append('@    string rot %s' % self.rot)
-        lines.append('@    string font %s' %
-                     (type(self.font)==str and ("\"%s\"" % self.font) or self.font))
-        lines.append('@    string rot %s' % self.rot)
-        lines.append('@    string just %s' % self.just)
-        lines.append('@    string char size %s' % self.char_size)
-        lines.append('@    string def "%s"' % self.text)
 
-        return '\n'.join(lines)
-        
-#-------------- Line Class ------------------#
-
-class Line:
-    def __init__(self, colors=DEFAULT_COLORS, fonts=DEFAULT_FONTS,
+class DrawLine(DrawingObject):
+    def __init__(self, parent,
                  onoff = 'on',
                  loctype = 'view',
                  start = (0,0),
@@ -257,123 +153,175 @@ class Line:
                  arrow = 0,
                  arrow_type = 0,
                  arrow_length = 1,
-                 arrow_layout = (1.0,1.0)):
-        self._colors = colors
-        self._fonts = fonts
-        self['onoff'] = onoff
-        self['loctype'] = loctype
-        self['start'] = start
-        self['end'] = end
-        self['linestyle'] = linestyle
-        self['linewidth'] = linewidth
-        self['color'] = color
-        self['arrow'] = arrow
-        self['arrow_type'] = arrow_type 
-        self['arrow_length'] = arrow_length
-        self['arrow_layout'] = arrow_layout
-        
+                 arrow_layout = (1.0,1.0)
+                 ):
+        DrawingObject.__init__(self, parent, locals())
+        self._formatting_template = {'start': '%.20f, %.20f',
+                                     'end': '%.20f, %.20f',
+                                     'arrow_layout': '%.20f, %.20f'}
 
-    def __getitem__(self, name): return getattr(self, name)
-    def __setitem__(self, name, value):
-        
-        if type(value) == str:
-            value = value.replace('"','')
+    def __setattr__(self, key, value):
+
+        # check Graph specific attributes
+        if key == 'start' or key == 'end':
+            self._check_type(tuple, key, value)
+        elif key == 'arrow':
+            self._check_type(int, key, value)
+            self._check_range(key, value, 0, 3)
+        elif key == 'arrow_type':
+            self._check_type(int, key, value)
+            self._check_range(key, value, 0, 2)
+        elif key == 'arrow_length':
+            self._check_type((float, int), key, value)
+            self._check_range(key, value, 0, None)
+        elif key == 'arrow_layout':
+            self._check_type(tuple, key, value)
+            self._check_range(key, value[0], 0, None)
+            self._check_range(key, value[1], 0, 1, includeMax=True)
             
-        if name == 'onoff':
-            try: self.onoff = value
-            except: SetItemError(self.__class__, name, value)
-                
-        elif name == 'loctype':
-            try: self.loctype = value
-            except: SetItemError(self.__class__, name, value)
+        GraceObject.__setattr__(self, key, value)
 
-        elif name == 'linestyle':
-            try: self.linestyle = int(value)
-            except: SetItemError(self.__class__, name, value)
+    def __str__(self):
+        self._header = self._make_header('line')
+        return \
+"""%(_header)s
+@    line %(onoff)s
+@    line loctype %(loctype)s
+@    line %(start)s, %(end)s
+@    line linewidth %(linewidth)s
+@    line linestyle %(linestyle)s
+@    line color %(color)s
+@    line arrow %(arrow)s
+@    line arrow type %(arrow_type)s
+@    line arrow length %(arrow_length)s
+@    line arrow layout %(arrow_layout)s
+@line def""" % self
 
-        elif name == 'start':
-            try:
-                if not type(value) == tuple:
-                    raise
-                else:
-                    self.start = value
-            except: SetItemError(self.__class__, name, value)
-                
-        elif name == 'end':
-            try:
-                if not type(value) == tuple:
-                    raise
-                else:
-                    self.end = value
-            except: SetItemError(self.__class__, name, value)
-            
-        elif name == 'linewidth':
-            try: self.linewidth = float(value)
-            except: SetItemError(self.__class__,name, value)
-            
-        elif name == 'color':
-            try:
-                if self._colors.has_key(value):
-                    self.color = value
-                else:
-                    intRepr = int(value)
-                    if intRepr >= len(self._colors.keys()):
-                        raise
-                    else:
-                        self.color = int(value)
-            except:
-                SetItemError(self.__class__,name, value)
-               
-        elif name == 'arrow':
-            try: self.arrow = int(value)
-            except: SetItemError(self.__class__, name, value)
-            
-        elif name == 'arrow_type':
-            try: self.arrow_type = int(value)
-            except: SetItemError(self.__class__, name, value)
+    def limits(self):
+        """Find the limits of a DrawLine for autoscaling axes (among
+        other things?)
+        """
+        x,y = zip(self.lowleft, self.upright)
+        return min(x), min(y), max(x), max(y)
 
-        elif name == 'arrow_length':
-            try: self.arrow_length = float(value)
-            except: SetItemError(self.__class__, name, value)
+class DrawEllipse(DrawingObject):
+    def __init__(self, parent,
+                 onoff = 'on',
+                 loctype = 'view',
+                 lowleft = (0,0),
+                 upright = (1,1),
+                 linestyle = 1,
+                 linewidth = 2.0,
+                 color = 1,
+                 fill_color = 1,
+                 fill_pattern = 1
+                 ):
+        DrawingObject.__init__(self, parent, locals())
+        self._formatting_template = {'lowleft': '%.20f, %.20f',
+                                     'upright': '%.20f, %.20f'}
+    def __str__(self):
+        self._header = self._make_header('ellipse')
+        return \
+"""%(_header)s
+@    ellipse %(onoff)s
+@    ellipse loctype %(loctype)s
+@    ellipse %(lowleft)s, %(upright)s
+@    ellipse linestyle %(linestyle)s
+@    ellipse linewidth %(linewidth)s
+@    ellipse color %(color)s
+@    ellipse fill color %(fill_color)s
+@    ellipse fill pattern %(fill_pattern)s
+@ellipse def""" % self
 
-        elif name == 'arrow_layout':
-            try:
-                if not type(value) == tuple:
-                    raise
-                else:
-                    self.arrow_layout = value
-            except: SetItemError(self.__class__, name, value)
-            
-        else:
-            AttrError(self.__class__, name)
+    def limits(self):
+        """Find the limits of a DrawEllipse for autoscaling axes (among
+        other things?)
+        """
+        x,y = zip(self.lowleft, self.upright)
+        return min(x), min(y), max(x), max(y)
 
-    def __repr__(self):
-        
-        lines = []
+class LabelledPoint(DrawingObject):
+    def __init__(self, parent,
+                 onoff = 'on',
+                 loctype = 'view',
+                 x = 0,
+                 y = 0,
+                 text_color = 1,
+                 rot = 0,
+                 font = 4,
+                 just = 14,
+                 char_size = 1.0,
+                 text = 'DrawObjText',
+                 r = 1,
+                 linestyle = 1,
+                 linewidth = 2.0,
+                 outline_color = 1,
+                 fill_color = 1,
+                 fill_pattern = 1,
+                 ):
+        DrawingObject.__init__(self, parent, locals())
 
-        lines.append('@with line')
-        lines.append('@    line %s' % self.onoff)
-        lines.append('@    line loctype %s' % self.loctype)
-        lines.append('@    line %.8f, %.8f, %.8f, %.8f' % (self.start[0],self.start[1],
-                                                          self.end[0],self.end[1]))
-        lines.append('@    line linestyle %s' % self.linestyle)
-        lines.append('@    line linewidth %s' % self.linewidth)
-        lines.append('@    line color %s' %             
-                     (type(self.color)==str and ("\"%s\"" % self.color) or self.color))
-        lines.append('@    line arrow %s' % self.arrow)
-        lines.append('@    line arrow type %s' % self.arrow_type)
-        lines.append('@    line arrow length %s' % self.arrow_length)
-        
-        lines.append('@    line arrow layout %.8f, %.8f' % (self.arrow_layout[0], self.arrow_layout[1]))
-        lines.append('@line def')
+        lowleft, upright = (x-r, y-r), (x+r, y+r)
+        self.ellipse = DrawEllipse(parent, onoff=onoff, loctype=loctype,
+                                   lowleft=lowleft, upright=upright,
+                                   linestyle=linestyle, linewidth=linewidth,
+                                   color=outline_color, fill_color=fill_color,
+                                   fill_pattern=fill_pattern)
+        self.textObject = DrawText(parent, onoff=onoff, loctype=loctype,
+                                   x=x, y=y, color=text_color, rot=rot,
+                                   font=font, just=just, char_size=char_size,
+                                   text=text)
 
-        return '\n'.join(lines)
+    def __str__(self):
+        return '\n'.join(map(str, (self.ellipse, self.textObject)))
 
+    def limits(self):
+        """Find the limits of a LabelledPoint for autoscaling axes (among
+        other things?)
+        """
+        return self.x, self.y, self.x, self.y
 
+class MultiLegend(DrawingObject):
+    def __init__(self, parent,
+                 onoff = 'on',
+                 loctype = 'view',
+                 x = 0,
+                 y = 0,
+                 text_color = 1,
+                 rot = 0,
+                 font = 4,
+                 just = 14,
+                 char_size = 1.0,
+                 text = 'DrawObjText',
+                 r = 1,
+                 linestyle = 1,
+                 linewidth = 2.0,
+                 outline_color = 1,
+                 fill_color = 1,
+                 fill_pattern = 1,
+                 ):
+        DrawingObject.__init__(self, parent, locals())
 
-#-------------- Ellipse Class ------------------#
+        for symbol, label in data:
+            pass
 
-#NOT IMPLEMENTED
+        lowleft, upright = (x-r, y-r), (x+r, y+r)
+        self.ellipse = DrawEllipse(parent, onoff=onoff, loctype=loctype,
+                                   lowleft=lowleft, upright=upright,
+                                   linestyle=linestyle, linewidth=linewidth,
+                                   color=outline_color, fill_color=fill_color,
+                                   fill_pattern=fill_pattern)
+        self.textObject = DrawText(parent, onoff=onoff, loctype=loctype,
+                                   x=x, y=y, color=text_color, rot=rot,
+                                   font=font, just=just, char_size=char_size,
+                                   text=text)
 
-class Ellipse:
-    pass
+    def __str__(self):
+        return '\n'.join(map(str, (self.ellipse, self.textObject)))
+
+    def limits(self):
+        """Find the limits of a MultiLegend for autoscaling axes (among
+        other things?)
+        """
+        return self.x, self.y, self.x, self.y
+

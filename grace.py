@@ -1,67 +1,37 @@
-#!/usr/bin/env python
-"""
-Amaral Group
-Northwestern University
-8/1/2006
+import time
+import os
 
-This module contains classes for creating, formatting, and writing xmgrace
-plots from within Python.
-
-Notes:
-
-* ask everybody: are region definitions necessary?
-
-"""
-
-# import from standard libraries
-from os import popen
-
-# import from supporting modules
-import sys
-from copy import deepcopy
-from other import Divider
-from colors import DEFAULT_COLORS, Color
-from fonts import DEFAULT_FONTS, Font
-from timestamp import Timestamp
-from grace_graph import Graph
-from view import View,World
-from dataset import *
-##from sizeAdjust import adjust_labels
-from xmg_exceptions import SetItemError, AttrError
+from base import GraceObject
+from graph import Graph
+from drawing_objects import DrawingObject
+from colors import default as default_colors
+from fonts import default as default_fonts
 
 HEADER_COMMENT = '# Amaral Group python interface for xmgrace. OH YEAH!'
 INDEX_ORIGIN = 0  # zero or one (one is for losers)
 
-# ================================================================= Grace class
-class Grace:
-    """
-    Grace Class
+class Grace(GraceObject):
+    def __init__(self,
+                 width=792,
+                 height=612,
+		 background_color=0,
+                 background_fill='off',
+                 version='50114',
+                 verbose=False,
+                 colors=None,
+		 ): 
+        GraceObject.__init__(self, None, locals())
 
-    Write detailed comments here later explaining the functionality and
-    examples of how to use...
-    """
-    def __init__(self, nGraphs=0,
-		 version='50114',
-		 width=792, height=612,
-		 backgroundColor='white', backgroundFill='off'
-		 ):
+	self.timestamp = Timestamp(self)
 
-	# initialize defaults as class attributes
-        self.version = version
-        self.width, self.height = width, height
-        self.background_color = backgroundColor
-        self.background_fill = backgroundFill        
+        # set these first, so that children inherit this color scheme
+        self.colors = colors or default_colors
+        self.fonts = default_fonts
 
-	# initialize default colors and fonts
-        self._colors = deepcopy(DEFAULT_COLORS)
-        self._colorIndex = len(self._colors)
-        self._fonts = deepcopy(DEFAULT_FONTS)
-        self._fontIndex = len(self._fonts)
-
-	# initialize grace objects
-	self.timestamp = Timestamp(self._colors,self._fonts)
-
+        self._graphIndex = INDEX_ORIGIN
 	self.graphs = []
+
+        self.drawing_objects = []
         
         #--FOR MULTI Graphs--#
         self.graphs_rc = [] #graphs by row and column
@@ -83,121 +53,65 @@ class Grace:
         self.frame_width = None    # width of one graph
         self.hgap = None           # horizontal gap between graphs
         self.vgap = None           # vertical gap between graphs
-
         #--------------#
-        self._graphIndex = INDEX_ORIGIN
-        for i in range(nGraphs):
-            self.add_graph()
-        self.drawing_objects = []  #list of strings, lines, boxes and ellipses
 
-    # ------------------------------------------------ Grace accessor functions
-    # these two function allow access to class attributes just like a
-    # dictionary (eg. instance['width'] = 424)
+    def __setattr__(self, key, value):
 
-    def __getitem__(self, name): return getattr(self, name)
-    def __setitem__(self, name, value):
+        # check Grace specific attributes
+        if key == 'width' or key == 'height':
+            self._check_type(int, key, value)
+            self._check_range(key, value, 0, None)
+        elif key == 'verbose':
+            self._check_type(bool, key, value)
+        elif key == 'version':
+            self._check_type(str, key, value)
+        elif key == 'background_fill':
+            self._check_type(str, key, value)
+            self._check_membership(key, value, ('on', 'off'))
+            
+        GraceObject.__setattr__(self, key, value)
+        
+    def set_portrait(self):
+        self.width = 612
+        self.height = 792
+        return 1.0, 792.0 / 612.0
+    
+    def set_landscape(self):
+        self.width = 792
+        self.height = 612
+        return 792.0 / 612.0, 1.0
 
-        if type(value) == str:
-            value = value.replace('"','')
+    def autoscale(self):
+        for graph in self.graphs:
+            graph.autoscale()
 
-        if name == 'version':
-            self.version = value
-        elif name == 'width':
-            try: self.width = int(value)
-            except: SetItemError(self.__class__, value, name)
-        elif name == 'height':
-            try: self.height = int(value)
-            except: SetItemError(self.__class__, value, name)
-        elif name == 'background_color':
-            try:
-                if self._colors.has_key(value):
-                    self.background_color = value
-                else:
-                    intRepr = int(value)
-                    if intRepr >= len(self._colors.keys()):
-                        raise
-                    else:
-                        self.background_color = int(value)
-            except:
-               SetItemError(self.__class__,value,name)
-        elif name == 'background_fill':
-            self.background_fill = value
-        elif name == 'timestamp':
-            if not value.__class__ == Timestamp:
-                SetItemError(self.__class__, value, name)
-            else:
-                self.timestamp = value
-
-        #set 'graphs' attribute?
-         
-        else:
-            AttrError(self.__class__, name)
-    # ------------------------------------------------- Grace private functions
-    # these functions are used internally by the grace class - there should be
-    # no need to use these externally.
-
-    def _sorted_colors(self):
-        """_sorted_colors() -> list of Color() objects
-
-        Uses decorate, sort, undecorate to sort dictionary by number.
-        """
-        decorated = [(self._colors[i]['index'], self._colors[i]['name']) \
-                     for i in self._colors]
-        decorated.sort()
-        return [self._colors[name] for (i, name) in decorated]
-
-    def _sorted_fonts(self):
-        """_sorted_fonts() -> list of Font() objects
-
-        Uses decorate, sort, undecorate to sort dictionary by number.
-        """ 
-        decorated = [(self._fonts[i]['index'], self._fonts[i]['nickName']) \
-                     for i in self._fonts]
-        decorated.sort()
-        return [self._fonts[name] for (i, name) in decorated]
+    def autoformat(self, printWidth=6.5):
+        for graph in self.graphs:
+            graph.autoformat(printWidth)
 
     def _header_string(self):
         lines = []
-
         lines.append('@version %s' % self.version)
         lines.append('@page size %i, %i' % (self.width, self.height))
         lines.append('@page background fill %s' % self.background_fill)
-        lines.append(str(Divider('Font Definitions','-', 68)))
-        lines.extend(map(str,self._sorted_fonts()))
-        lines.append(str(Divider('Color Definitions','-', 68)))
-        lines.extend(map(str, self._sorted_colors()))
-        lines.append('@background color %s' %
-                     (type(self.background_color)==str and ("\"%s\"" % self.background_color) \
-                      or self.background_color))
-        lines.append(str(Divider('Timestamp','-', 68)))
+        lines.append(str(self.fonts))
+        lines.append(str(self.colors))
+        lines.append('@background color %s' % self.background_color)
 	lines.append(str(self.timestamp))
-
         return '\n'.join(lines)
     
-    # -------------------------------------------------- Grace output functions
-    # the standard function __repr__ is defined to allow easy writing to
-    # standard out and to files (eg. a = Grace(); print a; str(a); ...)
-
-    def __repr__(self):
+    def __str__(self):
         lines = []
-
         lines.append('# Grace project file')
         lines.append(HEADER_COMMENT)
-        lines.append(str(Divider('Header', '=', 68)))
 	lines.append(self._header_string())
-        for drawobj in self.drawing_objects:
-            lines.append(str(drawobj))
-        lines.append(str(Divider('Graphs', '=', 68)))
-	lines.extend(map(str,self.graphs))
-        lines.append(str(Divider('Data', '=', 68)))
+        lines.extend(map(str, self.drawing_objects))
+	lines.extend(map(str, self.graphs))
         for graph in self.graphs:
             for dataset in graph.datasets:
-                idNumbers = (graph.idNumber, dataset.idNumber)
-                lines.append('@target G%i.S%i' % idNumbers)
-                lines.append('@type ' + dataset.type)
+                lines.append('@target G%i.S%i' % (graph.index, dataset.index))
+                lines.append('@type %s' % dataset.type)
                 lines.append(dataset._repr_data())
-        
-
         return '\n'.join(lines)
 
     def write_agr(self, filename='temp.agr'):
@@ -217,7 +131,7 @@ class Grace:
     def write_file(self, filename='temp.eps', filetype='EPS'):
         """write_file(filename='temp.eps', filetype='EPS') -> none.
 
-        This function uses xmgrace to output a image file of the specified
+        This function uses gracebat to output a image file of the specified
         type.  Here are the allowed types (for version 5.1.14):
 
         X11 PostScript EPS MIF SVG PNM JPEG PNG Metafile
@@ -227,130 +141,96 @@ class Grace:
         returns a file object in write mode, that will be sent to the command
         once the file object is closed (after writing stuff to it).
         """
-##         # format filename (include correct file extension)
-##         if not filename.split('.')[-1].upper() == filetype.upper():
-##             filename = filename + '.' + filetype.lower()
-
-        if filetype=='eps': filetype='EPS'
 
         # make command that will be piped to
-        command = 'gracebat -hardcopy -hdevice ' + filetype + \
-                  ' -printfile "' + filename + '" -pipe'
+        command = 'gracebat -hardcopy -hdevice %s -printfile "%s" -pipe' % \
+                  (filetype, filename)
 
         # set up a file as an INPUT pipe to command
-        pipeInput = popen(command, 'w')
+        pipeInput = os.popen(command, 'w')
 
         # write grace file to input pipe, and close.  once the input pipe is
         # closed, the command runs and xmgrace outputs a file
         pipeInput.write(str(self))
         pipeInput.close()
 
-    # ----------------------------------------------- Grace interface functions
-    # use these functions to modify grace objects, these should have helpful
-    # docstring comments, because these are the functions that the user must
-    # use.
-
-    def define_color(self, name, (red, green, blue)):
-        """define_color(name, (R,G,B)) -> none
-
-        Specifies a name for an (R,G,B) color which can be used later as the
-        color of any object.
-
-        Example:
-
-        a = Grace()
-        a.define_color('deeppurple', (100, 10, 100))
-        a['backgroundColor'] = 'deeppurple'
-
-        The accomplishes the same effect as:
-
-        a['backgroundColor'] = '(100, 10, 100)'   <--- note the quotes
-        """
-        self._colors[name] = Color(self._colorIndex, name, (red, green, blue))
-        self._colorIndex += 1
-
-    def define_font(self, nickName, officialName):
-        """define_font(nickName, officialName) -> None
-
-        Supposed to specify a name for a font, just like color - but it doesn't
-        work (in xmgrace). To specify the font of something, use the full name
-        or number as specified in the following list:
-
-        0  Times-Roman
-        1  Times-Italic
-        2  Times-Bold
-        3  Times-BoldItalic
-        4  Helvetica
-        5  Helvetica-Oblique
-        6  Helvetica-Bold
-        7  Helvetica-BoldOblique
-        8  Courier
-        9  Courier-Oblique
-        10 Courier-Bold
-        11 Courier-BoldOblique
-        12 Symbol
-        13 ZapfDingbats
-
-        Example:
-
-        a = Grace()
-        a.timestamp['font'] = 'ZapfDingbats'
-
-        In simpler words, this function is pretty much useless.
-        """
-        self._fonts[nickName] = Font(self._fontIndex, nickName, officialName)
-	self._fontIndex += 1
+    def add_color(self, red, green, blue, name=None):
+        color = self.colors.add_color(red, green, blue, name)
+        return color
         
-    def add_graph(self, graph=False):
-        """add_graph() -> none
+    def add_graph(self, cls=Graph, *args, **kwargs):
 
-        Stub to test main Grace output - will probably need to change
-        """
-        idNumber = self._graphIndex
+        # make sure that cls is a subclass of Graph
+        if not issubclass(cls, Graph):
+            message = '%s is not a subclass of Graph' % cls.__name__
+            raise TypeError(message)
 
-        if not graph:
-            self.graphs.append(Graph(idNumber))
-        else:
-            self.graphs.append(graph)
-            graph['idNumber'] = idNumber
-            
+        # make an instance of the graph class and add to list
+        graph = cls(parent=self, index=self._graphIndex, *args, **kwargs)
+        self.graphs.append(graph)
+
+#        if len(self.graphs) > 1:
+#            self.multi(1, len(self.graphs))
+
+        # increment counter and return the graph object
         self._graphIndex += 1
-        return idNumber
+        return graph
 
-    def get_graph(self,id):
-        if id >= len(self.graphs):
-            return None
-        else:
-            return self.graphs[id]
+    def clone_graph(self,graph,cls=Graph,*args,**kwargs):
+        """Clone graph 'graph' by adding a new graph (the clone) and
+        then copying the format of 'graph'.
 
-    def add_drawing_object(self,obj):
-        self.drawing_objects.append(obj)
-
-    def reset_colors(self):
-        self._colors = {}
-        self._colorIndex = 0
-    def reset_fonts(self):
-        self._fonts = {}
-        self._fontIndex = 0
-
-
-#------------------ FORMAT MULTIPLE GRAPHS -------------------------#
-
-    def multi(self, rows, cols, hoffset=0.2, voffset=0.2,hgap=0.1, vgap=0.1,
-              width_to_height_ratio=1.66):
-        """Create a grid of graphs with the given number of <rows> and <cols>
-           Makes graph frames all the same size.
+        This is a convenience method which is handy for graphs that
+        have drawing objects in them.  When drawing objects are in a
+        graph, the drawing object is placed over the axes, frame,
+        etc. and it makes the graphs rather ugly looking.
         """
-        self.graphs_rc = [[None for i in range(cols)] for j in range(rows)]
 
-        self.hgap = hgap
-        self.vgap = vgap
-        self.hoffset = hoffset
-        self.voffset = voffset
-        self.rows = rows
-        self.cols = cols
+        clone = self.add_graph(Graph,*args,**kwargs)
+        clone.copy_format(graph)
+        return clone
+                
+    def add_drawing_object(self, cls, *args, **kwargs):
 
-        #------ FRAME SIZING-----#
+        # make sure that cls is a subclass of DrawingObject
+        if not issubclass(cls, DrawingObject):
+            message = '%s is not a subclass of DrawingObject' % cls.__name__
+            raise TypeError(message)
+
+        # here, the class argument is mandatory, because there are many built
+        # in types of drawing objects
+        drawingObject = cls(parent=self, *args, **kwargs)
+        self.drawing_objects.append(drawingObject)
+
+        # return the instance of the drawing object
+        return drawingObject
+
+    def get_graph(self, index):
+        return self.graphs[index]
+
+    def get_rc(self,row,col):
+        """Returns the graph in position [row][col]"""
+        return self.graphs_rc[row][col]
+
+    def put(self, g, row, col):
+        # ZERO BASED INDEXING.  Places a graph at postion [row][col]
+        if row >= self.rows:
+            raise
+        if col >= self.cols:
+            raise
+
+        self.graphs_rc[row][col] = g
+
+        g.view.xmin = self.hoffset+(self.hgap+self.frame_width)*col
+        g.view.ymin = self.max_frame_height - self.voffset - \
+                            self.vgap*row - self.frame_height*(row+1)
+        g.view.xmax = g.view.xmin + self.frame_width
+        g.view.ymax = g.view.ymin + self.frame_height
+
+    def _calculate_graph_frame(self, rows, cols, hoffset, voffset,
+                               hgap, vgap,
+                               width_to_height_ratio):
+        
         # want to have frames all the same size, but also need to take
         # advantage of the entire canvas.  first check to see which
         # dimension will be more prohibitive (desired ratio is
@@ -369,7 +249,23 @@ class Grace:
         else:
             self.frame_height = self.frame_width/width_to_height_ratio;
         
-        #------------------------#
+    def multi(self, rows, cols, hoffset=0.1, voffset=0.1,hgap=0.1, vgap=0.1,
+              width_to_height_ratio=1.62):
+        """Create a grid of graphs with the given number of <rows> and <cols>
+           Makes graph frames all the same size.
+        """
+        self.graphs_rc = [[None for i in range(cols)] for j in range(rows)]
+
+        self.hgap = hgap
+        self.vgap = vgap
+        self.hoffset = hoffset
+        self.voffset = voffset
+        self.rows = rows
+        self.cols = cols
+
+        # compute the frame sizes
+        self._calculate_graph_frame(rows,cols,hoffset,voffset,hgap,vgap,
+                                    width_to_height_ratio)
 
         if rows*cols >= len(self.graphs):
             nPlots = len(self.graphs)
@@ -383,48 +279,244 @@ class Grace:
             if c>=cols:
                 c=0
                 r+=1
-                
-    def put(self,g, row, col): # ZERO BASED INDEXING.  Places a graph at postion [row][col]
-        if row >= self.rows:
-            raise
-        if col >= self.cols:
-            raise
 
-        self.graphs_rc[row][col] = g
-
-        g['view']['xmin'] = self.hoffset+(self.hgap+self.frame_width)*col
-        g['view']['ymin'] = self.max_frame_height - self.voffset - \
-                            self.vgap*row - self.frame_height*(row+1)
-        g['view']['xmax'] = g['view']['xmin'] + self.frame_width
-        g['view']['ymax'] = g['view']['ymin'] + self.frame_height
-
-        ## sys.stderr.write(str(row)+ ' ' + str(col)+'\n')
-##         sys.stderr.write(str(g['view']['xmin'])+'\n')
-##         sys.stderr.write(str(g['view']['ymin'])+'\n')
-        
-    def get_rc(self,row,col):
-        """Returns the graph in position [row][col]"""
-        return self.graphs_rc[row][col]
-        
-
-    def set_fonts(self,font_type):
-        """Set all fonts in grace object to be font_type
+    def hide_redundant_xaxislabels(self):
+        """Hide all x-axis axis labels on the interior of a multigraph that
+        are redundant, but only if all labels on the interior of the
+        multigraph are the same.
         """
 
-        self.timestamp.font = font_type;
-        for graph in self.graphs:
-            graph.title.font = font_type
-            graph.subtitle.font = font_type;
-            graph.legend.font = font_type
-            graph.xaxis.label.label.font = font_type;
-            graph.yaxis.label.label.font = font_type;
-            graph.xaxis.ticklabel.font = font_type;
-            graph.yaxis.ticklabel.font = font_type;
+        if not self.graphs_rc:
+            message = """
+Grace.autohide_multi_labels only works with a multigraph
+"""
+            raise TypeError,message
 
-            for dataset in graph.datasets:
-                dataset.symbol.char_font = font_type;
-                dataset.avalue.font = font_type
+        # iterate through each column of graphs
+        for c in range(self.cols):
+            
+            # find the lowest graph
+            _rows = self.rows
+            for r in range(self.rows-1,-1,-1):
+                graph = self.graphs_rc[r][c]
+                if graph is not None:
+                    _rows = r
+                    break
+            
+            # hide redundant labels in this column
+            if _rows>0:
+
+                # find redundant labels
+                redundant_axislabel = True
+                for r in range(_rows):
+                    g = self.graphs_rc[r][c]
+                    if not g.xaxis.label==graph.xaxis.label:
+                        redundant_axislabel = False
                 
+                # hide redundant labels
+                for r in range(_rows):
+                    if redundant_axislabel:
+                        self.graphs_rc[r][c].xaxis.label.text = ''
+        
+    def hide_redundant_xticklabels(self):
+        """Hide all x-axis tick labels on the interior of a multigraph that
+        are redundant, but only if all labels on the interior of the
+        multigraph are the same.
+        """
+
+        if not self.graphs_rc:
+            message = """
+Grace.autohide_multi_labels only works with a multigraph
+"""
+            raise TypeError,message
+
+        # iterate through each column of graphs
+        for c in range(self.cols):
+            
+            # find the lowest graph
+            _rows = self.rows
+            for r in range(self.rows-1,-1,-1):
+                graph = self.graphs_rc[r][c]
+                if graph is not None:
+                    _rows = r
+                    break
+            
+            # hide redundant labels in this column
+            if _rows>0:
+
+                # find redundant labels
+                redundant_ticklabel = True
+                for r in range(_rows):
+                    g = self.graphs_rc[r][c]
+                    if not g.xaxis.ticklabel==graph.xaxis.ticklabel:
+                        redundant_ticklabel = False
+                
+                # hide redundant labels
+                for r in range(_rows):
+                    if redundant_ticklabel:
+                        self.graphs_rc[r][c].xaxis.ticklabel.onoff = "off"
+        
+    def hide_redundant_xlabels(self):
+        """Hide all x-axis tick and axis labels on the interior of a
+        multigraph that are redundant, but only if all labels on the
+        interior of the multigraph are the same.
+        """
+        self.hide_redundant_xaxislabels()
+        self.hide_redundant_xticklabels()
+
+    def hide_redundant_yaxislabels(self):
+        """Hide all y-axis axis labels on the interior of a multigraph that
+        are redundant, but only if all labels on the interior of the
+        multigraph are the same.
+        """
+
+        if not self.graphs_rc:
+            message = """
+Grace.autohide_multi_labels only works with a multigraph
+"""
+            raise TypeError,message
+
+        # iterate through each column of graphs
+        for r in range(self.rows):
+            
+            # find the left-most graph
+            _cols = 0
+            for c in range(self.cols):
+                graph = self.graphs_rc[r][c]
+                if graph is not None:
+                    _cols = c+1
+                    break
+            
+            # hide redundant labels in this column
+            if _cols<self.cols:
+
+                # find redundant labels
+                redundant_axislabel = True
+                for c in range(_cols,self.cols):
+                    g = self.graphs_rc[r][c]
+                    if not g.yaxis.label==graph.yaxis.label:
+                        redundant_axislabel = False
+                
+                # hide redundant labels
+                for c in range(_cols,self.cols):
+                    if redundant_axislabel:
+                        self.graphs_rc[r][c].yaxis.label.text = ''
+        
+    def hide_redundant_yticklabels(self):
+        """Hide all y-axis tick labels on the interior of a multigraph that
+        are redundant, but only if all labels on the interior of the
+        multigraph are the same.
+        """
+
+        if not self.graphs_rc:
+            message = """
+Grace.autohide_multi_labels only works with a multigraph
+"""
+            raise TypeError,message
+
+        # iterate through each column of graphs
+        for r in range(self.rows):
+            
+            # find the lowest graph
+            _cols = self.cols
+            for c in range(self.cols):
+                graph = self.graphs_rc[r][c]
+                if graph is not None:
+                    _cols = c+1
+                    break
+            
+            # hide redundant labels in this column
+            if _cols<self.cols:
+
+                # find redundant labels
+                redundant_ticklabel = True
+                for c in range(_cols,self.cols):
+                    g = self.graphs_rc[r][c]
+                    if not g.yaxis.ticklabel==graph.yaxis.ticklabel:
+                        redundant_ticklabel = False
+                
+                # hide redundant labels
+                for c in range(_cols,self.cols):
+                    if redundant_ticklabel:
+                        self.graphs_rc[r][c].yaxis.ticklabel.onoff = "off"
+        
+    def hide_redundant_ylabels(self):
+        """Hide all y-axis tick and axis labels on the interior of a
+        multigraph that are redundant, but only if all labels on the
+        interior of the multigraph are the same.
+        """
+        self.hide_redundant_yaxislabels()
+        self.hide_redundant_yticklabels()
+
+    def hide_redundant_axislabels(self):
+        """Hide all redundant labels.
+        """
+        self.hide_redundant_xaxislabels()
+        self.hide_redundant_yaxislabels()
+
+    def hide_redundant_ticklabels(self):
+        """Hide all redundant labels.
+        """
+        self.hide_redundant_xticklabels()
+        self.hide_redundant_yticklabels()
+
+    def hide_redundant_labels(self):
+        """Hide all redundant labels.
+        """
+        self.hide_redundant_xlabels()
+        self.hide_redundant_ylabels()
+
+    def automulti(self, maxrows=5, maxcols=5,
+                  hoffset=0.1, voffset=0.1, hgap=0.1, vgap=0.1,
+                  width_to_height_ratio=1.62):
+        """Automatically determine the number of rows and columns to
+        add based on the number of graphs currently in the grace.  The
+        number of rows and columns is determined by trying to maximize
+        the area of canvas that is used (by a non-optimized brute
+        force approach).
+        """
+
+        optrows, optcols, optarea = None, None, 0.0
+        for rows in range(1,maxrows+1):
+            for cols in range(1,maxcols+1):
+                if rows*cols>=len(self.graphs):
+                    self._calculate_graph_frame(rows,cols,hoffset,voffset,
+                                                hgap,vgap,
+                                                width_to_height_ratio)
+                    area = len(self.graphs)*\
+                           self.frame_height*self.frame_width
+                    if area>optarea:
+                        optrows = rows
+                        optcols = cols
+                        optarea = area
+
+        # now that I have the optimum layout, do the multi
+        self.multi(optrows,optcols,hoffset,voffset,hgap,vgap,
+                   width_to_height_ratio)
+
+    def align_axislabelx(self,place_tup=(0, 0.08)):
+        """Align the x-axis labels with place_tup for all graphs in
+        this Grace instance.
+        """
+        for graph in self.graphs:
+            graph.xaxis.label.place_loc = "spec"
+            graph.xaxis.label.place_tup = place_tup
+
+    def align_axislabely(self,place_tup=(0, 0.08)):
+        """Align the y-axis labels with place_tup for all graphs in
+        this Grace instance.
+        """
+        for graph in self.graphs:
+            graph.yaxis.label.place_loc = "spec"
+            graph.yaxis.label.place_tup = place_tup
+
+    def align_axislabel(self,xplace_tup=(0, 0.08),yplace_tup=(0,0.08)):
+        """Align the x- and y-axis labels with place_tup for all
+        graphs in this Grace instance.
+        """
+        self.align_axislabelx(xplace_tup)
+        self.align_axislabely(yplace_tup)
+
     def get_eps_frame_coords(self):
         """For each graph, obtain the eps coordinates of the frame
         within the figure.  This is useful for aligning things in
@@ -444,52 +536,29 @@ class Grace:
             ymax = graph.view.ymax*lim_dimension
             eps_frame_coords.append((xmin,xmax,ymin,ymax))
         return eps_frame_coords
-            
-# =============================================================== Test function
-if __name__ == '__main__':
-    
-    
-    x = Grace()
-    d = DataSet([(-1,-2),(1,1),(2,3)], x._colors, x._fonts)
-    e = DataSet([(0,0),(1.5,2),(2,2.8)],x._colors, x._fonts)
-    g = Graph(x._colors,x._fonts)
-##     g.world = World((.1,.1),(2,3))
-    #g.yaxis['scale'] = 'Logarithmic'
 
-    g.add_dataset(d)
-    g.add_dataset(e)
-    x.add_graph(g)
-    #d.legend = 'blah'
+class Timestamp(GraceObject):
+    """A string representation of the time is created at time of printing."""
+    _staticType = 'Timestamp'
+    def __init__(self, parent,
+                 onoff='off',
+                 x = 0.03,
+                 y = 0.03,
+                 color = 1,
+                 font = 4,
+                 rot = 0,
+                 char_size = 1.0,
+                 ):
+        GraceObject.__init__(self, parent, locals())
 
-    #g.legend['loc'] = (.8,.8)
-
-    #g.legend['color'] = 'red'
-    #g.legend['font'] = "Helvetica"
-    
-    #g.frame.color = 'red'
-    #g.frame['type'] = 1
-
-
-
-    x.define_color('babybrown', (155, 135, 95))
-    #x['backgroundColor'] = 'babybrown'
-    #sys.err.write(_colors["red"])
-
-##     x.timestamp['onoff'] = 'on'
-##     x.timestamp['rot'] = 5
-
-##     d1, d2 = DataSet(), DataSet()
-##     g1 = Graph()
-
-##     g1.add_dataset(d1)
-##     g1.add_dataset(d2)
-
-##     x.add_graph(g1)
-
-    #adjust_labels(g,.5)
-    
-    print x
-    x.write_agr()
-    x.write_file()
-    
+    def __str__(self):
+        self.time = time.ctime()
+        return \
+"""@timestamp %(onoff)s
+@timestamp %(x)s, %(y)s
+@timestamp color %(color)s
+@timestamp rot %(rot)s
+@timestamp font %(font)s
+@timestamp char size %(char_size)s
+@timestamp def "%(time)s" """ % self
 
