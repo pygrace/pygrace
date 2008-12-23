@@ -1,5 +1,46 @@
 from base import GraceObject
 
+SYMBOLS = {"None":0,
+           "Circle":1,
+           "Square":2,
+           "Diamond":3,
+           "Triangle up":4,
+           "Triangle left":5,
+           "Triangle down":6,
+           "Triangle right":7,
+           "Plus":8,
+           "X":9,
+           "Star":10,
+           "Char":11,
+           "none":0,
+           "circle":1,
+           "square":2,
+           "diamond":3,
+           "triangle up":4,
+           "triangle left":5,
+           "triangle down":6,
+           "triangle right":7,
+           "plus":8,
+           "x":9,
+           "star":10,
+           "char":11,
+           }
+LINETYPES = {"None":0,
+             "Straight":1,
+             "Left stairs":2,
+             "Right stairs":3,
+             "Segments":4,
+             "3-Segments":5}
+LINESTYLES = {"--":0,
+              ". . ":1,
+              "- - ":2,
+              "-- -- ":3,
+              ". - . - ":4,
+              ". -- . -- ":5,
+              ". . - . . - ":6,
+              "- - . - - . ":7}
+
+
 class Symbol(GraceObject):
     _staticType = 'Symbol'
     def __init__(self, parent,
