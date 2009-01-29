@@ -185,7 +185,7 @@ class GraceObject(object):
             self._check_range(key, value, 0, None)
         elif key.endswith('just'):
             self._check_type((int,), key, value)
-            self._check_range(key, value, 0, 12, includeMax=False)
+            self._check_range(key, value, 0, 15, includeMax=False)
         elif key.endswith('size'):
             self._check_type((float, int), key, value)
             self._check_range(key, value, 0, None)
