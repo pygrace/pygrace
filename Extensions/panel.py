@@ -63,6 +63,21 @@ Graph.remove_extraworld_drawing_objects is called.
             raise TypeError, message
 
         # specify formats for panel labels
+        self.label_scheme = label_scheme
+        self.label_index = 0
+        self.set_text(label_scheme,label_index)
+
+        # place the panel label.  This method is also called at draw
+        # time in the event that a user changes the location of the
+        # PanelLabel
+        self.place_label()
+
+    def set_text(self,label_scheme=None,label_index=None):
+        """Set the text of the panel label at draw time based on the
+        label_scheme and the label_index.
+        """
+
+        # specify formats for panel labels
         latin_alphabet = "abcdefghijklmnopqrstuvwxyz"
         roman_numerals = ["i","ii","iii","iv","v","vi","vii","viii","ix","x"]
         label_schemes = {"LATIN":[c.upper() for c in latin_alphabet],
@@ -70,12 +85,35 @@ Graph.remove_extraworld_drawing_objects is called.
                          "ROMAN":[n.upper() for n in roman_numerals],
                          "roman":[n.lower() for n in roman_numerals],
                          }
-        self.text = label_schemes[label_scheme][label_index]
 
-        # place the panel label.  This method is also called at draw
-        # time in the event that a user changes the location of the
-        # PanelLabel
-        self.place_label()
+        # make sure label_scheme is legal
+        if label_scheme is None:
+            label_scheme = self.label_scheme
+        elif not label_schemes.has_key(label_scheme):
+            message = """
+Label scheme '%s' is not allowed.  Try one of these instead:
+%s
+"""%(str(label_scheme),
+     '\n'.join(label_sheme.keys()))
+            raise TypeError,message
+        self.label_scheme = label_scheme
+
+        # make sure label_index is legal
+        if label_index is None:
+            label_index = self.label_index
+        elif label_index<0 or label_index>=len(label_schemes[label_scheme]):
+            message = """
+Label index '%s' is not allowed for label scheme '%s'.
+For label scheme '%s', label index must be between 0 and %d.
+"""%(str(label_index),
+     label_scheme,
+     label_scheme,
+     len(label_schemes[label_scheme]))
+            raise TypeError,message
+        self.label_index = label_index
+
+        # set the text of the label
+        self.text = label_schemes[self.label_scheme][self.label_index]
 
     def place_label(self,placement=None,dx=None,dy=None,just=None):
         """Place the PanelLabel near with format placement and position dx and
@@ -167,5 +205,6 @@ Unknown placement.  Placement should be one of
         """Override the __str__ functionality to draw the PanelLabel at
         draw time.
         """
+        self.set_text()
         self.place_label()
         return DrawText.__str__(self)
