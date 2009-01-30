@@ -1,12 +1,16 @@
 import sys
-import user
-from __init__ import output_name
+
 from random import normalvariate as nv
-sys.path.append(user.pygracePackagePath)
+
+# add the root directory of the PyGrace package to the PYTHONPATH
+from example_tools import PYGRACE_PATH
+sys.path.append(PYGRACE_PATH)
+
 from PyGrace.grace import Grace
 from PyGrace.graph import Graph
 from PyGrace.dataset import DataSet
 from PyGrace.colors import ColorBrewerScheme
+from example_tools import output_name
 
 class ScatterPoints(DataSet):
     def __init__(self, color, *args, **kwargs):
@@ -42,6 +46,4 @@ graph.set_labels('Snerdwump', 'Sneezle')
 graph.format_for_print(6)
 
 # print the grace (.agr format) to a file
-outStream = open(output_name(__file__), 'w')
-print >> outStream, grace
-outStream.close()
+grace.write_file(output_name(__file__))

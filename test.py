@@ -4,7 +4,7 @@ out."""
 
 from sys import stderr, stdout
 from subprocess import Popen, PIPE
-from os.path import sep
+from os.path import sep, splitext
 
 exampleList = [
     './Examples/00_helloworld.py',
@@ -43,7 +43,8 @@ if __name__ == '__main__':
         # write output of error stream
         errorOutput = childProcess.stderr.read()
         if errorOutput:
-            errorStream = open('%s.log' % scriptPath, 'w')
+            root, ext = splitext(scriptPath)
+            errorStream = open('%s.log' % root, 'w')
             print >> errorStream, errorOutput
             errorStream.close()
         
@@ -70,7 +71,7 @@ if __name__ == '__main__':
 
         message = """
 The output of standard error for each test script are stored in the same file
-as the output with a .stderr at the end."""
+as the output with a .log extension."""
         print >> stderr, message
 
     if allPassed == 'PASSED':

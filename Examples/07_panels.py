@@ -5,10 +5,14 @@
 # label.
 
 import sys
-import user
 from random import random
-from __init__ import output_name
-sys.path.append(user.pygracePackagePath)
+
+from example_tools import output_name
+
+# add the root directory of the PyGrace package to the PYTHONPATH
+from example_tools import PYGRACE_PATH
+sys.path.append(PYGRACE_PATH)
+
 from PyGrace.grace import Grace
 from PyGrace.Extensions.panel import Panel
 from PyGrace.Styles.el import ElCircleDataSet
@@ -42,7 +46,5 @@ grace.autoformat()
 grace.hide_redundant_labels()
 
 # print the grace (.agr format) to a file
-outStream = open(output_name(__file__), 'w')
-print >> outStream, grace
-outStream.close()
+grace.write_file(output_name(__file__))
 

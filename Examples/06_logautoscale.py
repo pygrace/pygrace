@@ -4,10 +4,14 @@
 # outside of bounds of graph
 
 import sys
-import user
 import random
-from __init__ import output_name
-sys.path.append(user.pygracePackagePath)
+
+from example_tools import output_name
+
+# add the root directory of the PyGrace package to the PYTHONPATH
+from example_tools import PYGRACE_PATH
+sys.path.append(PYGRACE_PATH)
+
 from PyGrace.grace import Grace
 from PyGrace.colors import ColorBrewerScheme
 from PyGrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
@@ -57,6 +61,4 @@ graph.xaxis.label.text = "Negative X's are hidden"
 graph.yaxis.label.text = "Negative Y's are hidden"
 
 # print out the grace
-outStream = open(output_name(__file__), 'w')
-print >> outStream, grace
-outStream.close()
+grace.write_file(output_name(__file__))

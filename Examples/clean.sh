@@ -1,2 +1,2 @@
 #!/bin/bash
-rm -f *.out.agr; rm -f *.pyc; rm -f *.pyo; rm -f *.py.log; rm -f *~;
+rm -f *.agr; rm -f *.pyc; rm -f *.pyo; rm -f *.log; rm -f *~;
