@@ -273,7 +273,7 @@ class DataSet(GraceObject):
 
     def __setattr__(self, key, value):
 
-        DATA_TYPES = ('xy', 'xydy')
+        DATA_TYPES = ('xy', 'xydy', 'xydxdy')
 
         # check DataSet specific attributes
         if key == 'type':
