@@ -156,9 +156,9 @@ class Grace(GraceObject):
 
         # find extension of file
         root,ext = os.path.splitext(filename)
-        ext = ext.lower()
+        ext = ext[1:].lower()
 
-        if ext=="agr":
+        if ext=="agr" or (filetype and filetype.lower() == 'agr'):
             self.write_agr(filename)
             return
         elif ext in ext2filetype and filetype is None:
