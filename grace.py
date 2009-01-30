@@ -128,8 +128,8 @@ class Grace(GraceObject):
 	outfile.write(str(self))
 	outfile.close()
 
-    def write_file(self, filename='temp.eps', filetype='EPS'):
-        """write_file(filename='temp.eps', filetype='EPS') -> none.
+    def write_file(self, filename='temp.eps', filetype=None):
+        """write_file(filename='temp.eps', filetype=None) -> none.
 
         This function uses gracebat to output a image file of the specified
         type.  Here are the allowed types (for version 5.1.14):
@@ -141,6 +141,35 @@ class Grace(GraceObject):
         returns a file object in write mode, that will be sent to the command
         once the file object is closed (after writing stuff to it).
         """
+
+        # dictionary for converting file extensions to proper gracebat
+        # file types
+        ext2filetype = {"eps":"EPS",
+                        "ps":"PostScript",
+                        "mif":"MIF",
+                        "svg":"SVG",
+                        "pnm":"PNM",
+                        "jpg":"JPEG",
+                        "jpeg":"JPEG",
+                        "png":"PNG",
+                        }
+
+        # find extension of file
+        ext = filename.split('.')[-1].lower()
+
+        if ext=="agr":
+            self.write_agr(filename)
+            return
+        elif ext in ext2filetype and filetype is None:
+            filetype = ext2filetype[ext]
+        elif filetype is None:
+            message = """
+Grace.write_file tries to guess the gracebat file type from the given
+file name.  In this case, Grace.write_file does not recognize the file
+type of file '%s'.  Please specify the gracebat file type manually
+using the 'filetype' keyword argument.
+"""%(filename)
+            raise TypeError, message
 
         # make command that will be piped to
         command = 'gracebat -hardcopy -hdevice %s -printfile "%s" -pipe' % \
