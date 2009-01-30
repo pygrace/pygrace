@@ -155,7 +155,8 @@ class Grace(GraceObject):
                         }
 
         # find extension of file
-        ext = filename.split('.')[-1].lower()
+        root,ext = os.path.splitext(filename)
+        ext = ext.lower()
 
         if ext=="agr":
             self.write_agr(filename)
