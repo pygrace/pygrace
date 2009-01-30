@@ -39,7 +39,7 @@ from math import floor,ceil
 data = []
 for i in range(10000):
     x = normalvariate(0,1.0)
-    y = normalvariate(0,2.0)
+    y = normalvariate(-x,1.0)
     data.append((x,y))
 
 # quick and dirty class for creating a pdf
