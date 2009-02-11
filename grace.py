@@ -538,7 +538,7 @@ Grace.autohide_multi_labels only works with a multigraph
 
         # determine offsets for resulting new label
         if self.cols%2==1:
-            col = int(float(self.col)/2.0)
+            col = int(float(self.cols)/2.0)
             graph = self.graphs_rc[row][col]
             parallel_offset = 0.0
         else:
