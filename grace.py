@@ -497,6 +497,7 @@ Grace.autohide_multi_labels only works with a multigraph
         self.hide_redundant_ylabels()
 
     def set_col_yaxislabel(self,col,label,perpendicular_offset=0.08,
+                           opposite_side=False,
                            *args,**kwargs):
         """Add a single y-axis label to a particular column of multi plot.
         """
@@ -525,8 +526,19 @@ Grace.autohide_multi_labels only works with a multigraph
                                     place_tup=(parallel_offset,
                                                perpendicular_offset),
                                     *args,**kwargs)
+
+        # place label on the opposite side (rotate text and place tick
+        # mark labels there, too)
+        if opposite_side:
+            for row in range(self.rows):
+                graph = self.graphs_rc[row][col]
+                graph.yaxis.label.place = 'opposite'
+                graph.yaxis.ticklabel.place = 'opposite'
+                text = graph.yaxis.label.text
+                graph.yaxis.label.text = r"\t{-1 0 0 -1}" + text + r"\t{}"
             
     def set_row_xaxislabel(self,row,label,perpendicular_offset=0.08,
+                           opposite_side=False,
                            *args,**kwargs):
         """Add a single x-axis label to a particular row of multi plot.
         """
@@ -557,6 +569,13 @@ Grace.autohide_multi_labels only works with a multigraph
                                     *args,**kwargs)
             
 
+        # place axis and tick labels on the opposite side
+        if opposite_side:
+            for col in range(self.cols):
+                graph = self.graphs_rc[row][col]
+                graph.xaxis.label.place = 'opposite'
+                graph.xaxis.ticklabel.place = 'opposite'
+            
     def automulti(self, maxrows=5, maxcols=5,
                   hoffset=0.1, voffset=0.1, hgap=0.1, vgap=0.1,
                   width_to_height_ratio=1.62):
