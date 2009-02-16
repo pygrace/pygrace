@@ -273,7 +273,11 @@ class DataSet(GraceObject):
 
     def __setattr__(self, key, value):
 
-        DATA_TYPES = ('xy', 'xydy', 'xydxdy',"xydydy",'bar')
+        DATA_TYPES = ('xy', 'xydx', 'xydy', 'xydxdy', 'xydydy', 
+                      'xydxdx', 'xydxdxdydy', 'bar', 'bardy', 'bardydy',
+                      'xyhilo', 'xyz', 'xyr', 'xysize', 'xycolor',
+#                       'xycolpat', # xmgrace does not support
+                      'xyvmap', 'xyboxplot')
 
         # check DataSet specific attributes
         if key == 'type':
@@ -303,27 +307,104 @@ class DataSet(GraceObject):
 @    s%(index)s comment "%(comment)s"
 @    s%(index)s legend "%(legend)s" """ % self
 
-    def limits(self):
+    def data_bounds(self):
+        x, y = [], []
         if self.data:
-            if self.type=='xyboxplot':
-                x,y2,y1,y3,y0,y4 = zip(*self.data)
-                y = y0+y1+y2+y3+y4
-            elif self.type=="xydydy":
-                x, y = [], []
+            if self.type=="xy" or self.type=="bar":
+                x, y = zip(*self.data)
+            elif self.type=="xydx":
+                for datum in self.data:
+                    x.extend([datum[0],
+                              datum[0]-datum[2],
+                              datum[0]+datum[2]])
+                    y.append(datum[1])
+            elif self.type=="xydy":
                 for datum in self.data:
                     x.append(datum[0])
-                    y.append(datum[1])
-                    y.append(datum[1]+datum[2])
-                    y.append(datum[1]-datum[3])
+                    y.extend([datum[1],
+                              datum[1]-datum[2],
+                              datum[1]+datum[2]])
+            elif self.type=="xydxdy":
+                for datum in self.data:
+                    x.extend([datum[0],
+                              datum[0]-datum[2],
+                              datum[0]+datum[2]])
+                    y.extend([datum[1],
+                              datum[1]-datum[3],
+                              datum[1]+datum[3]])
+            elif self.type=="xydxdx":
+                for datum in self.data:
+                    x.extend([datum[0],
+                              datum[0]+datum[2],
+                              datum[0]-datum[3]])
+                    y.append(y)
+            elif self.type=="xydydy":
+                for datum in self.data:
+                    x.append(datum[0])
+                    y.extend([datum[1],
+                              datum[1]+datum[2],
+                              datum[1]-datum[3]])
+            elif self.type=="xydxdxdydy":
+                for datum in self.data:
+                    x.extend([datum[0],
+                              datum[0]+datum[2],
+                              datum[0]-datum[3]])
+                    y.extend([datum[1],
+                              datum[1]+datum[4],
+                              datum[1]-datum[5]])
+            elif self.type=="bardy":
+                for datum in self.data:
+                    x.append(datum[0])
+                    y.extend([datum[1],
+                              datum[1]+datum[2],
+                              datum[1]-datum[2]])
+            elif self.type=="bardydy":
+                for datum in self.data:
+                    x.append(datum[0])
+                    y.extend([datum[1],
+                              datum[1]+datum[2],
+                              datum[1]-datum[3]])
+            elif self.type=="xyhilo":
+                x,y1,y2,y3,y4 = zip(*self.data)
+                y = y1+y2+y3+y4
+            elif self.type=="xyz":
+                x,y,z = zip(*self.data) # z is annotation
+            elif self.type=="xyr":
+                for datum in self.data:
+                    x.extend([datum[0]-datum[2],
+                              datum[0]+datum[2]])
+                    y.extend([datum[1]-datum[2],
+                              datum[1]+datum[2]])
+            elif self.type=="xysize":
+                x,y,size = zip(*self.data) # size is symbol width
+            elif self.type=="xycolor":
+                x,y,color = zip(*self.data) # color is color of symbol
+#             elif self.type=="xycolpat": # xmgrace does not support
+#                 pass
+            elif self.type=="xyvmap":
+                for datum in self.data:
+                    x.extend([datum[0],
+                              datum[0]+datum[2]])
+                    y.extend([datum[1],
+                              datum[1]+datum[3]])
+            elif self.type=='xyboxplot':
+                x,y2,y1,y3,y0,y4 = zip(*self.data)
+                y = y0+y1+y2+y3+y4
             else:
-                xy = zip(*self.data)
-                x, y = xy[0], xy[1]
-                
+                message = """
+Can not find limits of DataSet with type %s
+"""%self.type
+                raise TypeError, message
+        return x,y
+
+    def limits(self):
+        if self.data:
+            x, y = self.data_bounds()
             return min(x), min(y), max(x), max(y)
 
     def smallest_positive(self):
         if self.data:
-            x, y = zip(*self.data)
+            x, y = self.data_bounds()
             x = [i for i in x if i > 0]
             y = [i for i in y if i > 0]
             if x:
