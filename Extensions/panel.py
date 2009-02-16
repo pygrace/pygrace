@@ -1,6 +1,4 @@
 import sys
-from user import pygracePackagePath
-sys.path.append(pygracePackagePath)
 from PyGrace.graph import Graph
 from PyGrace.drawing_objects import DrawText, DRAWTEXT_JUSTIFICATIONS
 

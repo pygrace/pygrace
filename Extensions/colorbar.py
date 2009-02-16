@@ -1,7 +1,5 @@
 import sys
 import math
-from user import pygracePackagePath
-sys.path.append(pygracePackagePath)
 from PyGrace.graph import Graph
 from PyGrace.drawing_objects import DrawBox
 from PyGrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
