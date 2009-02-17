@@ -318,7 +318,7 @@ using the 'filetype' keyword argument.
                 c=0
                 r+=1
 
-    def automulti(self, maxrows=5, maxcols=5,
+    def automulti(self, maxrows=5, maxcols=7,
                   hoffset=(0.15,0.05), voffset=(0.05,0.15), 
                   hgap=0.1, vgap=0.1,
                   width_to_height_ratio=1.62):
@@ -384,14 +384,15 @@ Grace.autohide_multi_labels only works with a multigraph
                 redundant_axislabel = True
                 for r in range(_rows):
                     g = self.graphs_rc[r][c]
-                    if not g.xaxis.label==graph.xaxis.label:
+                    if g is not None and g.xaxis.label!=graph.xaxis.label:
                         redundant_axislabel = False
                 
                 # hide redundant labels
                 for r in range(_rows):
                     if redundant_axislabel:
-                        self.graphs_rc[r][c].xaxis.label.text = ''
-        
+                        if self.graphs_rc[r][c] is not None:
+                            self.graphs_rc[r][c].xaxis.label.text = ''
+                        
     def hide_redundant_xticklabels(self):
         """Hide all x-axis tick labels on the interior of a multigraph that
         are redundant, but only if all labels on the interior of the
@@ -422,13 +423,15 @@ Grace.autohide_multi_labels only works with a multigraph
                 redundant_ticklabel = True
                 for r in range(_rows):
                     g = self.graphs_rc[r][c]
-                    if not g.xaxis.ticklabel==graph.xaxis.ticklabel:
+                    if (g is not None and 
+                        g.xaxis.ticklabel!=graph.xaxis.ticklabel):
                         redundant_ticklabel = False
                 
                 # hide redundant labels
                 for r in range(_rows):
                     if redundant_ticklabel:
-                        self.graphs_rc[r][c].xaxis.ticklabel.onoff = "off"
+                        if self.graphs_rc[r][c] is not None:
+                            self.graphs_rc[r][c].xaxis.ticklabel.onoff = "off"
         
     def hide_redundant_xlabels(self):
         """Hide all x-axis tick and axis labels on the interior of a
@@ -468,13 +471,14 @@ Grace.autohide_multi_labels only works with a multigraph
                 redundant_axislabel = True
                 for c in range(_cols,self.cols):
                     g = self.graphs_rc[r][c]
-                    if not g.yaxis.label==graph.yaxis.label:
+                    if g is not None and g.yaxis.label!=graph.yaxis.label:
                         redundant_axislabel = False
                 
                 # hide redundant labels
                 for c in range(_cols,self.cols):
                     if redundant_axislabel:
-                        self.graphs_rc[r][c].yaxis.label.text = ''
+                        if self.graphs_rc[r][c] is not None:
+                            self.graphs_rc[r][c].yaxis.label.text = ''
         
     def hide_redundant_yticklabels(self):
         """Hide all y-axis tick labels on the interior of a multigraph that
@@ -506,13 +510,15 @@ Grace.autohide_multi_labels only works with a multigraph
                 redundant_ticklabel = True
                 for c in range(_cols,self.cols):
                     g = self.graphs_rc[r][c]
-                    if not g.yaxis.ticklabel==graph.yaxis.ticklabel:
+                    if (g is not None and 
+                        g.yaxis.ticklabel!=graph.yaxis.ticklabel):
                         redundant_ticklabel = False
                 
                 # hide redundant labels
                 for c in range(_cols,self.cols):
                     if redundant_ticklabel:
-                        self.graphs_rc[r][c].yaxis.ticklabel.onoff = "off"
+                        if self.graphs_rc[r][c] is not None:
+                            self.graphs_rc[r][c].yaxis.ticklabel.onoff = "off"
         
     def hide_redundant_ylabels(self):
         """Hide all y-axis tick and axis labels on the interior of a

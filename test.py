@@ -16,6 +16,7 @@ exampleList = [
     './Examples/06_logautoscale.py',
     './Examples/07_panels.py',
     './Examples/08_latexlabels.py',
+    './Examples/09_datasets.py',
     ]
 
 if __name__ == '__main__':

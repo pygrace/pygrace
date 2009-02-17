@@ -275,7 +275,9 @@ class DataSet(GraceObject):
 
         DATA_TYPES = ('xy', 'xydx', 'xydy', 'xydxdy', 'xydydy', 
                       'xydxdx', 'xydxdxdydy', 'bar', 'bardy', 'bardydy',
-                      'xyhilo', 'xyz', 'xyr', 'xysize', 'xycolor',
+                      'xyhilo', 'xyz', 
+#                       'xyr', # apparently unsupported
+                      'xysize', 'xycolor',
 #                       'xycolpat', # xmgrace does not support
                       'xyvmap', 'xyboxplot')
 
@@ -337,7 +339,7 @@ class DataSet(GraceObject):
                     x.extend([datum[0],
                               datum[0]+datum[2],
                               datum[0]-datum[3]])
-                    y.append(y)
+                    y.append(datum[1])
             elif self.type=="xydydy":
                 for datum in self.data:
                     x.append(datum[0])
@@ -369,12 +371,12 @@ class DataSet(GraceObject):
                 y = y1+y2+y3+y4
             elif self.type=="xyz":
                 x,y,z = zip(*self.data) # z is annotation
-            elif self.type=="xyr":
-                for datum in self.data:
-                    x.extend([datum[0]-datum[2],
-                              datum[0]+datum[2]])
-                    y.extend([datum[1]-datum[2],
-                              datum[1]+datum[2]])
+#             elif self.type=="xyr": # xmgrace does not support
+#                 for datum in self.data:
+#                     x.extend([datum[0]-datum[2],
+#                               datum[0]+datum[2]])
+#                     y.extend([datum[1]-datum[2],
+#                               datum[1]+datum[2]])
             elif self.type=="xysize":
                 x,y,size = zip(*self.data) # size is symbol width
             elif self.type=="xycolor":
