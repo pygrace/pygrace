@@ -1,3 +1,5 @@
+import random
+
 from base import BaseSet
 from Styles.ColorBrewer import colorbrewer
 
@@ -58,6 +60,35 @@ class ColorBrewerScheme(ColorScheme):
             rgbList = tuple(rgbList)
 
         # make color instance from the rgb values
+        colors = [Color(0, 255, 255, 255, 'white'), Color(1, 0, 0, 0, 'black')]
+        colors.extend([Color(index + 2, r, g, b, '%s-%i' % (name, index)) \
+                           for index, (r, g, b) in enumerate(rgbList)])
+
+        ColorScheme.__init__(self, colors)
+
+class RandomColorScheme(ColorScheme):
+    """Instantiate with random seed and the number of colors.  The first
+    two colors (0 and 1) are always white and black.
+    """
+    def __init__(self, seed,n,reverse=False):
+
+        # create a list of rgb values
+        rgbList = []
+        random.seed(seed)
+        for i in range(n):
+            rgbList.append((random.randint(0,255),
+                            random.randint(0,255),
+                            random.randint(0,255)))
+        rgbList = tuple(rgbList)
+
+        # reverse the rgb list?
+        if reverse:
+            rgbList = list(rgbList)
+            rgbList.reverse()
+            rgbList = tuple(rgbList)
+
+        # make color instance from the rgb values
+        name = "Rand-%d"%seed
         colors = [Color(0, 255, 255, 255, 'white'), Color(1, 0, 0, 0, 'black')]
         colors.extend([Color(index + 2, r, g, b, '%s-%i' % (name, index)) \
                            for index, (r, g, b) in enumerate(rgbList)])

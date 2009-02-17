@@ -12,11 +12,9 @@ from example_tools import PYGRACE_PATH
 sys.path.append(PYGRACE_PATH)
 
 from PyGrace.grace import Grace
+from PyGrace.colors import RandomColorScheme
 from PyGrace.dataset import SYMBOLS
 from PyGrace.Extensions.panel import Panel
-
-# make an instance of the Grace class
-grace = Grace()
 
 # all of the data set types
 data_types = ['xy', 'xydx', 'xydy', 'xydxdy', 'xydydy', 
@@ -27,6 +25,10 @@ n_components = [2, 3, 3, 4, 4,
                 4, 6, 2, 3, 4, 
                 5, 3, 3, 3, 
                 4, 6]
+
+# make an instance of the Grace class that uses RandomColorScheme
+colors = RandomColorScheme(1,len(data_types))
+grace = Grace(colors=colors)
 
 # add a Graph as a "child" of the grace instance
 for i in range(len(data_types)):
@@ -47,8 +49,8 @@ for i in range(len(data_types)):
 
     # customize dataset
     dataset.line.configure(type=0)
-    dataset.symbol.configure(shape=SYMBOLS["square"],
-                             fill_color=2)
+    dataset.symbol.configure(shape=SYMBOLS["triangle up"],
+                             fill_color=i+2)
 
 # automatically space multi graph and automatically format figures.
 # width_to_height_ratio specifies the frame dimensions, hgap and vgap
