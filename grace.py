@@ -541,23 +541,43 @@ Grace.autohide_multi_labels only works with a multigraph
         self.hide_redundant_ylabels()
 
     def set_col_yaxislabel(self,col,label,perpendicular_offset=0.08,
-                           opposite_side=False,
+                           opposite_side=False,rowspan=(None,None),
                            *args,**kwargs):
         """Add a single y-axis label to a particular column of multi plot.
+        rowspan specifies the rows that label spans.  To span over
+        rows 0-1, for example, specify rowspan=(0,1).
+        rowspan=(None,None) is default and understood to mean all rows
+        in that column.
         """
 
+        # interpret default rowspan
+        rowspan = list(rowspan)
+        if rowspan[0] is None:
+            rowspan[0] = 0
+        if rowspan[1] is None:
+            rowspan[1] = self.rows-1
+        rowspan = tuple(rowspan)
+
+        # make sure rowspan[0]<=rowspan[1]
+        if rowspan[0]>rowspan[1]:
+            message = """
+rowspan[0]>rowspan[1].  Must have rowspan[0]<=rowspan[1] in 
+set_row_xaxislabel.
+"""
+            raise TypeError, message
+
         # turn off y-axis labels for all panels in this column
-        for row in range(self.rows):
+        for row in range(rowspan[0],rowspan[1]+1):
             graph = self.graphs_rc[row][col]
             graph.yaxis.label.text = ''
 
         # determine offsets for resulting new label
-        if self.rows%2==1:
-            row = int(float(self.rows)/2.0)
+        if (rowspan[1]-rowspan[0]+1)%2==1:
+            row = int(float(rowspan[1]-rowspan[0]+1)/2.0+rowspan[0])
             graph = self.graphs_rc[row][col]
             parallel_offset = 0.0
         else:
-            row = self.rows/2
+            row = (rowspan[1]-rowspan[0]+1)/2 + rowspan[0]
             graph = self.graphs_rc[row][col]
             graph_up = self.graphs_rc[row-1][col]
             upmid = 0.5*(graph_up.view.ymax + graph_up.view.ymin)
@@ -574,7 +594,7 @@ Grace.autohide_multi_labels only works with a multigraph
         # place label on the opposite side (rotate text and place tick
         # mark labels there, too)
         if opposite_side:
-            for row in range(self.rows):
+            for row in range(rowspan[0],rowspan[1]+1):
                 graph = self.graphs_rc[row][col]
                 graph.yaxis.label.place = 'opposite'
                 graph.yaxis.ticklabel.place = 'opposite'
@@ -582,23 +602,43 @@ Grace.autohide_multi_labels only works with a multigraph
                 graph.yaxis.label.text = r"\t{-1 0 0 -1}" + text + r"\t{}"
             
     def set_row_xaxislabel(self,row,label,perpendicular_offset=0.08,
-                           opposite_side=False,
+                           opposite_side=False,colspan=(None,None),
                            *args,**kwargs):
         """Add a single x-axis label to a particular row of multi plot.
+        colspan specifies the cols that label spans.  To span over
+        cols 0-1, for example, specify colspan=(0,1).
+        colspan=(None,None) is default and understood to mean all cols
+        in that row.
         """
 
+        # interpret default colspan
+        colspan = list(colspan)
+        if colspan[0] is None:
+            colspan[0] = 0
+        if colspan[1] is None:
+            colspan[1] = self.cols-1
+        colspan = tuple(colspan)
+
+        # make sure colspan[0]<=colspan[1]
+        if colspan[0]>colspan[1]:
+            message = """
+colspan[0]>colspan[1].  Must have colspan[0]<=colspan[1] in 
+set_row_xaxislabel.
+"""
+            raise TypeError, message
+
         # turn off y-axis labels for all panels in this column
-        for col in range(self.cols):
+        for col in range(colspan[0],colspan[1]+1):
             graph = self.graphs_rc[row][col]
             graph.xaxis.label.text = ''
 
         # determine offsets for resulting new label
-        if self.cols%2==1:
-            col = int(float(self.cols)/2.0)
+        if (colspan[1]-colspan[0]+1)%2==1:
+            col = int(float(colspan[1]-colspan[0]+1)/2.0+colspan[0])
             graph = self.graphs_rc[row][col]
             parallel_offset = 0.0
         else:
-            col = self.cols/2
+            col = (colspan[1]-colspan[0]+1)/2+colspan[0]
             graph = self.graphs_rc[row][col]
             graph_left = self.graphs_rc[row][col-1]
             lmid = 0.5*(graph_left.view.xmax + graph_left.view.xmin)
@@ -612,10 +652,9 @@ Grace.autohide_multi_labels only works with a multigraph
                                                perpendicular_offset),
                                     *args,**kwargs)
             
-
         # place axis and tick labels on the opposite side
         if opposite_side:
-            for col in range(self.cols):
+            for col in range(colspan[0],colspan[1]+1):
                 graph = self.graphs_rc[row][col]
                 graph.xaxis.label.place = 'opposite'
                 graph.xaxis.ticklabel.place = 'opposite'
