@@ -542,10 +542,10 @@ There are no datasets or drawing_objects on which to determine the limits.
                                                    scale=LOGARITHMIC_SCALE)
             self.world.xmax = 10**(math.ceil(math.log10(xMax) /
                                              float(math.log10(xMajor)))
-                                   * math.log10(xMajor))
+                                   * math.log10(xMajor) + pad*math.log10(xMajor))
             self.world.xmin = 10**(math.floor(math.log10(xMin) /
                                              float(math.log10(xMajor)))
-                                   * math.log10(xMajor))
+                                   * math.log10(xMajor) - pad*math.log10(xMajor))
         else:
             message = "'%s' is an unknown x-axis scale"%self.xaxis.scale
             raise TypeError(message)
