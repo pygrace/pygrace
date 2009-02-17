@@ -1,4 +1,3 @@
-import sys
 from PyGrace.grace import Grace
 from PyGrace.graph import Graph, INDEX_ORIGIN, Legend
 from PyGrace.dataset import DataSet

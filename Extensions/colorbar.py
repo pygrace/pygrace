@@ -1,4 +1,3 @@
-import sys
 import math
 from PyGrace.graph import Graph
 from PyGrace.drawing_objects import DrawBox
