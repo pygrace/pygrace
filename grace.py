@@ -81,9 +81,9 @@ class Grace(GraceObject):
         self.height = 612
         return 792.0 / 612.0, 1.0
 
-    def autoscale(self):
+    def autoscale(self, pad=0):
         for graph in self.graphs:
-            graph.autoscale()
+            graph.autoscale(pad=pad)
 
     def autoformat(self, printWidth=6.5):
         for graph in self.graphs:
@@ -229,7 +229,7 @@ using the 'filetype' keyword argument.
 
         # here, the class argument is mandatory, because there are many built
         # in types of drawing objects
-        drawingObject = cls(parent=self, *args, **kwargs)
+        drawingObject = cls(self, *args, **kwargs)
         self.drawing_objects.append(drawingObject)
 
         # return the instance of the drawing object

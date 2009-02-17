@@ -30,10 +30,16 @@ class DrawingObject(GraceObject):
 
         # if the drawing object is added by a Graph, then record the index of
         # the graph.  Otherwise the parent of the drawing object is the grace.
+        # The case in which self.parent = None occurs when Base.copy_format
+        # is used with a DrawingObject subclass.  In this case, since there
+        # is no instance to associate with a graph (or not), then the drawing
+        # object is linked to the grace (not any particular graph)
         if isinstance(self.parent, grace.Grace):
             self._linked_graph = None
         elif isinstance(self.parent, graph.Graph):
             self._linked_graph = self.parent.index
+        elif self.parent == None:
+            self._linked_graph = None            
         else:
             message = 'parent of drawing object (%s) is not graph or grace.' %\
                       type(self.parent)
@@ -239,6 +245,7 @@ class DrawEllipse(DrawingObject):
         """
         x,y = zip(self.lowleft, self.upright)
         return min(x), min(y), max(x), max(y)
+
 
 class LabelledPoint(DrawingObject):
     def __init__(self, parent,

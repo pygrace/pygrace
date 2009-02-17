@@ -446,6 +446,8 @@ There are no datasets or drawing_objects on which to determine the limits.
         if scale == LINEAR_SCALE:
             domain = iMin, iMax
         if scale == LOGARITHMIC_SCALE:
+            import sys
+            print >> sys.stderr, iMin, iMax
             domain = math.log10(iMin), math.log10(iMax)
         
         # determine appropriate scale for ticks
@@ -519,17 +521,17 @@ There are no datasets or drawing_objects on which to determine the limits.
         self.autoscale()
         self.format_for_print(printWidth)
 
-    def autoscalex(self):
+    def autoscalex(self, pad=0):
         xMin, yMin, xMax, yMax = self.limits()
         if self.xaxis.scale==LINEAR_SCALE:
             xMajor, nxMinor = self.calculate_ticks(xMin, xMax)
             xMinor = xMajor / float(nxMinor + 1)
             if nxMinor == 1:
-                self.world.xmax = math.ceil(xMax / float(xMinor)) * xMinor
-                self.world.xmin = math.floor(xMin / float(xMinor)) * xMinor
+                self.world.xmax = math.ceil(xMax / float(xMinor)) * xMinor + pad*xMinor
+                self.world.xmin = math.floor(xMin / float(xMinor)) * xMinor - pad*xMinor
             else:
-                self.world.xmax = math.ceil(xMax / float(xMajor)) * xMajor
-                self.world.xmin = math.floor(xMin / float(xMajor)) * xMajor
+                self.world.xmax = math.ceil(xMax / float(xMajor)) * xMajor + pad*xMajor
+                self.world.xmin = math.floor(xMin / float(xMajor)) * xMajor - pad*xMajor
         elif self.xaxis.scale==LOGARITHMIC_SCALE:
 
             # if x has a zero value, autoscale with second smallest
@@ -551,17 +553,17 @@ There are no datasets or drawing_objects on which to determine the limits.
         self.xaxis.tick.major = xMajor
         self.xaxis.tick.minor_ticks = nxMinor
 
-    def autoscaley(self):
+    def autoscaley(self, pad=0):
         xMin, yMin, xMax, yMax = self.limits()
         if self.yaxis.scale==LINEAR_SCALE:
             yMajor, nyMinor = self.calculate_ticks(yMin, yMax)
             yMinor = yMajor / float(nyMinor + 1)
             if nyMinor == 1:
-                self.world.ymax = math.ceil(yMax / float(yMinor)) * yMinor
-                self.world.ymin = math.floor(yMin / float(yMinor)) * yMinor
+                self.world.ymax = math.ceil(yMax / float(yMinor)) * yMinor + pad*yMinor
+                self.world.ymin = math.floor(yMin / float(yMinor)) * yMinor - pad*yMinor
             else:
-                self.world.ymax = math.ceil(yMax / float(yMajor)) * yMajor
-                self.world.ymin = math.floor(yMin / float(yMajor)) * yMajor
+                self.world.ymax = math.ceil(yMax / float(yMajor)) * yMajor + pad*yMajor
+                self.world.ymin = math.floor(yMin / float(yMajor)) * yMajor - pad*yMajor
         elif self.yaxis.scale==LOGARITHMIC_SCALE:
 
             # if y has a zero value, autoscale with second smallest
@@ -584,9 +586,9 @@ There are no datasets or drawing_objects on which to determine the limits.
         self.yaxis.tick.major = yMajor
         self.yaxis.tick.minor_ticks = nyMinor
 
-    def autoscale(self):
-        self.autoscalex()
-        self.autoscaley()
+    def autoscale(self, pad=0):
+        self.autoscalex(pad=pad)
+        self.autoscaley(pad=pad)
 
     def autotickx(self):
         """Automatically generate x-axis ticks based on world coords.
@@ -611,3 +613,5 @@ There are no datasets or drawing_objects on which to determine the limits.
         """
         self.autotickx()
         self.autoticky()
+
+

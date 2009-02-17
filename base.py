@@ -222,7 +222,7 @@ class GraceObject(object):
             self._check_type(str, key, value)
         elif key == 'format':
             self._check_type(str, key, value)
-            FORMAT_TYPES = ('general', 'decimal', 'power')
+            FORMAT_TYPES = ('general', 'decimal', 'power', 'engineering')
             upperTypes = [t.upper() for t in FORMAT_TYPES]
             self._check_membership(key, value.upper(), upperTypes)
         elif key == 'prec':
