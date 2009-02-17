@@ -42,8 +42,13 @@ for i in range(9):
     graph.xaxis.ticklabel.configure(format="decimal",prec=1)
     graph.yaxis.ticklabel.configure(format="decimal",prec=1)
 
-# automatically space multi graph and automatically format figures
-grace.automulti(width_to_height_ratio=1.0,hgap=0.05,vgap=0.05)
+# automatically space multi graph and automatically format figures.
+# width_to_height_ratio specifies the frame dimensions, hgap and vgap
+# specify the horizontal and vertical gap between frames, hoffset
+# specifies the offset from the left and right side, and voffset
+# specifies the offset from the top and bottom.  
+grace.automulti(width_to_height_ratio=1.0,hgap=0.05,vgap=0.05,
+                hoffset=(0.1,0.05),voffset=(0.05,0.1))
 grace.autoformat()
 
 # hide all of the interior labels to make this look v. nice

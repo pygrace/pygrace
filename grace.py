@@ -251,9 +251,9 @@ using the 'filetype' keyword argument.
 
         self.graphs_rc[row][col] = g
 
-        g.view.xmin = self.hoffset+(self.hgap+self.frame_width)*col
-        g.view.ymin = self.max_frame_height - self.voffset - \
-                            self.vgap*row - self.frame_height*(row+1)
+        g.view.xmin = self.hoffset[0]+(self.hgap+self.frame_width)*col
+        g.view.ymin = self.max_frame_height - self.voffset[0] - \
+                      self.vgap*row - self.frame_height*(row+1)
         g.view.xmax = g.view.xmin + self.frame_width
         g.view.ymax = g.view.ymin + self.frame_height
 
@@ -267,24 +267,32 @@ using the 'filetype' keyword argument.
         # width/height = 1.66)
 
         # proposed frame height and width of each graph
-        self.frame_height = (self.max_frame_height - 2*voffset \
+        self.frame_height = (self.max_frame_height - (voffset[0]+voffset[1]) \
                              - (rows-1)*vgap)/rows
-        self.frame_width = (self.max_frame_width - 2*hoffset \
+        self.frame_width = (self.max_frame_width - (hoffset[0]+hoffset[1]) \
                             - (cols-1)*hgap)/cols
 
-        # want a width/height ratio of 1.66, see which dimension is
+        # want a particular width/height, see which dimension is
         # more prohibitive and change it
         if self.frame_width/self.frame_height > width_to_height_ratio:
             self.frame_width = width_to_height_ratio*self.frame_height
         else:
             self.frame_height = self.frame_width/width_to_height_ratio;
         
-    def multi(self, rows, cols, hoffset=0.1, voffset=0.1,hgap=0.1, vgap=0.1,
-              width_to_height_ratio=1.62):
+    def multi(self, rows, cols, hoffset=(0.15,0.05), voffset=(0.05,0.15),
+              hgap=0.1, vgap=0.1,
+              width_to_height_ratio=1.0/0.7):
         """Create a grid of graphs with the given number of <rows> and <cols>
            Makes graph frames all the same size.
         """
         self.graphs_rc = [[None for i in range(cols)] for j in range(rows)]
+
+        # for backward compatibility, allow hoffset and voffset to be
+        # floats, which is interpretted as a symmetric offset
+        if type(hoffset)==type(0.0):
+            hoffset = (hoffset,hoffset)
+        if type(voffset)==type(0.0):
+            voffset = (voffset,voffset)
 
         self.hgap = hgap
         self.vgap = vgap
@@ -309,6 +317,42 @@ using the 'filetype' keyword argument.
             if c>=cols:
                 c=0
                 r+=1
+
+    def automulti(self, maxrows=5, maxcols=5,
+                  hoffset=(0.15,0.05), voffset=(0.05,0.15), 
+                  hgap=0.1, vgap=0.1,
+                  width_to_height_ratio=1.62):
+        """Automatically determine the number of rows and columns to
+        add based on the number of graphs currently in the grace.  The
+        number of rows and columns is determined by trying to maximize
+        the area of canvas that is used (by a non-optimized brute
+        force approach).
+        """
+
+        # for backward compatibility, allow hoffset and voffset to be
+        # floats, which is interpretted as a symmetric offset
+        if type(hoffset)==type(0.0):
+            hoffset = (hoffset,hoffset)
+        if type(voffset)==type(0.0):
+            voffset = (voffset,voffset)
+
+        optrows, optcols, optarea = None, None, 0.0
+        for rows in range(1,maxrows+1):
+            for cols in range(1,maxcols+1):
+                if rows*cols>=len(self.graphs):
+                    self._calculate_graph_frame(rows,cols,hoffset,voffset,
+                                                hgap,vgap,
+                                                width_to_height_ratio)
+                    area = len(self.graphs)*\
+                           self.frame_height*self.frame_width
+                    if area>optarea:
+                        optrows = rows
+                        optcols = cols
+                        optarea = area
+
+        # now that I have the optimum layout, do the multi
+        self.multi(optrows,optcols,hoffset,voffset,hgap,vgap,
+                   width_to_height_ratio)
 
     def hide_redundant_xaxislabels(self):
         """Hide all x-axis axis labels on the interior of a multigraph that
@@ -576,34 +620,6 @@ Grace.autohide_multi_labels only works with a multigraph
                 graph.xaxis.label.place = 'opposite'
                 graph.xaxis.ticklabel.place = 'opposite'
             
-    def automulti(self, maxrows=5, maxcols=5,
-                  hoffset=0.1, voffset=0.1, hgap=0.1, vgap=0.1,
-                  width_to_height_ratio=1.62):
-        """Automatically determine the number of rows and columns to
-        add based on the number of graphs currently in the grace.  The
-        number of rows and columns is determined by trying to maximize
-        the area of canvas that is used (by a non-optimized brute
-        force approach).
-        """
-
-        optrows, optcols, optarea = None, None, 0.0
-        for rows in range(1,maxrows+1):
-            for cols in range(1,maxcols+1):
-                if rows*cols>=len(self.graphs):
-                    self._calculate_graph_frame(rows,cols,hoffset,voffset,
-                                                hgap,vgap,
-                                                width_to_height_ratio)
-                    area = len(self.graphs)*\
-                           self.frame_height*self.frame_width
-                    if area>optarea:
-                        optrows = rows
-                        optcols = cols
-                        optarea = area
-
-        # now that I have the optimum layout, do the multi
-        self.multi(optrows,optcols,hoffset,voffset,hgap,vgap,
-                   width_to_height_ratio)
-
     def align_axislabelx(self,place_tup=(0, 0.08)):
         """Align the x-axis labels with place_tup for all graphs in
         this Grace instance.
