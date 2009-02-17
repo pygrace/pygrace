@@ -15,6 +15,7 @@ exampleList = [
     './Examples/05_colorplot.py',
     './Examples/06_logautoscale.py',
     './Examples/07_panels.py',
+    './Examples/08_latexlabels.py',
     ]
 
 if __name__ == '__main__':
