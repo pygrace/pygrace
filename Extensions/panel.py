@@ -1,6 +1,15 @@
 from PyGrace.graph import Graph
 from PyGrace.drawing_objects import DrawText, DRAWTEXT_JUSTIFICATIONS
 
+# specify automatically available label schemes
+LATIN_ALPHABET = "abcdefghijklmnopqrstuvwxyz"
+ROMAN_NUMERALS = ["i","ii","iii","iv","v","vi","vii","viii","ix","x"]
+DEFAULT_LABEL_SCHEMES = {"LATIN":[c.upper() for c in LATIN_ALPHABET],
+                         "latin":[c.lower() for c in LATIN_ALPHABET],
+                         "ROMAN":[n.upper() for n in ROMAN_NUMERALS],
+                         "roman":[n.lower() for n in ROMAN_NUMERALS],
+                         }
+
 class Panel(Graph):
     """A Panel is a Graph that has a panel label.
 
@@ -23,7 +32,7 @@ class PanelLabel(DrawText):
     """This class is useful for adding panel labels to figures.  Note that
     dx and dy are automatically adjusted to correctly space the 
 
-    label_index = index of labelling scheme
+    index = index of labelling scheme
 
     dx,dy = Spatial offset from Panel corner.  Direction of dx changes
         depending on placement specification.
@@ -31,8 +40,9 @@ class PanelLabel(DrawText):
          'ilr' (inside lowr right), etc.
     """
 
-    def __init__(self,parent,label_index,dx=0.05,dy=0.05,
+    def __init__(self,parent,index=None,dx=0.05,dy=0.05,
                  placement="iur",label_scheme="LATIN",
+                 label_schemes=DEFAULT_LABEL_SCHEMES,
                  *args,**kwargs):
         DrawText.__init__(self,parent,*args,**kwargs)
 
@@ -59,40 +69,39 @@ Graph.remove_extraworld_drawing_objects is called.
 """
             raise TypeError, message
 
-        # specify automatically available label schemes
-        latin_alphabet = "abcdefghijklmnopqrstuvwxyz"
-        roman_numerals = ["i","ii","iii","iv","v","vi","vii","viii","ix","x"]
-        self.label_schemes = {"LATIN":[c.upper() for c in latin_alphabet],
-                              "latin":[c.lower() for c in latin_alphabet],
-                              "ROMAN":[n.upper() for n in roman_numerals],
-                              "roman":[n.lower() for n in roman_numerals],
-                              }
-
         # specify formats for panel labels
-        self.label_scheme = label_scheme
-        self.label_index = 0
-        self.set_text(label_scheme,label_index)
+        self.set_text(label_scheme,index)
 
         # place the panel label.  This method is also called at draw
         # time in the event that a user changes the location of the
         # PanelLabel
-        self.place_label()
+        #
+        # Checking for None, which is necessary for copy_format to work.
+        if self.parent is not None: 
+            self.place_label()
 
     def add_scheme(self,scheme_name,scheme_labels):
         """This gives the user the ability to customize their label
         scheme however they damn well please.
         """
-        if self.label_schemes.has_key(scheme_name):
+        if (self.label_schemes.has_key(scheme_name) and 
+            scheme_labels!=self.label_schemes[scheme_name]):
             message = """Label scheme '%s' already exists!
 """%scheme_name
             raise TypeError,message
         self.label_schemes[scheme_name] = scheme_labels
 
-    def set_text(self,label_scheme=None,label_index=None):
+    def set_text(self,label_scheme=None,index=None):
         """Set the text of the panel label at draw time based on the
-        label_scheme and the label_index.
+        label_scheme and the index.
         """
-
+        
+        # nothing has been specified
+        if ((self.label_scheme is None and label_scheme is None) or
+            (self.index is None and index is None)):
+            self.text = ''
+            return
+        
         # make sure label_scheme is legal
         if label_scheme is None:
             label_scheme = self.label_scheme
@@ -105,22 +114,22 @@ Label scheme '%s' is not allowed.  Try one of these instead:
             raise TypeError,message
         self.label_scheme = label_scheme
 
-        # make sure label_index is legal
-        if label_index is None:
-            label_index = self.label_index
-        elif label_index<0 or label_index>=len(self.label_schemes[label_scheme]):
+        # make sure index is legal
+        if index is None:
+            index = self.index
+        elif index<0 or index>=len(self.label_schemes[label_scheme]):
             message = """
 Label index '%s' is not allowed for label scheme '%s'.
 For label scheme '%s', label index must be between 0 and %d.
-"""%(str(label_index),
+"""%(str(index),
      label_scheme,
      label_scheme,
      len(self.label_schemes[label_scheme]))
             raise TypeError,message
-        self.label_index = label_index
+        self.index = index
 
         # set the text of the label
-        self.text = self.label_schemes[self.label_scheme][self.label_index]
+        self.text = self.label_schemes[self.label_scheme][self.index]
 
     def place_label(self,placement=None,dx=None,dy=None,just=None):
         """Place the PanelLabel near with format placement and position dx and

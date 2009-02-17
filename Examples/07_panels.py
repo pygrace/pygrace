@@ -16,7 +16,7 @@ sys.path.append(PYGRACE_PATH)
 from PyGrace.grace import Grace
 from PyGrace.Extensions.panel import Panel
 from PyGrace.Styles.el import ElCircleDataSet
-from PyGrace.Styles.journals import NaturePanel, NaturePanelLabel
+from PyGrace.Styles.journals import NaturePanelLabel
 
 # make an instance of the Grace class
 grace = Grace()
@@ -26,9 +26,7 @@ for i in range(9):
     graph = grace.add_graph(Panel)
 
     # configure placement of panel label
-    tmp = NaturePanelLabel(graph,i)
-    graph.panel_label.copy_format(tmp)
-#     graph.panel_label.copy_format(NaturePanelLabel,i)
+    graph.panel_label.copy_format(NaturePanelLabel)
 
     # configure placement of panel label
     graph.panel_label.configure(placement="our",dx=0.01,dy=0.01)
@@ -53,6 +51,8 @@ grace.autoformat()
 
 # hide all of the interior labels to make this look v. nice
 grace.hide_redundant_labels()
+
+# add axis labels to matrix of figures
 grace.set_row_xaxislabel(2,"x")
 grace.set_col_yaxislabel(0,"y")
 

@@ -373,36 +373,18 @@ class GraceObject(object):
                     args.append(None)
                 else:
                     complete = True
-#            print type(x),x.__class__,x.xaxis.tick.major_size
-#            print type(x.xaxis)
             self.copy_format(x, all=all)
             
         # other is an instance of a class
         else:
-            try:
-                a = other.xaxis.tick.major_size
-                b = type(other.xaxis)
-#                print 'major_size', a, b
-            except:
-                pass
-
-
-##             # throw error if the objects are not of the same type
-##             if not isinstance(other,self.__class__):
-##                 message = "can't copy format of different type (%s != %s)" % \
-##                           (type(self), type(other))
-##                 raise TypeError(message)
 
             # set all default attibutes to the same values as other
             for attr in self.defaultAttributes:
-#                print type(other), attr, getattr(other, attr)
                 setattr(self, attr, getattr(other, attr))
 
-#            print type(self), map(type, self.children)
-#            print type(other), map(type, other.children)
             if all:
-                for thisChild, thatChild in zip(self.children(), other.children()):
-#                    print 'children', type(thisChild), type(thatChild)
+                for thisChild, thatChild in zip(self.children(), 
+                                                other.children()):
                     thisChild.copy_format(thatChild)
 
 class BaseSet(object):
