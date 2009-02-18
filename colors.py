@@ -41,7 +41,7 @@ class ColorBrewerScheme(ColorScheme):
     number of colors -- default is the maximum that is explicitly enumerated
     in the colorbrewer definition.  The first two colors (0 and 1) are always
     white and black."""
-    def __init__(self, name, n=None,reverse=False):
+    def __init__(self, name, n=None, reverse=False):
 
         # get the colors from a color brewer scheme
         try:
@@ -70,7 +70,7 @@ class RandomColorScheme(ColorScheme):
     """Instantiate with random seed and the number of colors.  The first
     two colors (0 and 1) are always white and black.
     """
-    def __init__(self, seed,n,reverse=False):
+    def __init__(self, seed, n, reverse=False):
 
         # create a list of rgb values
         rgbList = []
@@ -89,6 +89,43 @@ class RandomColorScheme(ColorScheme):
 
         # make color instance from the rgb values
         name = "Rand-%d"%seed
+        colors = [Color(0, 255, 255, 255, 'white'), Color(1, 0, 0, 0, 'black')]
+        colors.extend([Color(index + 2, r, g, b, '%s-%i' % (name, index)) \
+                           for index, (r, g, b) in enumerate(rgbList)])
+
+        ColorScheme.__init__(self, colors)
+
+class MarkovChainColorScheme(ColorScheme):
+    """Instantiate with random seed and the number of colors.  The first
+    two colors (0 and 1) are always white and black.  This identifies
+    a Markov Chain of colors after that.
+    """
+    def __init__(self, seed, n, reverse=False, maxstep=25):
+
+        # create a list of rgb values
+        rgbList = []
+        random.seed(seed)
+        if n>0:
+            rgbList.append((random.randint(0,255),
+                            random.randint(0,255),
+                            random.randint(0,255)))
+        while len(rgbList)<n:
+            rgb = list(rgbList[-1])
+            drgb = [random.randint(-maxstep,maxstep),
+                    random.randint(-maxstep,maxstep),
+                    random.randint(-maxstep,maxstep)]
+            rgb = [(rgb[i] + drgb[i])%256 for i in range(3)]
+            rgbList.append(tuple(rgb))
+        rgbList = tuple(rgbList)
+
+        # reverse the rgb list?
+        if reverse:
+            rgbList = list(rgbList)
+            rgbList.reverse()
+            rgbList = tuple(rgbList)
+
+        # make color instance from the rgb values
+        name = "MC-%d-%d"%(maxstep,seed)
         colors = [Color(0, 255, 255, 255, 'white'), Color(1, 0, 0, 0, 'black')]
         colors.extend([Color(index + 2, r, g, b, '%s-%i' % (name, index)) \
                            for index, (r, g, b) in enumerate(rgbList)])
