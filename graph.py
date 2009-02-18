@@ -446,8 +446,6 @@ There are no datasets or drawing_objects on which to determine the limits.
         if scale == LINEAR_SCALE:
             domain = iMin, iMax
         if scale == LOGARITHMIC_SCALE:
-            import sys
-            print >> sys.stderr, iMin, iMax
             domain = math.log10(iMin), math.log10(iMax)
         
         # determine appropriate scale for ticks
