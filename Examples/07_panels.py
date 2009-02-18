@@ -13,13 +13,13 @@ from example_tools import output_name
 from example_tools import PYGRACE_PATH
 sys.path.append(PYGRACE_PATH)
 
-from PyGrace.grace import Grace
+from PyGrace.Extensions.multi_grace import MultiGrace
 from PyGrace.Extensions.panel import Panel
 from PyGrace.Styles.el import ElCircleDataSet
 from PyGrace.Styles.journals import NaturePanelLabel
 
 # make an instance of the Grace class
-grace = Grace()
+grace = MultiGrace()
 
 # add a Graph as a "child" of the grace instance
 for i in range(9):

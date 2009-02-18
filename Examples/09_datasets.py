@@ -3,7 +3,7 @@
 # data sets.
 
 import sys
-from random import random
+from random import random, randint
 
 from example_tools import output_name
 
@@ -11,8 +11,8 @@ from example_tools import output_name
 from example_tools import PYGRACE_PATH
 sys.path.append(PYGRACE_PATH)
 
-from PyGrace.grace import Grace
-from PyGrace.colors import RandomColorScheme
+from PyGrace.Extensions.multi_grace import MultiGrace
+from PyGrace.colors import RandomColorScheme, MarkovChainColorScheme
 from PyGrace.dataset import SYMBOLS
 from PyGrace.Extensions.panel import Panel
 
@@ -27,8 +27,10 @@ n_components = [2, 3, 3, 4, 4,
                 4, 6]
 
 # make an instance of the Grace class that uses RandomColorScheme
-colors = RandomColorScheme(1,len(data_types))
-grace = Grace(colors=colors)
+seed = randint(0,10000)
+colors = RandomColorScheme(seed,len(data_types))
+# colors = MarkovChainColorScheme(seed,len(data_types))
+grace = MultiGrace(colors=colors)
 
 # add a Graph as a "child" of the grace instance
 for i in range(len(data_types)):
