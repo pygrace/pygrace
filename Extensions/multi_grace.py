@@ -370,7 +370,12 @@ set_row_xaxislabel.
         # turn off y-axis labels for all panels in this column
         for row in range(rowspan[0],rowspan[1]+1):
             graph = self.graphs_rc[row][col]
-            graph.yaxis.label.text = ''
+
+            # To avoid error with trying to set NoneType attributes
+            try:
+                graph.yaxis.label.text = ''
+            except AttributeError:
+                pass
 
         # determine offsets for resulting new label
         if (rowspan[1]-rowspan[0]+1)%2==1:
@@ -431,7 +436,12 @@ set_row_xaxislabel.
         # turn off y-axis labels for all panels in this column
         for col in range(colspan[0],colspan[1]+1):
             graph = self.graphs_rc[row][col]
-            graph.xaxis.label.text = ''
+
+            # To avoid error with trying to set NoneType attributes
+            try:
+                graph.xaxis.label.text = ''
+            except AttributeError:
+                pass
 
         # determine offsets for resulting new label
         if (colspan[1]-colspan[0]+1)%2==1:
