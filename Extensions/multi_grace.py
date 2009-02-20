@@ -189,8 +189,8 @@ Grace.autohide_multi_labels only works with a multigraph
                         redundant_axislabel = False
                 
                 # hide redundant labels
-                for r in range(_rows):
-                    if redundant_axislabel:
+                if redundant_axislabel:
+                    for r in range(_rows):
                         if self.graphs_rc[r][c] is not None:
                             self.graphs_rc[r][c].xaxis.label.text = ''
                         
@@ -216,7 +216,8 @@ Grace.autohide_multi_labels only works with a multigraph
                 if graph is not None:
                     _rows = r
                     break
-            
+            xmin,blah,xmax,blek = graph.get_world()
+
             # hide redundant labels in this column
             if _rows>0:
 
@@ -224,13 +225,16 @@ Grace.autohide_multi_labels only works with a multigraph
                 redundant_ticklabel = True
                 for r in range(_rows):
                     g = self.graphs_rc[r][c]
+                    gxmin,blah,gxmax,blek = g.get_world()
                     if (g is not None and 
-                        g.xaxis.ticklabel!=graph.xaxis.ticklabel):
+                        (g.xaxis.ticklabel!=graph.xaxis.ticklabel or
+                         g.xaxis.tick!=graph.xaxis.tick or 
+                         xmin!=gxmin or xmax!=gxmax)):
                         redundant_ticklabel = False
                 
                 # hide redundant labels
-                for r in range(_rows):
-                    if redundant_ticklabel:
+                if redundant_ticklabel:
+                    for r in range(_rows):
                         if self.graphs_rc[r][c] is not None:
                             self.graphs_rc[r][c].xaxis.ticklabel.onoff = "off"
         
@@ -264,7 +268,7 @@ Grace.autohide_multi_labels only works with a multigraph
                 if graph is not None:
                     _cols = c+1
                     break
-            
+
             # hide redundant labels in this column
             if _cols<self.cols:
 
@@ -276,8 +280,8 @@ Grace.autohide_multi_labels only works with a multigraph
                         redundant_axislabel = False
                 
                 # hide redundant labels
-                for c in range(_cols,self.cols):
-                    if redundant_axislabel:
+                if redundant_axislabel:
+                    for c in range(_cols,self.cols):
                         if self.graphs_rc[r][c] is not None:
                             self.graphs_rc[r][c].yaxis.label.text = ''
         
@@ -303,6 +307,7 @@ Grace.autohide_multi_labels only works with a multigraph
                 if graph is not None:
                     _cols = c+1
                     break
+            blah,ymin,blek,ymax = graph.get_world()
             
             # hide redundant labels in this column
             if _cols<self.cols:
@@ -311,13 +316,16 @@ Grace.autohide_multi_labels only works with a multigraph
                 redundant_ticklabel = True
                 for c in range(_cols,self.cols):
                     g = self.graphs_rc[r][c]
+                    blah,gymin,blek,gymax = g.get_world()
                     if (g is not None and 
-                        g.yaxis.ticklabel!=graph.yaxis.ticklabel):
+                        (g.yaxis.ticklabel!=graph.yaxis.ticklabel or
+                         g.yaxis.tick!=graph.yaxis.tick or
+                         ymin!=gymin or ymax!=gymax)):
                         redundant_ticklabel = False
                 
                 # hide redundant labels
-                for c in range(_cols,self.cols):
-                    if redundant_ticklabel:
+                if redundant_ticklabel:
+                    for c in range(_cols,self.cols):
                         if self.graphs_rc[r][c] is not None:
                             self.graphs_rc[r][c].yaxis.ticklabel.onoff = "off"
         
@@ -330,19 +338,19 @@ Grace.autohide_multi_labels only works with a multigraph
         self.hide_redundant_yticklabels()
 
     def hide_redundant_axislabels(self):
-        """Hide all redundant labels.
+        """Hide all redundant axis labels.
         """
         self.hide_redundant_xaxislabels()
         self.hide_redundant_yaxislabels()
 
     def hide_redundant_ticklabels(self):
-        """Hide all redundant labels.
+        """Hide all redundant tick labels.
         """
         self.hide_redundant_xticklabels()
         self.hide_redundant_yticklabels()
 
     def hide_redundant_labels(self):
-        """Hide all redundant labels.
+        """Hide all redundant axis and tick labels.
         """
         self.hide_redundant_xlabels()
         self.hide_redundant_ylabels()

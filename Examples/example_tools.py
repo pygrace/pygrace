@@ -114,7 +114,7 @@ def panels():
     import random
     dataList = []
     for i in range(9):
-        data = [(random.random(), random.random()) for i in range(100)]
+        data = [(random.random(), random.random()) for i in range(10)]
         dataList.append(data)
     return dataList
 
