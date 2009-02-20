@@ -306,9 +306,25 @@ class Graph(GraceObject):
 
     def move_dataset_to_back(self, dataset):
         _dataset = self.datasets.pop(dataset.index-INDEX_ORIGIN)
+        assert _dataset==dataset, "Not the same dataset"
+        self.datasets.insert(0, dataset)
+        for index,dataset in enumerate(self.datasets):
+            dataset.index = index + INDEX_ORIGIN
+
+    def move_dataset_forward(self, dataset):
+        _dataset = self.datasets.pop(dataset.index-INDEX_ORIGIN)
         _index = _dataset.index
         assert _dataset==dataset, "Not the same dataset"
-        self.datasets.insert(0,dataset)
+        self.datasets.insert(_index-INDEX_ORIGIN+1, dataset)
+        for index,dataset in enumerate(self.datasets):
+            dataset.index = index + INDEX_ORIGIN
+
+    def move_dataset_backward(self, dataset):
+        _dataset = self.datasets.pop(dataset.index-INDEX_ORIGIN)
+        _index = _dataset.index
+        assert _dataset==dataset, "Not the same dataset"
+        _newListIndex = max(0, _index-INDEX_ORIGIN-1) 
+        self.datasets.insert(_newListIndex, dataset)
         for index,dataset in enumerate(self.datasets):
             dataset.index = index + INDEX_ORIGIN
 
