@@ -74,9 +74,9 @@ class Grace(GraceObject):
             self.max_canvas_height = 1.0
         return self.max_canvas_width,self.max_canvas_height
 
-    def autoscale(self, pad=0):
+    def autoscale(self, padx=0,pady=0):
         for graph in self.graphs:
-            graph.autoscale(pad=pad)
+            graph.autoscale(padx=padx,pady=pady)
 
     def autoformat(self, printWidth=6.5):
         for graph in self.graphs:
