@@ -525,11 +525,15 @@ There are no datasets or drawing_objects on which to determine the limits.
             xMajor, nxMinor = self.calculate_ticks(xMin, xMax)
             xMinor = xMajor / float(nxMinor + 1)
             if nxMinor == 1:
-                self.world.xmax = math.ceil(xMax / float(xMinor)) * xMinor + pad*xMinor
-                self.world.xmin = math.floor(xMin / float(xMinor)) * xMinor - pad*xMinor
+                self.world.xmax = math.ceil(xMax / float(xMinor)) * xMinor + \
+                    pad*xMinor
+                self.world.xmin = math.floor(xMin / float(xMinor)) * xMinor - \
+                    pad*xMinor
             else:
-                self.world.xmax = math.ceil(xMax / float(xMajor)) * xMajor + pad*xMajor
-                self.world.xmin = math.floor(xMin / float(xMajor)) * xMajor - pad*xMajor
+                self.world.xmax = math.ceil(xMax / float(xMajor)) * xMajor + \
+                    pad*xMajor
+                self.world.xmin = math.floor(xMin / float(xMajor)) * xMajor - \
+                    pad*xMajor
         elif self.xaxis.scale==LOGARITHMIC_SCALE:
 
             # if x has a zero value, autoscale with second smallest
@@ -557,11 +561,15 @@ There are no datasets or drawing_objects on which to determine the limits.
             yMajor, nyMinor = self.calculate_ticks(yMin, yMax)
             yMinor = yMajor / float(nyMinor + 1)
             if nyMinor == 1:
-                self.world.ymax = math.ceil(yMax / float(yMinor)) * yMinor + pad*yMinor
-                self.world.ymin = math.floor(yMin / float(yMinor)) * yMinor - pad*yMinor
+                self.world.ymax = math.ceil(yMax / float(yMinor)) * yMinor + \
+                    pad*yMinor
+                self.world.ymin = math.floor(yMin / float(yMinor)) * yMinor - \
+                    pad*yMinor
             else:
-                self.world.ymax = math.ceil(yMax / float(yMajor)) * yMajor + pad*yMajor
-                self.world.ymin = math.floor(yMin / float(yMajor)) * yMajor - pad*yMajor
+                self.world.ymax = math.ceil(yMax / float(yMajor)) * yMajor + \
+                    pad*yMajor
+                self.world.ymin = math.floor(yMin / float(yMajor)) * yMajor - \
+                    pad*yMajor
         elif self.yaxis.scale==LOGARITHMIC_SCALE:
 
             # if y has a zero value, autoscale with second smallest
@@ -612,4 +620,32 @@ There are no datasets or drawing_objects on which to determine the limits.
         self.autotickx()
         self.autoticky()
 
+    def set_different_colors(self, skip=1, attr='name', exclude=('White',)):
+        """Set datasets in graph to different colors.  This function behaves
+        similarly to the similar function in the xmgrace GUI."""
+
+        # make sure attr argument is the right type
+        if attr not in ('name', 'index'):
+            message = "attr must be 'name' or 'index' (got %s)" % attr
+            raise ValueError(message)
+
+        # put all color indexes or color names that should be excluded from
+        # the list in a dictionary, and make color names case insensitive
+        lookup = {}
+        for item in exclude:
+            if isinstance(item, str):
+                item = item.upper()
+            lookup[item] = None
+
+        # put colors into a list
+        colorList = []
+        for color in self.root.colors:
+            if not (color.name.upper() in lookup or color.index in lookup):
+                colorList.append(getattr(color, attr))
+                
+        # set datasets to different colors
+        nColors = len(colorList)
+        for index, dataset in enumerate(self.datasets):
+            color = colorList[(skip *index) % nColors]
+            dataset.set_suffix(color, 'color')
 
