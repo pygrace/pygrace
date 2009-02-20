@@ -1,16 +1,9 @@
-import sys
-
-# add the root directory of the PyGrace package to the PYTHONPATH
-from example_tools import PYGRACE_PATH
-sys.path.append(PYGRACE_PATH)
-
 from PyGrace.grace import Grace
 from PyGrace.graph import Graph
 from PyGrace.drawing_objects import DrawText, DrawLine
 
 from PyGrace.Extensions.latex_string import LatexString, CONVERT
 
-from example_tools import output_name, calculate_cdf, calculate_pdf
 
 class DistributionGraph(Graph):
     def __init__(self, data, *args, **kwargs):
@@ -54,7 +47,6 @@ class CDFGraph(DistributionGraph):
             result.append(b)
         return tuple(result)
 
-
 class PDFGraph(DistributionGraph):
     def __init__(self, data, *args, **kwargs):
         DistributionGraph.__init__(self, data, *args, **kwargs)
@@ -65,42 +57,39 @@ class PDFGraph(DistributionGraph):
         self.autotick()
         self.yaxis.label.text = LatexString(r'P(\6X\f{})')
 
-if __name__ == '__main__':
+# this is the step where YOU do the analysis
+import example_tools
+cdf, pdf = example_tools.latexlabels()
 
-    # generate some data
-    import random
-    data = [random.randint(1, 9) for i in range(20)]
-    cdf = calculate_cdf(data, normalized=True)
-    pdf = calculate_pdf(data, normalized=False)
 
-    # make the plot
-    grace = Grace()
+# make the plot
+grace = Grace()
 
-    grace.add_drawing_object(DrawText, text='Currently available LaTeX characters',
-                             x=0.08, y=0.92, char_size=0.8, font=6, just=4)
-    grace.add_drawing_object(DrawLine, start=(0.08, 0.915), end=(1.22, 0.915),
-                             linewidth=1.0)
+grace.add_drawing_object(DrawText, text='Currently available LaTeX characters',
+                         x=0.08, y=0.92, char_size=0.8, font=6, just=4)
+grace.add_drawing_object(DrawLine, start=(0.08, 0.915), end=(1.22, 0.915),
+                         linewidth=1.0)
 
-    mod = (len(CONVERT) / 5) + 1
-    for index, (latexString, graceString) in enumerate(sorted(CONVERT.items())):
-        x = 0.1 + 0.20 * (index / mod)
-        y = 0.895 - 0.0225 * (index % mod)
-        latexString = latexString.replace('\\', r'\\')
-        grace.add_drawing_object(DrawText, text=graceString, x=x, y=y,
-                                 char_size=0.6, font=4, just=1)
-        grace.add_drawing_object(DrawText, text=latexString, x=x+0.01, y=y,
-                                 char_size=0.6, font=4, just=0)
+mod = (len(CONVERT) / 5) + 1
+for index, (latexString, graceString) in enumerate(sorted(CONVERT.items())):
+    x = 0.1 + 0.20 * (index / mod)
+    y = 0.895 - 0.0225 * (index % mod)
+    latexString = latexString.replace('\\', r'\\')
+    grace.add_drawing_object(DrawText, text=graceString, x=x, y=y,
+                             char_size=0.6, font=4, just=1)
+    grace.add_drawing_object(DrawText, text=latexString, x=x+0.01, y=y,
+                             char_size=0.6, font=4, just=0)
 
-    grace.add_drawing_object(DrawLine,
-                             start=(0.08, 0.895-0.0225*(mod-1)-0.01),
-                             end=(1.22, 0.895-0.0225*(mod-1)-0.01),
-                             linewidth=1.0)
+grace.add_drawing_object(DrawLine,
+                         start=(0.08, 0.895-0.0225*(mod-1)-0.01),
+                         end=(1.22, 0.895-0.0225*(mod-1)-0.01),
+                         linewidth=1.0)
 
-    graph1 = grace.add_graph(CDFGraph, cdf)
-    graph1.set_view(0.15, 0.15, 0.6, 0.6)
+graph1 = grace.add_graph(CDFGraph, cdf)
+graph1.set_view(0.15, 0.15, 0.6, 0.6)
 
-    graph2 = grace.add_graph(PDFGraph, pdf)
-    graph2.set_view(0.75, 0.15, 1.2, 0.6)
+graph2 = grace.add_graph(PDFGraph, pdf)
+graph2.set_view(0.75, 0.15, 1.2, 0.6)
 
-    grace.write_file(output_name(__file__))
+grace.write_file('08_latexlabels.agr')
 

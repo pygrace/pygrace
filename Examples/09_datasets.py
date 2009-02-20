@@ -1,20 +1,10 @@
-
-# This example illustrates how to use all of the different types of
-# data sets.
-
-import sys
-from random import random, randint
-
-from example_tools import output_name
-
-# add the root directory of the PyGrace package to the PYTHONPATH
-from example_tools import PYGRACE_PATH
-sys.path.append(PYGRACE_PATH)
-
 from PyGrace.Extensions.multi_grace import MultiGrace
 from PyGrace.colors import RandomColorScheme, MarkovChainColorScheme
 from PyGrace.dataset import SYMBOLS
 from PyGrace.Extensions.panel import Panel
+
+# This example illustrates how to use all of the different types of
+# data sets.
 
 # all of the data set types
 data_types = ['xy', 'xydx', 'xydy', 'xydxdy', 'xydydy', 
@@ -25,6 +15,8 @@ n_components = [2, 3, 3, 4, 4,
                 4, 6, 2, 3, 4, 
                 5, 3, 3, 3, 
                 4, 6]
+
+from random import random, randint
 
 # make an instance of the Grace class that uses RandomColorScheme
 seed = randint(0,10000)
@@ -71,4 +63,4 @@ for graph in grace.graphs:
     graph.yaxis.ticklabel.onoff = 'off'
 
 # print the grace (.agr format) to a file
-grace.write_file(output_name(__file__))
+grace.write_file('09_datasets.agr')

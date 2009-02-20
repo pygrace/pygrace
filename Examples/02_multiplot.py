@@ -1,32 +1,13 @@
-import sys
-import random
-
-from example_tools import output_name
-
-# add the root directory of the PyGrace package to the PYTHONPATH
-from example_tools import PYGRACE_PATH
-sys.path.append(PYGRACE_PATH)
-
 from PyGrace.grace import Grace
 from PyGrace.colors import ColorBrewerScheme
 from PyGrace.drawing_objects import DrawText
 
-# generate a bunch of data to plot
-m, b, sigma = 10, 60, 12
-x = [float(i) / 200 for i in range(0, 2000)]
-y0 = [m * x_i + b for x_i in x]
-r = [random.normalvariate(0, sigma) for i in y0]
-y1 = [y_i + r_i for y_i, r_i in zip(y0, r)]
-r_cdf = [(x_i, 1 - float(i) / len(r)) for i, x_i in enumerate(sorted(r))]
-moving_average, window, l = [], [], 100
-for x_i, r_i in zip(x, r):
-    window.append((x_i, r_i))
-    if len(window) >= l:
-        x_bar, r_bar = map(sum, zip(*window))
-        moving_average.append( (x_bar / float(l), r_bar / float(l)) )
-        window.pop(0)
+# ---------------------------------- this is the part where YOU do the analysis
+# all datasets are lists of (x, y) points
+import example_tools
+data1, data2, data3, data4, data5 = example_tools.multiplot()
 
-# create a grace in landscape mode
+# make a Grace instance with the "Set1" color scheme
 grace = Grace(colors=ColorBrewerScheme('Set1'))
 
 # this function returns the maximum x and y "view" values to fit in the page
@@ -58,8 +39,9 @@ graph3.set_labels(r'\xg\4\s1\N-\xg\4\s0\N', r'CDF(\xg\4\s1\N-\xg\4\s0\N)')
 title3 = graph3.add_drawing_object(DrawText, text='(c) Distribution',
                                    x=0.55*xView, y=0.46*yView, just=4)
 
+
 # create a dataset for graph 1
-noisy = graph1.add_dataset(zip(x, y1))
+noisy = graph1.add_dataset(data1)
 
 # these commands "manually" set the formatting for the dataset
 noisy.line.type = 0
@@ -68,25 +50,25 @@ noisy.symbol.fill_color = 'Set1-8'
 noisy.symbol.size = 0.25
 
 # create another dataset in graph 1
-clean = graph1.add_dataset(zip(x, y0))
+clean = graph1.add_dataset(data2)
 clean.symbol.shape = 0
 
 # the configure command can be used to set many attributes at once
 clean.line.configure(type=1, linewidth=4, color='Set1-0')
 
 # create a dataset for graph 2
-residuals = graph2.add_dataset(zip(x, r))
+residuals = graph2.add_dataset(data3)
 
 # this function will copy all of the formatting attributes for this the
 # 'residuals' dataset from the 'noisy' dataset.  When an object has children,
 # the command is recursive.
 residuals.copy_format(noisy)
 
-moving = graph2.add_dataset(moving_average)
+moving = graph2.add_dataset(data4)
 moving.copy_format(clean)
 moving.line.color = 'Set1-2'
 
-cdf = graph3.add_dataset(r_cdf)
+cdf = graph3.add_dataset(data5)
 cdf.copy_format(clean)
 cdf.line.color = 'Set1-1'
 
@@ -108,5 +90,5 @@ grace.configure_group(title1, title2, title3,
                       font='Helvetica-Bold', char_size=1.25)
 
 # print the grace (.agr format) to a file
-grace.write_file(output_name(__file__))
+grace.write_file('02_multiplot.agr')
 

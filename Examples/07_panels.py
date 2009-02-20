@@ -1,28 +1,21 @@
+from PyGrace.Extensions.multi_grace import MultiGrace
+from PyGrace.Extensions.panel import Panel
+from PyGrace.Styles.el import ElCircleDataSet
+from PyGrace.Styles.journals import NaturePanelLabel
+
+import example_tools
+dataList = example_tools.panels()
 
 # This example illustrates some features that exist for multigraphs,
 # including methods which hide redundant labels on axes.  This also
 # illustrates the use of panels which automatically come with a panel
 # label.
 
-import sys
-from random import random
-
-from example_tools import output_name
-
-# add the root directory of the PyGrace package to the PYTHONPATH
-from example_tools import PYGRACE_PATH
-sys.path.append(PYGRACE_PATH)
-
-from PyGrace.Extensions.multi_grace import MultiGrace
-from PyGrace.Extensions.panel import Panel
-from PyGrace.Styles.el import ElCircleDataSet
-from PyGrace.Styles.journals import NaturePanelLabel
-
 # make an instance of the Grace class
 grace = MultiGrace()
 
 # add a Graph as a "child" of the grace instance
-for i in range(9):
+for data in dataList:
     graph = grace.add_graph(Panel)
 
     # configure placement of panel label
@@ -33,7 +26,6 @@ for i in range(9):
 
     # add a simple DataSet as a "child" of the graph instance.  A list
     # of data is always the required first argument to add_dataset.
-    data = [(random(),random()) for i in range(100)]
     dataset = graph.add_dataset(data,ElCircleDataSet,1)
 
     # ticklabels
@@ -57,4 +49,4 @@ grace.set_row_xaxislabel(2,"x")
 grace.set_col_yaxislabel(0,"y")
 
 # print the grace (.agr format) to a file
-grace.write_file(output_name(__file__))
+grace.write_file('07_panels.agr')

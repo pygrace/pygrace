@@ -1,26 +1,15 @@
-
-# Demonstrate how the autoscaling works for logarithmic axes.  In
-# particular demonstrate how to get ride of drawing objects that are
-# outside of bounds of graph
-
-import sys
-import random
-
-from example_tools import output_name
-
-# add the root directory of the PyGrace package to the PYTHONPATH
-from example_tools import PYGRACE_PATH
-sys.path.append(PYGRACE_PATH)
-
 from PyGrace.grace import Grace
 from PyGrace.colors import ColorBrewerScheme
 from PyGrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
 from PyGrace.drawing_objects import DrawText
-
 from PyGrace.Styles.el import ElSquareGraph, ElCircleDataSet
 
-from random import random
-from math import floor,ceil
+import example_tools
+data = example_tools.logautoscale()
+
+# Demonstrate how the autoscaling works for logarithmic axes.  In
+# particular demonstrate how to get ride of drawing objects that are
+# outside of bounds of graph
 
 #------------------------------------------------------------------------------
 # make a nice figure
@@ -33,11 +22,6 @@ grace = Grace(colors=colors)
 # coordinates.  this ensures that all of the autoscaling will work
 # properly.
 graph = grace.add_graph(ElSquareGraph)
-data = []
-for i in range(10000):
-    x = 2.0*random()-1.0
-    y = 2.0*random()-1.0
-    data.append((x,y))
 dataset = graph.add_dataset(data,ElCircleDataSet,3)
 
 # add some drawing objects to graph
@@ -61,4 +45,4 @@ graph.xaxis.label.text = "Negative X's are hidden"
 graph.yaxis.label.text = "Negative Y's are hidden"
 
 # print out the grace
-grace.write_file(output_name(__file__))
+grace.write_file('06_logautoscale.agr')
