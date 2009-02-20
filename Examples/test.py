@@ -7,16 +7,16 @@ from subprocess import Popen, PIPE
 from os.path import sep, splitext
 
 exampleList = [
-    './Examples/00_helloworld.py',
-    './Examples/01_singleplot.py',
-    './Examples/02_multiplot.py',
-    './Examples/03_simplesubclass.py',
-    './Examples/04_classy.py',
-    './Examples/05_colorplot.py',
-    './Examples/06_logautoscale.py',
-    './Examples/07_panels.py',
-    './Examples/08_latexlabels.py',
-    './Examples/09_datasets.py',
+    './00_helloworld.py',
+    './01_singleplot.py',
+    './02_multiplot.py',
+    './03_simplesubclass.py',
+    './04_classy.py',
+    './05_colorplot.py',
+    './06_logautoscale.py',
+    './07_panels.py',
+    './08_latexlabels.py',
+    './09_datasets.py',
     ]
 
 if __name__ == '__main__':
