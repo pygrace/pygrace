@@ -372,10 +372,8 @@ set_row_xaxislabel.
             graph = self.graphs_rc[row][col]
 
             # To avoid error with trying to set NoneType attributes
-            try:
+            if graph is not None:
                 graph.yaxis.label.text = ''
-            except AttributeError:
-                pass
 
         # determine offsets for resulting new label
         if (rowspan[1]-rowspan[0]+1)%2==1:
@@ -438,10 +436,8 @@ set_row_xaxislabel.
             graph = self.graphs_rc[row][col]
 
             # To avoid error with trying to set NoneType attributes
-            try:
+            if graph is not None:
                 graph.xaxis.label.text = ''
-            except AttributeError:
-                pass
 
         # determine offsets for resulting new label
         if (colspan[1]-colspan[0]+1)%2==1:
