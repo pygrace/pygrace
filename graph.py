@@ -304,6 +304,14 @@ class Graph(GraceObject):
         for index,dataset in enumerate(self.datasets):
             dataset.index = index + INDEX_ORIGIN
 
+    def move_dataset_to_back(self, dataset):
+        _dataset = self.datasets.pop(dataset.index-INDEX_ORIGIN)
+        _index = _dataset.index
+        assert _dataset==dataset, "Not the same dataset"
+        self.datasets.insert(0,dataset)
+        for index,dataset in enumerate(self.datasets):
+            dataset.index = index + INDEX_ORIGIN
+
     def logy(self): self.yaxis.set_log()
     def logx(self): self.xaxis.set_log()
     def logxy(self):
