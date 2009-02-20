@@ -592,9 +592,9 @@ There are no datasets or drawing_objects on which to determine the limits.
         self.yaxis.tick.major = yMajor
         self.yaxis.tick.minor_ticks = nyMinor
 
-    def autoscale(self, pad=0):
-        self.autoscalex(pad=pad)
-        self.autoscaley(pad=pad)
+    def autoscale(self, padx=0,pady=0):
+        self.autoscalex(pad=padx)
+        self.autoscaley(pad=pady)
 
     def autotickx(self):
         """Automatically generate x-axis ticks based on world coords.

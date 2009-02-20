@@ -228,6 +228,89 @@ using the 'filetype' keyword argument.
     def get_graph(self, index):
         return self.graphs[index]
 
+    def get_eps_frame_coords(self):
+        """For each graph, obtain the eps coordinates of the frame
+        within the figure.  This is useful for aligning things in
+        external programs such as xfig.
+        """
+        eps_frame_coords = []
+        for graph in self.graphs:
+
+            # height is the limiting dimension in viewport coordinates
+            if self.width>self.height:
+                lim_dimension = float(self.height)
+            else:
+                lim_dimension = float(self.width)
+            xmin = graph.view.xmin*lim_dimension
+            xmax = graph.view.xmax*lim_dimension
+            ymin = graph.view.ymin*lim_dimension
+            ymax = graph.view.ymax*lim_dimension
+            eps_frame_coords.append((xmin,xmax,ymin,ymax))
+        return eps_frame_coords
+
+    #--------------------------------------------------------------------------
+    # methods for rescaling graphs in a MultiGrace
+    #--------------------------------------------------------------------------
+    def autoscalex_same(self, pad=0):
+        """Autoscale all x-axes to have the same world coordinates
+        """
+
+        # find the world coordinates of all of the graphs
+        worlds = []
+        for graph in self.graphs:
+            graph.autoscalex(pad=pad)
+            worlds.append(graph.get_world())
+        
+        # find the least restrictive world coordinates to share for
+        # all graphs
+        xmins,ymins,xmaxs,ymaxs = zip(*worlds)
+        xmin = min(xmins)
+        xmax = max(xmaxs)
+        for graph in self.graphs:
+            world = graph.get_world()
+            graph.set_world(xmin,world[1],xmax,world[3])
+
+        # set the ticks now
+        for graph in self.graphs:
+            graph.autotickx()
+
+    def autoscaley_same(self,pad=0):
+        """Autoscale all y-axes to have the same world coordinates
+        """
+
+        # find the world coordinates of all of the graphs
+        worlds = []
+        for graph in self.graphs:
+            graph.autoscaley(pad=pad)
+            worlds.append(graph.get_world())
+        
+        # find the least restrictive world coordinates to share for
+        # all graphs
+        xmins,ymins,xmaxs,ymaxs = zip(*worlds)
+        ymin = min(ymins)
+        ymax = max(ymaxs)
+        for graph in self.graphs:
+            world = graph.get_world()
+            graph.set_world(world[0],ymin,world[2],ymax)
+
+        # set the ticks now
+        for graph in self.graphs:
+            graph.autoticky()
+
+    def autoscale_same(self,padx=0,pady=0):
+        """Autoscale all graphs in a this MultiGrace to have the same x,y
+        world coordinates.
+        """
+        self.autoscalex_same(pad=padx)
+        self.autoscaley_same(pad=pady)
+
+    def set_world_same(self,xmin,ymin,xmax,ymax):
+        """Rescale all graphs in a MultiGrace to have the same x,y world
+        coordinates.
+        """
+        for graph in self.graphs:
+            graph.set_world(xmin,ymin,xmax,ymax)
+
 class Timestamp(GraceObject):
     """A string representation of the time is created at time of printing."""
     _staticType = 'Timestamp'

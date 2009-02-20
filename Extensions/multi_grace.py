@@ -66,6 +66,9 @@ class MultiGrace(Grace):
         else:
             self.frame_height = self.frame_width/self.width_to_height_ratio
         
+    #--------------------------------------------------------------------------
+    # methods for arranging graphs in a MultiGrace
+    #--------------------------------------------------------------------------
     def multi(self, rows, cols, hoffset=(0.15,0.05), voffset=(0.05,0.15),
               hgap=0.1, vgap=0.1,
               width_to_height_ratio=1.0/0.7):
@@ -149,6 +152,9 @@ class MultiGrace(Grace):
         self.multi(optrows,optcols,hoffset,voffset,hgap,vgap,
                    width_to_height_ratio)
 
+    #--------------------------------------------------------------------------
+    # methods for hiding redundant information in a MultiGrace
+    #--------------------------------------------------------------------------
     def hide_redundant_xaxislabels(self):
         """Hide all x-axis axis labels on the interior of a multigraph that
         are redundant, but only if all labels on the interior of the
@@ -341,6 +347,9 @@ Grace.autohide_multi_labels only works with a multigraph
         self.hide_redundant_xlabels()
         self.hide_redundant_ylabels()
 
+    #--------------------------------------------------------------------------
+    # methods for adding a single label for multiple graphs in a MultiGrace
+    #--------------------------------------------------------------------------
     def set_col_yaxislabel(self,col,label,perpendicular_offset=0.08,
                            opposite_side=False,rowspan=(None,None),
                            *args,**kwargs):
@@ -466,6 +475,9 @@ set_row_xaxislabel.
                 graph.xaxis.label.place = 'opposite'
                 graph.xaxis.ticklabel.place = 'opposite'
             
+    #--------------------------------------------------------------------------
+    # methods for aligning axis labels on graphs in a MultiGrace
+    #--------------------------------------------------------------------------
     def align_axislabelx(self,place_tup=(0, 0.08)):
         """Align the x-axis labels with place_tup for all graphs in
         this Grace instance.
@@ -488,24 +500,4 @@ set_row_xaxislabel.
         """
         self.align_axislabelx(xplace_tup)
         self.align_axislabely(yplace_tup)
-
-    def get_eps_frame_coords(self):
-        """For each graph, obtain the eps coordinates of the frame
-        within the figure.  This is useful for aligning things in
-        external programs such as xfig.
-        """
-        eps_frame_coords = []
-        for graph in self.graphs:
-
-            # height is the limiting dimension in viewport coordinates
-            if self.width>self.height:
-                lim_dimension = float(self.height)
-            else:
-                lim_dimension = float(self.width)
-            xmin = graph.view.xmin*lim_dimension
-            xmax = graph.view.xmax*lim_dimension
-            ymin = graph.view.ymin*lim_dimension
-            ymax = graph.view.ymax*lim_dimension
-            eps_frame_coords.append((xmin,xmax,ymin,ymax))
-        return eps_frame_coords
 
