@@ -125,7 +125,7 @@ class Tick(base.GraceObject):
             self._check_membership(key, value, ('none', 'ticks', 'both'))
 
         base.GraceObject.__setattr__(self, key, value)
-        
+
     def __str__(self):
 
         # get orientation and alt from parent (axis)
@@ -188,6 +188,24 @@ class Tick(base.GraceObject):
 
         # return a string with tick information and special ticks
         return '\n'.join((tickString, specialTickString))
+
+    def set_spec_ticks(self,major_ticks,minor_ticks,tick_labels=[]):
+        """Set special ticks and tick labels in an intuitive manner.
+        """
+        
+        if len(tick_labels)>0 and len(tick_labels)!=len(major_ticks):
+            message = """
+Tick.set_spec_ticks expects tick_labels list to be the same size as major_ticks.
+"""
+            raise TypeError,message
+
+        if len(tick_labels)>0:
+            self.spec_type = "both"
+            self.spec_ticklabels = tick_labels + ['']*len(minor_ticks)
+        else:
+            self.spec_type = "ticks"
+        self.spec_ticktypes = ["major"]*len(major_ticks) + ["minor"]*len(minor_ticks)
+        self.spec_ticks = major_ticks + minor_ticks
 
 class TickLabel(base.GraceObject):
     _staticType = 'TickLabel'
