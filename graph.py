@@ -1,6 +1,7 @@
 from base import GraceObject
 from drawing_objects import DrawingObject
-from dataset import DataSet
+from dataset import DataSet, SYMBOLS, INDEX2SYMBOLS, LINESTYLES, \
+    INDEX2LINESTYLES
 from axis import Axis,LINEAR_SCALE,LOGARITHMIC_SCALE
 import math
 
@@ -672,4 +673,79 @@ There are no datasets or drawing_objects on which to determine the limits.
         for index, dataset in enumerate(self.datasets):
             color = colorList[(skip *index) % nColors]
             dataset.set_suffix(color, 'color')
+
+    def set_different_symbols(self, skip=1, attr="index", exclude=(0,)):
+        """Set datasets in graph to different symbols.  This function behaves
+        similarly to the similar function in the xmgrace GUI."""
+
+        # make sure attr argument is the right type
+        if attr not in ('name', 'index'):
+            message = "attr must be 'name' or 'index' (got %s)" % attr
+            raise ValueError(message)
+
+        # put all symbol indexes that should be excluded from the list
+        # in a dictionary
+        lookup = {}
+        for item in exclude:
+            if isinstance(item, str):
+                item = SYMBOLS[item]
+            lookup[item] = None
+
+        # put symbols into a list
+        indices = INDEX2SYMBOLS.keys()
+        indices.sort()
+        symbolsList = []
+        for index in indices:
+            if index not in lookup:
+                symbolsList.append(index)
+        
+        # set datasets to different colors
+        nSymbols = len(symbolsList)
+        for index, dataset in enumerate(self.datasets):
+            shape = symbolsList[(skip *index) % nSymbols]
+            dataset.symbol.set_suffix(shape, "shape")
+
+    def set_different_linestyles(self, skip=1, attr="index", exclude=(0,)):
+        """Set datasets in graph to different linestyles.  This function
+        behaves similarly to the similar function in the xmgrace
+        GUI.
+        """
+
+        # make sure attr argument is the right type
+        if attr not in ('name', 'index'):
+            message = "attr must be 'name' or 'index' (got %s)" % attr
+            raise ValueError(message)
+
+        # put all symbol indexes that should be excluded from the list
+        # in a dictionary
+        lookup = {}
+        for item in exclude:
+            if isinstance(item, str):
+                item = LINESTYLES[item]
+            lookup[item] = None
+
+        # put symbols into a list
+        indices = INDEX2LINESTYLES.keys()
+        indices.sort()
+        linestylesList = []
+        for index in indices:
+            if index not in lookup:
+                linestylesList.append(index)
+        
+        # set datasets to different colors
+        nLinestyles = len(linestylesList)
+        for index, dataset in enumerate(self.datasets):
+            linestyle = linestylesList[(skip *index) % nLinestyles]
+            dataset.line.set_suffix(linestyle, "linestyle")
+
+    def set_different_linewidths(self, skip=0.5, start=0.5):
+        """Set datasets in graph to different linewidths.  This function
+        behaves similarly to the similar function in the xmgrace
+        GUI.
+        """
+
+        # set datasets to different colors
+        for index, dataset in enumerate(self.datasets):
+            dataset.line.set_suffix(skip*index+start, "linewidth")
+
 

@@ -12,34 +12,31 @@ SYMBOLS = {"None":0,
            "X":9,
            "Star":10,
            "Char":11,
-           "none":0,
-           "circle":1,
-           "square":2,
-           "diamond":3,
-           "triangle up":4,
-           "triangle left":5,
-           "triangle down":6,
-           "triangle right":7,
-           "plus":8,
-           "x":9,
-           "star":10,
-           "char":11,
            }
+INDEX2SYMBOLS = {}
+for name,index in SYMBOLS.iteritems():
+    INDEX2SYMBOLS[index] = name
 LINETYPES = {"None":0,
              "Straight":1,
              "Left stairs":2,
              "Right stairs":3,
              "Segments":4,
              "3-Segments":5}
-LINESTYLES = {"--":0,
-              ". . ":1,
-              "- - ":2,
-              "-- -- ":3,
-              ". - . - ":4,
-              ". -- . -- ":5,
-              ". . - . . - ":6,
-              "- - . - - . ":7}
-
+INDEX2LINETYPES = {}
+for name,index in LINETYPES.iteritems():
+    INDEX2LINETYPES[index] = name
+LINESTYLES = {"None":0,
+              "--":1,
+              ". . ":2,
+              "- - ":3,
+              "-- -- ":4,
+              ". - . - ":5,
+              ". -- . -- ":6,
+              ". . - . . - ":7,
+              "- - . - - . ":8}
+INDEX2LINESTYLES = {}
+for name,index in LINESTYLES.iteritems():
+    INDEX2LINESTYLES[index] = name
 
 class Symbol(GraceObject):
     _staticType = 'Symbol'
