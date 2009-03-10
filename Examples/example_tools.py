@@ -181,9 +181,9 @@ def datasets():
     pass
 
 def dataset_features():
-    xs = [0.1*i for i in range(20)]
-    data0 = [(x,x*x+0.0) for x in xs]
-    data1 = [(x,x*x+1.0) for x in xs]
-    data2 = [(x,x*x+2.0) for x in xs]
+    xs = [0.3*i for i in range(20)]
+    data0 = [(x+0.0,(x+0.0)*(x+0.0)) for x in xs]
+    data1 = [(x+0.1,(x+0.1)*(x+0.1)) for x in xs]
+    data2 = [(x+0.2,(x+0.2)*(x+0.2)) for x in xs]
     return data0,data1,data2
     

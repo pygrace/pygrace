@@ -297,7 +297,11 @@ class Graph(GraceObject):
             result.extend(dataset.data)
         return result
 
-    def move_dataset_to_top(self, dataset):
+    def move_dataset_to_front(self, dataset):
+        """Move data set to the front.  This emulates the functionality of the
+        xmgrace GUI.
+        """
+
         _dataset = self.datasets.pop(dataset.index-INDEX_ORIGIN)
         _index = _dataset.index
         assert _dataset==dataset, "Not the same dataset"
@@ -306,6 +310,10 @@ class Graph(GraceObject):
             dataset.index = index + INDEX_ORIGIN
 
     def move_dataset_to_back(self, dataset):
+        """Move data set to the back.  This emulates the functionality of the
+        xmgrace GUI.
+        """
+
         _dataset = self.datasets.pop(dataset.index-INDEX_ORIGIN)
         assert _dataset==dataset, "Not the same dataset"
         self.datasets.insert(0, dataset)
@@ -313,6 +321,10 @@ class Graph(GraceObject):
             dataset.index = index + INDEX_ORIGIN
 
     def move_dataset_forward(self, dataset):
+        """Move data set forward by one dataset.  This emulates the 
+        functionality of the xmgrace GUI.
+        """
+
         _dataset = self.datasets.pop(dataset.index-INDEX_ORIGIN)
         _index = _dataset.index
         assert _dataset==dataset, "Not the same dataset"
@@ -321,6 +333,10 @@ class Graph(GraceObject):
             dataset.index = index + INDEX_ORIGIN
 
     def move_dataset_backward(self, dataset):
+        """Move data set backward by one dataset.  This emulates the 
+        functionality of the xmgrace GUI.
+        """
+
         _dataset = self.datasets.pop(dataset.index-INDEX_ORIGIN)
         _index = _dataset.index
         assert _dataset==dataset, "Not the same dataset"
@@ -328,6 +344,18 @@ class Graph(GraceObject):
         self.datasets.insert(_newListIndex, dataset)
         for index,dataset in enumerate(self.datasets):
             dataset.index = index + INDEX_ORIGIN
+
+    def set_dataset_order(self, datasets):
+        """Specify the order of the data sets.
+        """
+
+        # make sure that the lengths of order and datasets are the same
+        assert len(datasets)==len(self.datasets),\
+            "'datasets' not same length as Graph.datasets."
+
+        # use the move_dataset_to_back
+        for dataset in datasets:
+            self.move_dataset_to_back(dataset)
 
     def logy(self): self.yaxis.set_log()
     def logx(self): self.xaxis.set_log()
@@ -763,6 +791,6 @@ There are no datasets or drawing_objects on which to determine the limits.
         
         # set datasets to different line widths
         for index, dataset in enumerate(self.datasets):
-            dataset.line.set_suffix(skip*index+start, "linewidth")
+            dataset.line.set_suffix(linewidthsList[index], "linewidth")
 
 

@@ -21,6 +21,11 @@ dataset2 = graph.add_dataset(data2)
 # autoscale the axes
 graph.autoscale()
 
+# set symbol sizes
+for dataset in graph.datasets:
+    dataset.symbol.size = 0.75
+    dataset.symbol.linewidth = 2.0
+
 # these methods emulate some functions in xmgrace that automatically
 # set the symbols, colors, and linestyles to be different for each
 # dataset in a graph.
@@ -61,6 +66,22 @@ graph.set_different_colors(colorsList=colorsList)
 graph.set_different_symbols(symbolsList=symbolsList)
 graph.set_different_linestyles(linestylesList=linestylesList)
 graph.set_different_linewidths(linewidthsList=linewidthsList)
+
+# You can also move datasets forward/backward or to the top or bottom
+# like this:
+graph.move_dataset_backward(dataset2)
+graph.move_dataset_to_front(dataset0)
+
+# now they are ordered [dataset2,dataset1,dataset0].  To move them
+# back, you can specify the order of all data sets like this:
+graph.set_dataset_order([dataset0,dataset1,dataset2])
+
+# now if you want the data sets in the back to have thicker lines, you
+# can do this:
+linewidthsList = [3,2,1]
+graph.set_different_linewidths(linewidthsList=linewidthsList)
+
+#xxxx this clearly is not working yet
 
 # print out the grace
 grace.write_file('10_dataset_features.agr')
