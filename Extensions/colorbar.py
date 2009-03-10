@@ -50,19 +50,33 @@ class ColorBar(Graph):
     def get_domain(self):
         return self.world.ymin,self.world.ymax
 
-    def set_domain(self,domain,autoscale=True):
+    def set_domain(self,domain,autoscale=True,pad=0):
         """set the domain of the yaxis by (1) adding a dummy dataset,
         (2) autoscaling, and (3) removing dummy dataset.
         """
 
         # slightly alter domain to get rid of numerical errors
+        self.set_world(0,domain[0],1,domain[1])
         if autoscale:
-            dataset = self.add_dataset(zip([0,1],domain))
-            self.autoscale()
-            self.datasets.pop()
-            self._datasetIndex -= 1
-        else:
-            self.set_world(0,domain[0],1,domain[1])
+            self.autoscale(pady=pad)
+    
+    def autoscalex(self, pad=0, only_visible=True):
+        """Over ride autoscale behavior of Graph.
+        """
+        dataset = self.add_dataset([(self.world.xmin,self.world.ymin),
+                                    (self.world.xmax,self.world.ymax)])
+        Graph.autoscalex(self,pad=pad)
+        self.datasets.pop()
+        self._datasetIndex -= 1
+    
+    def autoscaley(self, pad=0, only_visible=True):
+        """Over ride autoscale behavior of Graph.
+        """
+        dataset = self.add_dataset([(self.world.xmin,self.world.ymin),
+                                    (self.world.xmax,self.world.ymax)])
+        Graph.autoscaley(self,pad=pad)
+        self.datasets.pop()
+        self._datasetIndex -= 1
 
     def add_colors(self):
         """add colors
