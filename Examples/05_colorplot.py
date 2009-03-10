@@ -27,60 +27,22 @@ from PyGrace.drawing_objects import DrawBox
 
 from PyGrace.Styles.el import ElGraph, ElLogTick, ElLogTickLabel, ElAxisLabel
 
-from random import normalvariate
-from math import floor,ceil
-
-#------------------------------------------------------------------------------
-# make data to plot
-#------------------------------------------------------------------------------
-# generate some synthetic data from eliptical Gaussian
-data = []
-for i in range(10000):
-    x = normalvariate(0,1.0)
-    y = normalvariate(-x,1.0)
-    data.append((x,y))
-
-# quick and dirty class for creating a pdf
-class Bin2D:
-    def __init__(self,lwrbnd,uprbnd,pdf=0.0):
-        self.lwrbnd = lwrbnd
-        self.uprbnd = uprbnd
-        self.pdf = pdf
-
-# create quick and dirty histogram
-delta = 0.2
-f = lambda zs: floor(min(zs)/delta)*delta
-g = lambda zs: ceil(max(zs)/delta)*delta
-xmin,ymin = map(f,zip(*data))
-xmax,ymax = map(g,zip(*data))
-bins = []
-for i in range(int(xmin/delta),int(xmax/delta)):
-    for j in range(int(ymin/delta),int(ymax/delta)):
-        lwrbnd = (i*delta,j*delta)
-        uprbnd = ((i+1)*delta,(j+1)*delta)
-        bins.append(Bin2D(lwrbnd,uprbnd))
-M = int(xmax/delta) - int(xmin/delta)
-N = int(ymax/delta) - int(ymin/delta)
-for datum in data:
-    i = int(floor((datum[0]-xmin)/delta))
-    j = int(floor((datum[1]-ymin)/delta))
-    bin = bins[N*i + j]
-    if not (bin.lwrbnd[0]<=datum[0] and datum[0]<bin.uprbnd[0] and
-            bin.lwrbnd[1]<=datum[1] and datum[1]<bin.uprbnd[1]):
-        s = "bin not correctly identified" + \
-            str(bin.lwrbnd) + ' ' + str(bin.uprbnd) + ' ' + str(datum)
-        raise TypeError, s
-    bin.pdf += 1.0
-minpdf,maxpdf = 1.0/float(len(data))/delta/delta, 0.0
-for bin in bins:
-    bin.pdf /= float(len(data))*(bin.uprbnd[0] - bin.lwrbnd[0])\
-               *(bin.uprbnd[1] - bin.lwrbnd[1])
-    if bin.pdf > maxpdf:
-        maxpdf = bin.pdf
 
 #------------------------------------------------------------------------------
 # make a nice figure
 #------------------------------------------------------------------------------
+# get the data
+import example_tools
+data = example_tools.colorplot()
+
+# find bounds of pdf
+x0s,y0s,x1s,y1s,pdfs = zip(*data)
+maxpdf=max(pdfs)
+minpdf = float("inf")
+for pdf in pdfs:
+    if pdf<minpdf and pdf>0.0:
+        minpdf=pdf
+
 # instantiate a sweet figgy fig
 colors = ColorBrewerScheme("YlOrBr",n=253) # this is the maximum number of colors
 grace = Grace(colors=colors)
@@ -102,12 +64,12 @@ colorbar.yaxis.label.place="opposite"
 # properly.
 graph = grace.add_graph()
 graph.copy_format(ElGraph)
-for bin in bins:
-    if bin.pdf > 0.0:
-        color = colorbar.z2color(bin.pdf)
+for (x0,y0,x1,y1,pdf) in data:
+    if pdf > 0.0:
+        color = colorbar.z2color(pdf)
         graph.add_drawing_object(DrawBox,
-                                 lowleft = tuple(bin.lwrbnd),
-                                 upright = tuple(bin.uprbnd),
+                                 lowleft = (x0,y0),
+                                 upright = (x1,y1),
                                  loctype="world", 
                                  fill_color=color,
                                  color=color,

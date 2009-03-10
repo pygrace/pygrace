@@ -99,7 +99,59 @@ def simplesubclass():
     return dataList
 
 def colorplot():
-    pass
+    from random import normalvariate
+    from math import floor,ceil
+
+    # generate some synthetic data from eliptical Gaussian
+    data = []
+    for i in range(10000):
+        x = normalvariate(0,1.0)
+        y = normalvariate(-x,1.0)
+        data.append((x,y))
+
+    # quick and dirty class for creating a pdf
+    class Bin2D:
+        def __init__(self,lwrbnd,uprbnd,pdf=0.0):
+            self.lwrbnd = lwrbnd
+            self.uprbnd = uprbnd
+            self.pdf = pdf
+
+    # create quick and dirty histogram
+    delta = 0.2
+    f = lambda zs: floor(min(zs)/delta)*delta
+    g = lambda zs: ceil(max(zs)/delta)*delta
+    xmin,ymin = map(f,zip(*data))
+    xmax,ymax = map(g,zip(*data))
+    bins = []
+    for i in range(int(xmin/delta),int(xmax/delta)):
+        for j in range(int(ymin/delta),int(ymax/delta)):
+            lwrbnd = (i*delta,j*delta)
+            uprbnd = ((i+1)*delta,(j+1)*delta)
+            bins.append(Bin2D(lwrbnd,uprbnd))
+    M = int(xmax/delta) - int(xmin/delta)
+    N = int(ymax/delta) - int(ymin/delta)
+    for datum in data:
+        i = int(floor((datum[0]-xmin)/delta))
+        j = int(floor((datum[1]-ymin)/delta))
+        bin = bins[N*i + j]
+        if not (bin.lwrbnd[0]<=datum[0] and datum[0]<bin.uprbnd[0] and
+                bin.lwrbnd[1]<=datum[1] and datum[1]<bin.uprbnd[1]):
+            s = "bin not correctly identified" + \
+                str(bin.lwrbnd) + ' ' + str(bin.uprbnd) + ' ' + str(datum)
+            raise TypeError, s
+        bin.pdf += 1.0
+    minpdf,maxpdf = 1.0/float(len(data))/delta/delta, 0.0
+    for bin in bins:
+        bin.pdf /= float(len(data))*(bin.uprbnd[0] - bin.lwrbnd[0])\
+                   *(bin.uprbnd[1] - bin.lwrbnd[1])
+        if bin.pdf > maxpdf:
+            maxpdf = bin.pdf
+
+    # convert to a list of points to make this easy to understand
+    data = [(bin.lwrbnd[0],bin.lwrbnd[1],
+             bin.uprbnd[0],bin.uprbnd[1],
+             bin.pdf) for bin in bins]
+    return data
 
 def logautoscale():
     from random import random
