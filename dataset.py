@@ -396,25 +396,31 @@ Can not find limits of DataSet with type %s
                 raise TypeError, message
         return x,y
 
-    def limits(self):
+    def limits(self,only_visible=True):
         if self.data:
-            x, y = self.data_bounds()
-            return min(x), min(y), max(x), max(y)
+            if ((only_visible and self.hidden=="false") 
+                or not only_visible):
+                x, y = self.data_bounds()
+                return min(x), min(y), max(x), max(y)
+        return None,None,None,None
 
-    def smallest_positive(self):
+    def smallest_positive(self,only_visible=True):
         if self.data:
-            x, y = self.data_bounds()
-            x = [i for i in x if i > 0]
-            y = [i for i in y if i > 0]
-            if x:
-                xMin = min(x)
-            else:
-                xMin = None
-            if y:
-                yMin = min(y)
-            else:
-                yMin = None
-            return xMin, yMin
+            if ((only_visible and self.hidden=="false") 
+                or not only_visible):
+                x, y = self.data_bounds()
+                x = [i for i in x if i > 0]
+                y = [i for i in y if i > 0]
+                if x:
+                    xMin = min(x)
+                else:
+                    xMin = None
+                if y:
+                    yMin = min(y)
+                else:
+                    yMin = None
+                return xMin, yMin
+        return None,None
 
     def _repr_data(self):
         if self.type[:2]=='xy' or self.type[:3] =='bar': #any xy or bar type

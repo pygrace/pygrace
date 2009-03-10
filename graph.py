@@ -341,10 +341,10 @@ class Graph(GraceObject):
         self.xaxis.set_lin()
         self.yaxis.set_lin()
 
-    def data_smallest_positive(self):
+    def data_smallest_positive(self,only_visible=True):
         all = []
         for dataset in self.datasets:
-            result = dataset.smallest_positive()
+            result = dataset.smallest_positive(only_visible=only_visible)
             all.append(result)
         if all:
             xmins, ymins = zip(*all)
@@ -368,8 +368,8 @@ class Graph(GraceObject):
         else:
             return None, None
         
-    def smallest_positive(self):
-        data_sp = self.data_smallest_positive()
+    def smallest_positive(self,only_visible=True):
+        data_sp = self.data_smallest_positive(only_visible=only_visible)
         drawing_object_sp = self.drawing_object_smallest_positive()
         if None not in drawing_object_sp and None not in data_sp:
             xmins, ymins = zip(data_sp,drawing_object_sp)
@@ -386,10 +386,10 @@ smallest positive number.
 """
             raise TypeError, message
         
-    def data_limits(self):
+    def data_limits(self,only_visible=True):
         all = []
         for dataset in self.datasets:
-            result = dataset.limits()
+            result = dataset.limits(only_visible=only_visible)
             if not None in result:
                 all.append(result)
         if len(all):
@@ -410,8 +410,8 @@ smallest positive number.
         else:
             return None, None, None, None
 
-    def limits(self):
-        data_limits = self.data_limits()
+    def limits(self,only_visible=True):
+        data_limits = self.data_limits(only_visible=only_visible)
         drawing_object_limits = self.drawing_object_limits()
         if None not in drawing_object_limits and None not in data_limits:
             xmins, ymins, xmaxs, ymaxs = zip(data_limits,drawing_object_limits)
@@ -544,8 +544,8 @@ There are no datasets or drawing_objects on which to determine the limits.
         self.autoscale()
         self.format_for_print(printWidth)
 
-    def autoscalex(self, pad=0):
-        xMin, yMin, xMax, yMax = self.limits()
+    def autoscalex(self, pad=0, only_visible=True):
+        xMin, yMin, xMax, yMax = self.limits(only_visible=only_visible)
         if self.xaxis.scale==LINEAR_SCALE:
             xMajor, nxMinor = self.calculate_ticks(xMin, xMax)
             xMinor = xMajor / float(nxMinor + 1)
@@ -563,7 +563,7 @@ There are no datasets or drawing_objects on which to determine the limits.
 
             # if x has a zero value, autoscale with second smallest
             if xMin <= 0:
-                xMin, dummy = self.smallest_positive()
+                xMin, dummy = self.smallest_positive(only_visible=only_visible)
             
             xMajor, nxMinor = self.calculate_ticks(xMin, xMax,
                                                    scale=LOGARITHMIC_SCALE)
@@ -580,8 +580,8 @@ There are no datasets or drawing_objects on which to determine the limits.
         self.xaxis.tick.major = xMajor
         self.xaxis.tick.minor_ticks = nxMinor
 
-    def autoscaley(self, pad=0):
-        xMin, yMin, xMax, yMax = self.limits()
+    def autoscaley(self, pad=0, only_visible=True):
+        xMin, yMin, xMax, yMax = self.limits(only_visible=only_visible)
         if self.yaxis.scale==LINEAR_SCALE:
             yMajor, nyMinor = self.calculate_ticks(yMin, yMax)
             yMinor = yMajor / float(nyMinor + 1)
@@ -599,7 +599,7 @@ There are no datasets or drawing_objects on which to determine the limits.
 
             # if y has a zero value, autoscale with second smallest
             if yMin <= 0:
-                dummy, yMin = self.smallest_positive()
+                dummy, yMin = self.smallest_positive(only_visible=only_visible)
 
             yMajor, nyMinor = self.calculate_ticks(yMin, yMax,
                                                    scale=LOGARITHMIC_SCALE)
@@ -617,9 +617,9 @@ There are no datasets or drawing_objects on which to determine the limits.
         self.yaxis.tick.major = yMajor
         self.yaxis.tick.minor_ticks = nyMinor
 
-    def autoscale(self, padx=0,pady=0):
-        self.autoscalex(pad=padx)
-        self.autoscaley(pad=pady)
+    def autoscale(self, padx=0, pady=0, only_visible=True):
+        self.autoscalex(pad=padx,only_visible=only_visible)
+        self.autoscaley(pad=pady,only_visible=only_visible)
 
     def autotickx(self):
         """Automatically generate x-axis ticks based on world coords.

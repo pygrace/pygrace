@@ -43,7 +43,7 @@ for i in range(len(data_types)):
 
     # customize dataset
     dataset.line.configure(type=0)
-    dataset.symbol.configure(shape=SYMBOLS["triangle up"],
+    dataset.symbol.configure(shape=SYMBOLS["Triangle up"],
                              fill_color=i+2)
 
 # automatically space multi graph and automatically format figures.
