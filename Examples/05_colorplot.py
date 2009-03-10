@@ -19,12 +19,6 @@
 import sys
 import random
 
-from example_tools import output_name
-
-# add the root directory of the PyGrace package to the PYTHONPATH
-from example_tools import PYGRACE_PATH
-sys.path.append(PYGRACE_PATH)
-
 from PyGrace.grace import Grace
 from PyGrace.Extensions.colorbar import ColorBar
 from PyGrace.colors import ColorBrewerScheme
@@ -148,4 +142,4 @@ clone_graph = grace.clone_graph(graph)
 clone_colorbar = grace.clone_graph(colorbar)
 
 # print out the grace
-grace.write_file(output_name(__file__))
+grace.write_file("05_colorplot.agr")
