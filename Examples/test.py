@@ -17,6 +17,7 @@ exampleList = [
     './07_panels.py',
     './08_latexlabels.py',
     './09_datasets.py',
+    './10_dataset_features.py',
     ]
 
 if __name__ == '__main__':

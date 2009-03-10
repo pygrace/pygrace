@@ -645,9 +645,12 @@ There are no datasets or drawing_objects on which to determine the limits.
         self.autotickx()
         self.autoticky()
 
-    def set_different_colors(self, skip=1, attr='name', exclude=('White',)):
+    def set_different_colors(self, skip=1, attr='name', exclude=('White',),
+                             colorsList=[]):
         """Set datasets in graph to different colors.  This function behaves
-        similarly to the similar function in the xmgrace GUI."""
+        similarly to the similar function in the xmgrace GUI.  Can 
+        alternatively specify a list of colors for ordering the colors.
+        """
 
         # make sure attr argument is the right type
         if attr not in ('name', 'index'):
@@ -663,20 +666,25 @@ There are no datasets or drawing_objects on which to determine the limits.
             lookup[item] = None
 
         # put colors into a list
-        colorList = []
-        for color in self.root.colors:
-            if not (color.name.upper() in lookup or color.index in lookup):
-                colorList.append(getattr(color, attr))
+        if not colorsList:
+            colorsList = []
+            for color in self.root.colors:
+                if not (color.name.upper() in lookup or color.index in lookup):
+                    colorsList.append(getattr(color, attr))
                 
         # set datasets to different colors
-        nColors = len(colorList)
+        nColors = len(colorsList)
         for index, dataset in enumerate(self.datasets):
-            color = colorList[(skip *index) % nColors]
+            color = colorsList[(skip *index) % nColors]
             dataset.set_suffix(color, 'color')
 
-    def set_different_symbols(self, skip=1, attr="index", exclude=(0,)):
+    def set_different_symbols(self, skip=1, attr="index", exclude=(0,),
+                              symbolsList=[]):
         """Set datasets in graph to different symbols.  This function behaves
-        similarly to the similar function in the xmgrace GUI."""
+        similarly to the similar function in the xmgrace GUI.  Can
+        alternatively specify a list of symbols for ordering the symbol
+        shapes.
+        """
 
         # make sure attr argument is the right type
         if attr not in ('name', 'index'):
@@ -694,21 +702,24 @@ There are no datasets or drawing_objects on which to determine the limits.
         # put symbols into a list
         indices = INDEX2SYMBOLS.keys()
         indices.sort()
-        symbolsList = []
-        for index in indices:
-            if index not in lookup:
-                symbolsList.append(index)
+        if not symbolsList:
+            symbolsList = []
+            for index in indices:
+                if index not in lookup:
+                    symbolsList.append(index)
         
-        # set datasets to different colors
+        # set datasets to different symbols
         nSymbols = len(symbolsList)
         for index, dataset in enumerate(self.datasets):
             shape = symbolsList[(skip *index) % nSymbols]
             dataset.symbol.set_suffix(shape, "shape")
 
-    def set_different_linestyles(self, skip=1, attr="index", exclude=(0,)):
+    def set_different_linestyles(self, skip=1, attr="index", exclude=(0,),
+                                 linestylesList=[]):
         """Set datasets in graph to different linestyles.  This function
         behaves similarly to the similar function in the xmgrace
-        GUI.
+        GUI.  Can alternatively specify a list of linestyles for ordering the 
+        line styles.
         """
 
         # make sure attr argument is the right type
@@ -716,7 +727,7 @@ There are no datasets or drawing_objects on which to determine the limits.
             message = "attr must be 'name' or 'index' (got %s)" % attr
             raise ValueError(message)
 
-        # put all symbol indexes that should be excluded from the list
+        # put all linestyle indexes that should be excluded from the list
         # in a dictionary
         lookup = {}
         for item in exclude:
@@ -724,27 +735,33 @@ There are no datasets or drawing_objects on which to determine the limits.
                 item = LINESTYLES[item]
             lookup[item] = None
 
-        # put symbols into a list
+        # put line styles into a list
         indices = INDEX2LINESTYLES.keys()
         indices.sort()
-        linestylesList = []
-        for index in indices:
-            if index not in lookup:
-                linestylesList.append(index)
+        if not linestylesList:
+            linestylesList = []
+            for index in indices:
+                if index not in lookup:
+                    linestylesList.append(index)
         
-        # set datasets to different colors
+        # set datasets to different line styles
         nLinestyles = len(linestylesList)
         for index, dataset in enumerate(self.datasets):
             linestyle = linestylesList[(skip *index) % nLinestyles]
             dataset.line.set_suffix(linestyle, "linestyle")
 
-    def set_different_linewidths(self, skip=0.5, start=0.5):
+    def set_different_linewidths(self, skip=0.5, start=0.5,linewidthsList=[]):
         """Set datasets in graph to different linewidths.  This function
         behaves similarly to the similar function in the xmgrace
-        GUI.
+        GUI.  Can alternatively specify a list of line widths.
         """
 
-        # set datasets to different colors
+        # determine linewidths
+        if not linewidthsList:
+            linewidthsList = [skip*index+start 
+                              for index in range(len(self.datasets))]
+        
+        # set datasets to different line widths
         for index, dataset in enumerate(self.datasets):
             dataset.line.set_suffix(skip*index+start, "linewidth")
 
