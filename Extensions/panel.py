@@ -20,13 +20,14 @@ class Panel(Graph):
         Graph.__init__(self,parent,index)
 
         # find a default index for this graph
-        if panel_index is None and not index is None:
-            panel_index = index
-        elif index is None:
-            panel_index = 0
+        if panel_index is None:
+            if self.index is None:
+                panel_index = 0
+            else:
+                panel_index = self.index
 
         # specify the default justification for the label
-        self.panel_label = self.add_drawing_object(PanelLabel,index)
+        self.panel_label = self.add_drawing_object(PanelLabel,panel_index)
 
 class PanelLabel(DrawText):
     """This class is useful for adding panel labels to figures.  Note that
