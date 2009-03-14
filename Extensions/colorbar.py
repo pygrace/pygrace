@@ -93,15 +93,15 @@ class ColorBar(Graph):
             else:
                 message = "'%s' is an unknown axis type"%self.xaxis.scale
                 raise TypeError,message
-            self.add_drawing_object(DrawBox,
-                                    lowleft = (0,y0),
-                                    upright = (1,y1),
-                                    loctype="world",
-                                    fill_color=self.color_range[i],
-                                    color=self.color_range[i],
-                                    linestyle=0,
-                                    linewidth=0,
-                                    )
+            # add a three-point dataset to show-up as a solid rectangle
+            the_dataset = self.add_dataset([(0,y1), (1,y1), (1,y0)])
+            the_dataset.symbol.shape = 0
+            the_dataset.line.linewidth = 0
+            the_dataset.line.color = self.color_range[i]
+            the_dataset.fill.type = 2
+            the_dataset.fill.rule = 0
+            the_dataset.fill.color = self.color_range[i]
+            the_dataset.baseline.type = 1
 
     def set_label(self,label):
         """Set the axis label. 
