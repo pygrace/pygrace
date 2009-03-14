@@ -1,8 +1,28 @@
 import math
 from PyGrace.graph import Graph
+from PyGrace.dataset import DataSet
 from PyGrace.drawing_objects import DrawBox
 from PyGrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
 
+class SolidRectangle(DataSet):
+    """A three-point dataset that shows up as a solid rectangle.
+    """
+    def __init__(self, color, *args, **kwargs):
+        DataSet.__init__(self, *args, **kwargs)
+        if len(self.data) != 2:
+            raise TypeError, 'Data for SolidRectangle MUST contain 2 points'
+        x0 = self.data[0][0]
+        x1 = self.data[1][0]
+        y0 = min(self.data[0][1], self.data[1][1])
+        y1 = max(self.data[0][1], self.data[1][1])
+        self.data = [(x0, y1), (x1, y1), (x1, y0)]
+        self.symbol.configure(shape=0)
+        self.line.configure(linewidth=0, color=color)
+        self.fill.configure(type=2, rule=0, color=color)
+        self.baseline.configure(type=1)
+            
+        
+    
 class ColorBar(Graph):
     def __init__(self, domain=(0,1), scale=LINEAR_SCALE, autoscale=True,
                  color_range=[], *args, **kwargs):
@@ -94,14 +114,9 @@ class ColorBar(Graph):
                 message = "'%s' is an unknown axis type"%self.xaxis.scale
                 raise TypeError,message
             # add a three-point dataset to show-up as a solid rectangle
-            the_dataset = self.add_dataset([(0,y1), (1,y1), (1,y0)])
-            the_dataset.symbol.shape = 0
-            the_dataset.line.linewidth = 0
-            the_dataset.line.color = self.color_range[i]
-            the_dataset.fill.type = 2
-            the_dataset.fill.rule = 0
-            the_dataset.fill.color = self.color_range[i]
-            the_dataset.baseline.type = 1
+            the_dataset = self.add_dataset([(0, y0), (1, y1)],
+                                           SolidRectangle,
+                                           self.color_range[i])
 
     def set_label(self,label):
         """Set the axis label. 

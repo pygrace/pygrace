@@ -20,7 +20,7 @@ import sys
 import random
 
 from PyGrace.grace import Grace
-from PyGrace.Extensions.colorbar import ColorBar
+from PyGrace.Extensions.colorbar import SolidRectangle, ColorBar
 from PyGrace.colors import ColorBrewerScheme
 from PyGrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
 from PyGrace.drawing_objects import DrawBox
@@ -59,23 +59,13 @@ colorbar.yaxis.ticklabel.place="opposite"
 colorbar.yaxis.label.copy_format(ElAxisLabel)
 colorbar.yaxis.label.place="opposite"
 
-# to add some data to graph, just add the DrawBox to the 'world'
-# coordinates.  this ensures that all of the autoscaling will work
-# properly.
+# to add some data to graph, just add SolidRectangle datasets
 graph = grace.add_graph()
 graph.copy_format(ElGraph)
 for (x0,y0,x1,y1,pdf) in data:
     if pdf > 0.0:
         color = colorbar.z2color(pdf)
-        graph.add_drawing_object(DrawBox,
-                                 lowleft = (x0,y0),
-                                 upright = (x1,y1),
-                                 loctype="world", 
-                                 fill_color=color,
-                                 color=color,
-                                 linestyle=0,
-                                 linewidth=0,
-                                 )
+        graph.add_dataset([(x0,y0), (x1,y1)], SolidRectangle, color)
 
 # move things around
 graph.set_view(0.2,0.2,0.9,0.9)
@@ -97,11 +87,6 @@ graph.autoticky()
 
 # get rid of points that are out of bounds
 graph.remove_extraworld_drawing_objects()
-
-# clone the graph and colorbar to place the frames above the drawing
-# objects that are associated with each graph
-clone_graph = grace.clone_graph(graph)
-clone_colorbar = grace.clone_graph(colorbar)
 
 # print out the grace
 grace.write_file("05_colorplot.agr")
