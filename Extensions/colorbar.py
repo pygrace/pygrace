@@ -5,7 +5,10 @@ from PyGrace.drawing_objects import DrawBox
 from PyGrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
 
 class SolidRectangle(DataSet):
-    """A three-point dataset that shows up as a solid rectangle.
+    """A dataset that shows up as a solid rectangle.
+
+    data for the creating of the SolidRectangle must be the two
+    corners of the rectangle.
     """
     def __init__(self, color, *args, **kwargs):
         DataSet.__init__(self, *args, **kwargs)
