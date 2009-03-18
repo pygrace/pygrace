@@ -1,4 +1,6 @@
-import base, sys
+import base
+import sys
+import math
 
 LINEAR_SCALE = "Normal"
 LOGARITHMIC_SCALE = "Logarithmic"
@@ -365,6 +367,44 @@ scale must be either LINEAR_SCALE or LOGARITHMIC_SCALE.
 """
             raise TypeError,message
 
-    def set_format(self, format, precision=1):
+    def set_format(self, format, precision=None):
         self.ticklabel.format = format
-        self.ticklabel.prec = precision
+        if precision is None:
+            self.auto_precision()
+        else:
+            self.ticklabel.prec = precision
+
+    def auto_precision(self):
+        """Automatically find the precision based on the format of the tick
+        label.
+        """
+        
+        if self.ticklabel.format.lower()=="general":
+            self.ticklabel.prec = 0 # doesn't matter
+        elif self.ticklabel.format.lower()=="decimal":
+            x = self.tick.major
+            p = int(math.floor(math.log10(x)))
+            if p>=0:
+                self.ticklabel.prec = 0
+            else:
+                z = math.floor(x/(10**p))
+                y = x-z*10**p
+                if y==0.0:
+                    self.ticklabel.prec = -p
+                else:
+                    prec = -int(math.floor(math.log10(y)+0.0000001))
+                    self.ticklabel.prec = prec
+        elif self.ticklabel.format.lower()=="power":
+            self.ticklabel.prec = 0
+        elif self.ticklabel.format.lower() in ["exponential","scientific"]:
+            x = self.tick.major
+            p = int(math.floor(math.log10(x)))
+            z = math.floor(x/(10**p))
+            y = x-z*10**p
+            if y==0.0:
+                self.ticklabel.prec = 0
+            else:
+                prec = -int(math.floor(math.log10(y/10**p)+0.0000001))
+                self.ticklabel.prec = prec
+        else:
+            self.ticklabel.prec = 1

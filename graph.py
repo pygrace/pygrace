@@ -607,6 +607,7 @@ There are no datasets or drawing_objects on which to determine the limits.
 
         self.xaxis.tick.major = xMajor
         self.xaxis.tick.minor_ticks = nxMinor
+        self.xaxis.auto_precision()
 
     def autoscaley(self, pad=0, only_visible=True):
         xMin, yMin, xMax, yMax = self.limits(only_visible=only_visible)
@@ -644,6 +645,7 @@ There are no datasets or drawing_objects on which to determine the limits.
 
         self.yaxis.tick.major = yMajor
         self.yaxis.tick.minor_ticks = nyMinor
+        self.yaxis.auto_precision()
 
     def autoscale(self, padx=0, pady=0, only_visible=True):
         self.autoscalex(pad=padx,only_visible=only_visible)
@@ -657,6 +659,7 @@ There are no datasets or drawing_objects on which to determine the limits.
         major, n_minor_ticks = self.calculate_ticks(xmin,xmax,scale=scale)
         self.xaxis.tick.major = major
         self.xaxis.tick.minor_ticks = n_minor_ticks
+        self.xaxis.auto_precision()
 
     def autoticky(self):
         """Automatically generate y-axis ticks based on world coords.
@@ -666,6 +669,7 @@ There are no datasets or drawing_objects on which to determine the limits.
         major, n_minor_ticks = self.calculate_ticks(ymin,ymax,scale=scale)
         self.yaxis.tick.major = major
         self.yaxis.tick.minor_ticks = n_minor_ticks
+        self.yaxis.auto_precision()
 
     def autotick(self):
         """Automatically generate ticks based on world coords.
