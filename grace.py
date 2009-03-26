@@ -74,10 +74,6 @@ class Grace(GraceObject):
             self.max_canvas_height = 1.0
         return self.max_canvas_width,self.max_canvas_height
 
-    def autoscale(self, padx=0,pady=0):
-        for graph in self.graphs:
-            graph.autoscale(padx=padx,pady=pady)
-
     def autoformat(self, printWidth=6.5):
         for graph in self.graphs:
             graph.autoformat(printWidth)
@@ -249,15 +245,37 @@ using the 'filetype' keyword argument.
         return eps_frame_coords
 
     #--------------------------------------------------------------------------
-    # methods for rescaling graphs in a MultiGrace
+    # methods for rescaling graphs 
     #--------------------------------------------------------------------------
-    def autoscalex_same(self, pad=0):
+    def autoscale(self, padx=0,pady=0):
+        for graph in self.graphs:
+            graph.autoscale(padx=padx,pady=pady)
+
+    def autoscalex_same(self, pad=0, graphs=(), exclude_graphs=()):
         """Autoscale all x-axes to have the same world coordinates
         """
 
+        # make sure none of the graphs 
+        if graphs and exclude_graphs:
+            message = """keyword arguments 'graphs' and 'exclude_graphs' 
+can not be used simultaneously.
+"""
+            raise TypeError,message
+        
+        # only autoscale these graphs
+        if graphs:
+            graphs = set(graphs)
+        else:
+            graphs = set(self.graphs)
+
+        # make sure none of the excluded graphs are in 'graphs'
+        for graph in exclude_graphs:
+            graphs.pop(graph)
+        graphs = tuple(graphs)
+
         # find the world coordinates of all of the graphs
         worlds = []
-        for graph in self.graphs:
+        for graph in graphs:
             graph.autoscalex(pad=pad)
             worlds.append(graph.get_world())
         
@@ -266,21 +284,39 @@ using the 'filetype' keyword argument.
         xmins,ymins,xmaxs,ymaxs = zip(*worlds)
         xmin = min(xmins)
         xmax = max(xmaxs)
-        for graph in self.graphs:
+        for graph in graphs:
             world = graph.get_world()
             graph.set_world(xmin,world[1],xmax,world[3])
 
         # set the ticks now
-        for graph in self.graphs:
+        for graph in graphs:
             graph.autotickx()
 
-    def autoscaley_same(self,pad=0):
+    def autoscaley_same(self,pad=0, graphs=(), exclude_graphs=()):
         """Autoscale all y-axes to have the same world coordinates
         """
 
+        # make sure none of the graphs 
+        if graphs and exclude_graphs:
+            message = """keyword arguments 'graphs' and 'exclude_graphs' 
+can not be used simultaneously.
+"""
+            raise TypeError,message
+        
+        # only autoscale these graphs
+        if graphs:
+            graphs = set(graphs)
+        else:
+            graphs = set(self.graphs)
+
+        # make sure none of the excluded graphs are in 'graphs'
+        for graph in exclude_graphs:
+            graphs.pop(graph)
+        graphs = tuple(graphs)
+
         # find the world coordinates of all of the graphs
         worlds = []
-        for graph in self.graphs:
+        for graph in graphs:
             graph.autoscaley(pad=pad)
             worlds.append(graph.get_world())
         
@@ -289,20 +325,22 @@ using the 'filetype' keyword argument.
         xmins,ymins,xmaxs,ymaxs = zip(*worlds)
         ymin = min(ymins)
         ymax = max(ymaxs)
-        for graph in self.graphs:
+        for graph in graphs:
             world = graph.get_world()
             graph.set_world(world[0],ymin,world[2],ymax)
 
         # set the ticks now
-        for graph in self.graphs:
+        for graph in graphs:
             graph.autoticky()
 
-    def autoscale_same(self,padx=0,pady=0):
+    def autoscale_same(self,padx=0,pady=0, graphs=(), exclude_graphs=()):
         """Autoscale all graphs in a this MultiGrace to have the same x,y
         world coordinates.
         """
-        self.autoscalex_same(pad=padx)
-        self.autoscaley_same(pad=pady)
+        self.autoscalex_same(pad=padx,graphs=graphs,
+                             exclude_graphs=exclude_graphs)
+        self.autoscaley_same(pad=pady,graphs=graphs,
+                             exclude_graphs=exclude_graphs)
 
     def set_world_same(self,xmin,ymin,xmax,ymax):
         """Rescale all graphs in a MultiGrace to have the same x,y world
