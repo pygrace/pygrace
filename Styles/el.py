@@ -3,6 +3,7 @@ from PyGrace.graph import Graph, INDEX_ORIGIN, Legend
 from PyGrace.dataset import DataSet
 from PyGrace.axis import Tick, TickLabel, Axis, AxisLabel, \
      LINEAR_SCALE, LOGARITHMIC_SCALE
+from PyGrace.Extensions.colorbar import ColorBar
 
 #------------------------------------------------------------------------------
 # The 'El' style of data sets
@@ -172,3 +173,34 @@ class ElEmptySquareGraph(ElSquareGraph):
             axis.tick.minor_size = 0
             axis.ticklabel.onoff = "off"
             axis.tick.onoff = "off"
+
+class ElColorBar(ColorBar):
+    def __init__(self,*args,**kwargs):
+        ColorBar.__init__(self,*args,**kwargs)
+
+        # place the axis label
+        self.yaxis.label.copy_format(ElAxisLabel)
+        self.yaxis.label.place = "opposite"
+        
+        # place the tick label
+        self.yaxis.tick.copy_format(ElTick)
+        self.yaxis.ticklabel.copy_format(ElTickLabel)
+        self.yaxis.ticklabel.place = "opposite"
+
+class ElLinColorBar(ElColorBar):
+    def __init__(self,*args,**kwargs):
+        ElColorBar.__init__(self,*args,**kwargs)
+
+        # place the tick label
+        self.yaxis.tick.copy_format(ElLinTick)
+        self.yaxis.ticklabel.copy_format(ElLinTickLabel)
+        self.yaxis.ticklabel.place = "opposite"
+
+class ElLogColorBar(ElColorBar):
+    def __init__(self,*args,**kwargs):
+        ElColorBar.__init__(self,*args,**kwargs)
+
+        # place the tick label
+        self.yaxis.tick.copy_format(ElLogTick)
+        self.yaxis.ticklabel.copy_format(ElLogTickLabel)
+        self.yaxis.ticklabel.place = "opposite"

@@ -27,8 +27,8 @@ class SolidRectangle(DataSet):
         
     
 class ColorBar(Graph):
-    def __init__(self, domain=(0,1), scale=LINEAR_SCALE, autoscale=True,
-                 color_range=[], *args, **kwargs):
+    def __init__(self, domain=(), scale=LINEAR_SCALE, autoscale=True,
+                 color_range=(), *args, **kwargs):
         Graph.__init__(self,*args,**kwargs)
 
         # turn off the xaxis labels
@@ -46,13 +46,19 @@ class ColorBar(Graph):
         self.view.xmin = self.view.xmax - 0.1*(self.view.ymax - self.view.ymin)
 
         # remember the range of colors to be used
-        if len(color_range)==0:
-            self.color_range = range(2,len(self.parent.colors))
+        if not color_range:
+            if self.parent is None:
+                self.color_range = []
+            else:
+                self.color_range = range(2,len(self.parent.colors))
         else:
             self.color_range = color_range
 
         # set the domain
-        self.set_domain(domain,autoscale)
+        if domain:
+            self.set_domain(domain,autoscale)
+        else:
+            self.set_domain((0,1),autoscale)
 
     def set_scale(self,scale):
         if scale==LOGARITHMIC_SCALE:

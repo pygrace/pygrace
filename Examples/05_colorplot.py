@@ -25,7 +25,7 @@ from PyGrace.colors import ColorBrewerScheme
 from PyGrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
 from PyGrace.drawing_objects import DrawBox
 
-from PyGrace.Styles.el import ElGraph, ElLogTick, ElLogTickLabel, ElAxisLabel
+from PyGrace.Styles.el import ElGraph, ElLogColorBar
 
 
 #------------------------------------------------------------------------------
@@ -48,16 +48,8 @@ colors = ColorBrewerScheme("YlOrBr",n=253) # this is the maximum number of color
 grace = Grace(colors=colors)
 
 # add a colorbar
-colorbar = grace.add_graph(ColorBar,domain=(minpdf,maxpdf),
+colorbar = grace.add_graph(ElLogColorBar,domain=(minpdf,maxpdf),
                            scale=LOGARITHMIC_SCALE,autoscale=False)
-
-# copy the format
-## colorbar.copy_format(ElGraph)
-colorbar.yaxis.tick.copy_format(ElLogTick)
-colorbar.yaxis.ticklabel.copy_format(ElLogTickLabel)
-colorbar.yaxis.ticklabel.place="opposite"
-colorbar.yaxis.label.copy_format(ElAxisLabel)
-colorbar.yaxis.label.place="opposite"
 
 # to add some data to graph, just add SolidRectangle datasets
 graph = grace.add_graph()
