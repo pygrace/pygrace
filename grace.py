@@ -270,7 +270,7 @@ can not be used simultaneously.
 
         # make sure none of the excluded graphs are in 'graphs'
         for graph in exclude_graphs:
-            graphs.pop(graph)
+            graphs.remove(graph)
         graphs = tuple(graphs)
 
         # find the world coordinates of all of the graphs
@@ -311,7 +311,7 @@ can not be used simultaneously.
 
         # make sure none of the excluded graphs are in 'graphs'
         for graph in exclude_graphs:
-            graphs.pop(graph)
+            graphs.remove(graph)
         graphs = tuple(graphs)
 
         # find the world coordinates of all of the graphs

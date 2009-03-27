@@ -23,8 +23,6 @@ class SolidRectangle(DataSet):
         self.line.configure(linewidth=0, color=color)
         self.fill.configure(type=2, rule=0, color=color)
         self.baseline.configure(type=1)
-            
-        
     
 class ColorBar(Graph):
     def __init__(self, domain=(), scale=LINEAR_SCALE, autoscale=True,
