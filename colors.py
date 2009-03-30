@@ -133,22 +133,26 @@ class MarkovChainColorScheme(ColorScheme):
         ColorScheme.__init__(self, colors)
 
 # these are the default colors in XMGrace
-default = ColorScheme([Color(*params) for params in (
-        (0, 255, 255, 255, 'white'),
-        (1, 0, 0, 0, 'black'),
-        (2, 255, 0, 0, 'red'),
-        (3, 0, 255, 0, 'green'),
-        (4, 0, 0, 255, 'blue'),
-        (5, 255, 255, 0, 'yellow'),
-        (6, 188, 143, 143, 'brown'),
-        (7, 220, 220, 220, 'grey'),
-        (8, 148, 0, 211, 'violet'),
-        (9, 0, 255, 255, 'cyan'),
-        (10, 255, 0, 255, 'magenta'),
-        (11, 255, 165, 0, 'orange'),
-        (12, 114, 33, 188, 'indigo'),
-        (13, 103, 7, 72, 'maroon'),
-        (14, 64, 224, 208, 'turquoise'),
-        (15, 0, 139, 0, 'green4'),
-        )])
+class DefaultColorScheme(ColorScheme):
+    """Keepin' it real with the *original* xmgrace color scheme."""
+    def __init__(self):
+        colors = [Color(*params) for params in (
+                (0, 255, 255, 255, 'white'),
+                (1, 0, 0, 0, 'black'),
+                (2, 255, 0, 0, 'red'),
+                (3, 0, 255, 0, 'green'),
+                (4, 0, 0, 255, 'blue'),
+                (5, 255, 255, 0, 'yellow'),
+                (6, 188, 143, 143, 'brown'),
+                (7, 220, 220, 220, 'grey'),
+                (8, 148, 0, 211, 'violet'),
+                (9, 0, 255, 255, 'cyan'),
+                (10, 255, 0, 255, 'magenta'),
+                (11, 255, 165, 0, 'orange'),
+                (12, 114, 33, 188, 'indigo'),
+                (13, 103, 7, 72, 'maroon'),
+                (14, 64, 224, 208, 'turquoise'),
+                (15, 0, 139, 0, 'green4'),
+                )]
+        ColorScheme.__init__(self, colors)
 

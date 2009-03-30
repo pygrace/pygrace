@@ -4,7 +4,7 @@ import os
 from base import GraceObject
 from graph import Graph
 from drawing_objects import DrawingObject
-from colors import default as default_colors
+from colors import DefaultColorScheme
 from fonts import default as default_fonts
 
 HEADER_COMMENT = '# Amaral Group python interface for xmgrace. OH YEAH!'
@@ -25,7 +25,7 @@ class Grace(GraceObject):
 	self.timestamp = Timestamp(self)
 
         # set these first, so that children inherit this color scheme
-        self.colors = colors or default_colors
+        self.colors = colors or DefaultColorScheme()
         self.fonts = default_fonts
 
         self._graphIndex = INDEX_ORIGIN
