@@ -71,7 +71,8 @@ class ColorBrewerScheme:
     diverging ColorBrewer schemes.
     """
 
-    def __init__(self, name, schemeType, lineList):
+    def __init__(self, name, schemeType, lineList,
+                 minColor=None, maxColor=None):
         """This init function parses the input in the format in which
         it is passed by the module."""
 
@@ -81,6 +82,8 @@ class ColorBrewerScheme:
         # set these descriptive attributes
         self.name = name
         self.schemeType = schemeType
+        self.minColor = minColor
+        self.maxColor = maxColor
         
         record = []
         for line in lineList:
@@ -219,7 +222,17 @@ class ColorBrewerScheme:
             # interpolate between the rgb values of the maximum n
             if n > self.max_number():
 
-                result = self.__linear_gradient(self.get_max_colors(), n)
+                # if optional minColor or maxColor arguments are given,
+                # then add them to the list to be interpolated
+                colorList = self.get_max_colors()
+                if self.minColor is not None:
+                    colorList.insert(0, self.minColor)
+                    colorList.insert(0, self.minColor)
+                if self.maxColor is not None:
+                    colorList.append(self.maxColor)
+                    colorList.append(self.maxColor)
+                    
+                result = self.__linear_gradient(colorList, n)
                 
             # if n is less than the lowest pre-enumerated subscheme
             elif n < self.min_number():

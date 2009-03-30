@@ -364,7 +364,17 @@ class GraceObject(object):
 
         # other is a class, not an instance of a class
         if isinstance(other,type):
-            
+
+#             print 'BBB', other
+#             print dir(other)
+#             print other.__init__
+#             print dir(other.__init__)
+#             print other.__init__.im_func.func_code.co_argcount
+
+#             args = [None] * (other.__init__.im_func.func_code.co_argcount - 1)
+#             print args
+#             x = other(*args)
+
             complete = False
             args = []
             while not complete:
