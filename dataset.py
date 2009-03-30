@@ -170,7 +170,7 @@ class AnnotatedValue(GraceObject):
     _staticType = 'AnnotatedValue'
     def __init__(self, parent,
                  onoff = "off",
-                 type = 2,
+                 type = 4,
                  char_size = 0.65,
                  font = 4,
                  color = 1,
@@ -310,7 +310,8 @@ class DataSet(GraceObject):
         x, y = [], []
         if self.data:
             if self.type=="xy" or self.type=="bar":
-                x, y = zip(*self.data)
+                columns = zip(*self.data)
+                x, y = columns[:2]
             elif self.type=="xydx":
                 for datum in self.data:
                     x.extend([datum[0],
@@ -364,10 +365,12 @@ class DataSet(GraceObject):
                               datum[1]+datum[2],
                               datum[1]-datum[3]])
             elif self.type=="xyhilo":
-                x,y1,y2,y3,y4 = zip(*self.data)
-                y = y1+y2+y3+y4
+                columns = zip(*self.data)
+                x = columns[0]
+                y = columns[1] + columns[2] + columns[3] + columns[4]
             elif self.type=="xyz":
-                x,y,z = zip(*self.data) # z is annotation
+                columns = zip(*self.data)
+                x, y = columns[:2]
 #             elif self.type=="xyr": # xmgrace does not support
 #                 for datum in self.data:
 #                     x.extend([datum[0]-datum[2],
@@ -375,9 +378,11 @@ class DataSet(GraceObject):
 #                     y.extend([datum[1]-datum[2],
 #                               datum[1]+datum[2]])
             elif self.type=="xysize":
-                x,y,size = zip(*self.data) # size is symbol width
+                columns = zip(*self.data)
+                x, y = columns[:2]
             elif self.type=="xycolor":
-                x,y,color = zip(*self.data) # color is color of symbol
+                columns = zip(*self.data)
+                x, y = columns[:2]
 #             elif self.type=="xycolpat": # xmgrace does not support
 #                 pass
             elif self.type=="xyvmap":
@@ -387,8 +392,9 @@ class DataSet(GraceObject):
                     y.extend([datum[1],
                               datum[1]+datum[3]])
             elif self.type=='xyboxplot':
-                x,y2,y1,y3,y0,y4 = zip(*self.data)
-                y = y0+y1+y2+y3+y4
+                col = zip(*self.data)
+                x = col[0]
+                y = col[0] + col[1] + col[2] + col[3] + col[4]
             else:
                 message = """
 Can not find limits of DataSet with type %s
