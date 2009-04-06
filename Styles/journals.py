@@ -1,4 +1,4 @@
-from PyGrace.Extensions.panel import Panel, PanelLabel
+from PyGrace.Extensions.panel import Panel, PanelLabel, MultiPanelGrace
 
 #------------------------------------------------------------------------------
 # Nature style
@@ -8,15 +8,21 @@ class NaturePanelLabel(PanelLabel):
         PanelLabel.__init__(self, parent, index, *args, **kwargs)
 
         # configure text
-        self.add_scheme("Nature",self.label_schemes["latin"])
-        self.configure(label_scheme="Nature")
+        self.label_scheme = "latin"
 
 class NaturePanel(Panel):
-    def __init__(self,parent,index):
-        Panel.__init__(self,parent,index)
+    def __init__(self,*args,**kwargs):
+        Panel.__init__(self,*args,**kwargs)
         
         index = self.panel_label.label_index
         self.panel_label = self.add_drawing_object(NaturePanelLabel,index)
+
+class NatureMultiGrace(MultiPanelGrace):
+    def __init__(self,*args,**kwargs):
+        MultiPanelGrace.__init__(self,*args,**kwargs)
+        
+        # configure text
+        self.set_label_scheme("latin")
 
 #------------------------------------------------------------------------------
 # Science style
@@ -26,12 +32,18 @@ class SciencePanelLabel(PanelLabel):
         PanelLabel.__init__(self, parent, index, *args, **kwargs)
 
         # configure text
-        self.add_scheme("Science",self.label_schemes["latin"])
-        self.configure(label_scheme="Science")
+        self.label_scheme = "LATIN"
 
 class SciencePanel(Panel):
-    def __init__(self,parent,index):
+    def __init__(self,*args,**kwargs):
         Panel.__init__(self,parent,index)
         
         index = self.panel_label.label_index
         self.panel_label = self.add_drawing_object(SciencePanelLabel,index)
+
+class ScienceMultiGrace(MultiPanelGrace):
+    def __init__(self,*args,**kwargs):
+        MultiPanelGrace.__init__(self,*args,**kwargs)
+        
+        # configure text
+        self.set_label_scheme("LATIN")

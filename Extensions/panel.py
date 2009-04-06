@@ -1,33 +1,6 @@
 from PyGrace.graph import Graph
 from PyGrace.drawing_objects import DrawText, DRAWTEXT_JUSTIFICATIONS
-
-# specify automatically available label schemes
-LATIN_ALPHABET = "abcdefghijklmnopqrstuvwxyz"
-ROMAN_NUMERALS = ["i","ii","iii","iv","v","vi","vii","viii","ix","x"]
-DEFAULT_LABEL_SCHEMES = {"LATIN":[c.upper() for c in LATIN_ALPHABET],
-                         "latin":[c.lower() for c in LATIN_ALPHABET],
-                         "ROMAN":[n.upper() for n in ROMAN_NUMERALS],
-                         "roman":[n.lower() for n in ROMAN_NUMERALS],
-                         }
-
-class Panel(Graph):
-    """A Panel is a Graph that has a panel label.
-
-    """
-
-    def __init__(self,parent,index,panel_index=None,
-                 *args,**kwargs):
-        Graph.__init__(self,parent,index)
-
-        # find a default index for this graph
-        if panel_index is None:
-            if self.index is None:
-                panel_index = 0
-            else:
-                panel_index = self.index
-
-        # specify the default justification for the label
-        self.panel_label = self.add_drawing_object(PanelLabel,panel_index)
+from PyGrace.Extensions.multi_grace import MultiGrace
 
 class PanelLabel(DrawText):
     """This class is useful for adding panel labels to figures.  Note that
@@ -43,7 +16,6 @@ class PanelLabel(DrawText):
 
     def __init__(self,parent,index=None,dx=0.05,dy=0.05,
                  placement="iur",label_scheme="LATIN",
-                 label_schemes=DEFAULT_LABEL_SCHEMES,
                  *args,**kwargs):
         DrawText.__init__(self,parent,*args,**kwargs)
 
@@ -53,12 +25,6 @@ class PanelLabel(DrawText):
         # panel label.
         self._set_kwargs_attributes(locals())
 
-        # make sure parent is a graph
-        if not isinstance(parent,Graph):
-            message = """
-PanelLabel's expect to have parents that are Graph's.
-"""
-            
         # panel label always lives in view coordinates to prevent it
         # from being marked as out of bounds in the event that
         # Graph.remove_extraworld_drawing_objects is called.
@@ -71,7 +37,7 @@ Graph.remove_extraworld_drawing_objects is called.
             raise TypeError, message
 
         # specify formats for panel labels
-        self.set_text(label_scheme,index)
+        self.set_text()
 
         # place the panel label.  This method is also called at draw
         # time in the event that a user changes the location of the
@@ -80,17 +46,6 @@ Graph.remove_extraworld_drawing_objects is called.
         # Checking for None, which is necessary for copy_format to work.
         if self.parent is not None: 
             self.place_label()
-
-    def add_scheme(self,scheme_name,scheme_labels):
-        """This gives the user the ability to customize their label
-        scheme however they damn well please.
-        """
-        if (self.label_schemes.has_key(scheme_name) and 
-            scheme_labels!=self.label_schemes[scheme_name]):
-            message = """Label scheme '%s' already exists!
-"""%scheme_name
-            raise TypeError,message
-        self.label_schemes[scheme_name] = scheme_labels
 
     def set_text(self,label_scheme=None,index=None):
         """Set the text of the panel label at draw time based on the
@@ -106,31 +61,31 @@ Graph.remove_extraworld_drawing_objects is called.
         # make sure label_scheme is legal
         if label_scheme is None:
             label_scheme = self.label_scheme
-        elif not self.label_schemes.has_key(label_scheme):
+        elif not self.root.label_schemes.has_key(label_scheme):
             message = """
 Label scheme '%s' is not allowed.  Try one of these instead:
 %s
 """%(str(label_scheme),
-     '\n'.join(label_sheme.keys()))
+     '\n'.join(self.root.label_schemes.keys()))
             raise TypeError,message
         self.label_scheme = label_scheme
 
         # make sure index is legal
         if index is None:
             index = self.index
-        elif index<0 or index>=len(self.label_schemes[label_scheme]):
+        elif index<0 or index>=len(self.root.label_schemes[label_scheme]):
             message = """
 Label index '%s' is not allowed for label scheme '%s'.
 For label scheme '%s', label index must be between 0 and %d.
 """%(str(index),
      label_scheme,
      label_scheme,
-     len(self.label_schemes[label_scheme]))
+     len(self.root.label_schemes[label_scheme]))
             raise TypeError,message
         self.index = index
 
         # set the text of the label
-        self.text = self.label_schemes[self.label_scheme][self.index]
+        self.text = self.root.label_schemes[self.label_scheme][self.index]
 
     def place_label(self,placement=None,dx=None,dy=None,just=None):
         """Place the PanelLabel near with format placement and position dx and
@@ -225,3 +180,84 @@ Unknown placement.  Placement should be one of
         self.set_text()
         self.place_label()
         return DrawText.__str__(self)
+
+class Panel(Graph):
+    """A Panel is a Graph that has a panel label.
+
+    """
+
+    def __init__(self,parent,index,panel_index=None,
+                 *args,**kwargs):
+        Graph.__init__(self,parent,index)
+
+        # find a default index for this graph
+        if panel_index is None:
+            if self.index is None:
+                panel_index = 0
+            else:
+                panel_index = self.index
+
+        # specify the default justification for the label
+        self.panel_label = self.add_drawing_object(PanelLabel,panel_index)
+
+class MultiPanelGrace(MultiGrace):
+    """Grace object to hold panel schemes.
+    """
+
+    def __init__(self,label_scheme="LATIN",*args,**kwargs):
+        MultiGrace.__init__(self,*args,**kwargs)
+
+        # dummy variables
+        latin_alphabet = "abcdefghijklmnopqrstuvwxyz"
+        roman_numerals = ["i","ii","iii","iv","v","vi","vii","viii","ix","x"]
+
+        # add default label schemes
+        self.label_schemes = {}
+        self.add_label_scheme("latin",[c.lower() for c in latin_alphabet])
+        self.add_label_scheme("LATIN",[c.upper() for c in latin_alphabet])
+        self.add_label_scheme("roman",[n.lower() for n in roman_numerals])
+        self.add_label_scheme("ROMAN",[n.upper() for n in roman_numerals])
+
+        # specify the label scheme
+        self.set_label_scheme(label_scheme)
+
+    def add_label_scheme(self,label_scheme,labels):
+        """Add a label scheme to this Grace.
+        """
+
+        if (self.label_schemes.has_key(label_scheme) and 
+            self.label_schemes[label_scheme]!=tuple(labels)):
+            message = """Label scheme '%s' already exists.
+"""%(label_scheme)
+            raise KeyError,message
+
+        self.label_schemes[label_scheme] = tuple(labels)
+
+    def set_label_scheme(self,label_scheme):
+        """Specify the label scheme for the grace and all panels
+        in the grace.
+        """
+
+        if not self.label_schemes.has_key(label_scheme):
+            l = self.label_schemes.keys()
+            l.sort()
+            possible_label_schemes = ''
+            for a_scheme in l[:-1]:
+                possible_label_schemes += '\'' + a_scheme + "', "
+            possible_label_schemes += "or '" + l[-1]
+            message = """Label scheme '%s' does not exist.  
+Only labels schemes %s are possible.
+"""%(label_scheme,possible_label_schemes)
+            raise KeyError,message
+
+        self.label_scheme = label_scheme
+        for graph in self.graphs:
+            if isinstance(graph,Panel):
+                graph.panel_label.label_scheme = label_scheme
+
+    def add_graph(self, cls=Panel, *args, **kwargs):
+        """Overwrite the add_graph of Grace base so that the default
+        argument is a panel
+        """
+        return MultiGrace.add_graph(self,cls,*args,**kwargs)
+

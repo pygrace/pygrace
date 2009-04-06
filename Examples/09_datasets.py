@@ -1,7 +1,6 @@
-from PyGrace.Extensions.multi_grace import MultiGrace
 from PyGrace.colors import RandomColorScheme, MarkovChainColorScheme
 from PyGrace.dataset import SYMBOLS
-from PyGrace.Extensions.panel import Panel
+from PyGrace.Extensions.panel import Panel,MultiPanelGrace
 
 # This example illustrates how to use all of the different types of
 # data sets.
@@ -22,16 +21,17 @@ from random import random, randint
 seed = randint(0,10000)
 colors = RandomColorScheme(seed,len(data_types))
 # colors = MarkovChainColorScheme(seed,len(data_types))
-grace = MultiGrace(colors=colors)
+grace = MultiPanelGrace(colors=colors)
+
+# specify the label scheme
+grace.add_label_scheme("my_scheme",data_types)
 
 # add a Graph as a "child" of the grace instance
 for i in range(len(data_types)):
     graph = grace.add_graph(Panel)
 
     # customize the panel label scheme
-    graph.panel_label.add_scheme("my_scheme",data_types)
-    graph.panel_label.configure(dx=0.02,dy=0.02,placement="iul",
-                                label_scheme="my_scheme")
+    graph.panel_label.configure(dx=0.02,dy=0.02,placement="iul")
 
     # add a simple DataSet as a "child" of the graph instance.  A list
     # of data is always the required first argument to add_dataset.
@@ -54,6 +54,7 @@ for i in range(len(data_types)):
 grace.automulti(width_to_height_ratio=1.0,hgap=0.02,vgap=0.02,
                 hoffset=(0.03,0.03),voffset=(0.03,0.03))
 grace.autoformat()
+grace.set_label_scheme("my_scheme")
 
 # hide all ticklabels and ticks
 for graph in grace.graphs:

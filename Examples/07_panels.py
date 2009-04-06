@@ -1,5 +1,4 @@
-from PyGrace.Extensions.multi_grace import MultiGrace
-from PyGrace.Extensions.panel import Panel
+from PyGrace.Extensions.panel import Panel, MultiPanelGrace
 from PyGrace.Styles.el import ElCircleDataSet
 from PyGrace.Styles.journals import NaturePanelLabel
 
@@ -12,7 +11,7 @@ dataList = example_tools.panels()
 # label.
 
 # make an instance of the Grace class
-grace = MultiGrace()
+grace = MultiPanelGrace()
 
 # add a Graph as a "child" of the grace instance
 for data in dataList:

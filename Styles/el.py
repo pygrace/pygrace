@@ -4,6 +4,7 @@ from PyGrace.dataset import DataSet
 from PyGrace.axis import Tick, TickLabel, Axis, AxisLabel, \
      LINEAR_SCALE, LOGARITHMIC_SCALE
 from PyGrace.Extensions.colorbar import ColorBar
+from PyGrace.Extensions.panel import PanelLabel
 
 #------------------------------------------------------------------------------
 # The 'El' style of data sets
@@ -204,3 +205,4 @@ class ElLogColorBar(ElColorBar):
         self.yaxis.tick.copy_format(ElLogTick)
         self.yaxis.ticklabel.copy_format(ElLogTickLabel)
         self.yaxis.ticklabel.place = "opposite"
+
