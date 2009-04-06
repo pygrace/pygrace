@@ -59,9 +59,12 @@ class LatexString(str):
             result = result.replace(latex, grace)
         return result
 
+    def __add__(self,other):
+        return str(self) + other
+
 if __name__ == '__main__':
 
-    s = LatexString(r'Q $\le$ 0.5')
+    s = LatexString(r'Q $\in$ 0.5') + "hi"
 
     print s
 
