@@ -53,6 +53,7 @@ SORTED_CONVERT.sort(reverse=True)
 SORTED_CONVERT = [(key, value) for (len, (key, value)) in SORTED_CONVERT]
 
 class LatexString(str):
+
     def __str__(self):
         result = self
         for (latex, grace) in SORTED_CONVERT:
@@ -62,9 +63,10 @@ class LatexString(str):
     def __add__(self,other):
         return str(self) + other
 
+    def __radd__(self,other):
+        return other + str(self)
+
 if __name__ == '__main__':
 
-    s = LatexString(r'Q $\in$ 0.5') + "hi"
-
+    s = LatexString(r'Q $\in$ 0.5')
     print s
-
