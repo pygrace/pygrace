@@ -394,7 +394,7 @@ class DataSet(GraceObject):
             elif self.type=='xyboxplot':
                 col = zip(*self.data)
                 x = col[0]
-                y = col[0] + col[1] + col[2] + col[3] + col[4]
+                y = col[1] + col[2] + col[3] + col[4]
             else:
                 message = """
 Can not find limits of DataSet with type %s
