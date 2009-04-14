@@ -24,6 +24,26 @@ class SolidRectangle(DataSet):
         self.fill.configure(type=2, rule=0, color=color)
         self.baseline.configure(type=1)
     
+class SolidOutlinedRectangle(DataSet):
+    """A dataset that shows up as a solid rectangle with an outline.
+
+    data for the creating of the SolidOutlinedRectangle must be the two
+    corners of the rectangle.
+    """
+    def __init__(self, color, outline_color=1, *args, **kwargs):
+        DataSet.__init__(self, *args, **kwargs)
+        if len(self.data) != 2:
+            raise TypeError, 'Data for SolidOutlinedRectangle MUST contain 2 points'
+        x0 = self.data[0][0]
+        x1 = self.data[1][0]
+        y0 = min(self.data[0][1], self.data[1][1])
+        y1 = max(self.data[0][1], self.data[1][1])
+        self.data = [(x0, y1), (x1, y1), (x1, y0), (x0, y0), (x0,y1)]
+        self.symbol.configure(shape=0)
+        self.line.configure(linewidth=0, color=outline_color)
+        self.fill.configure(type=2, rule=0, color=color)
+        self.baseline.configure(type=1)
+    
 class ColorBar(Graph):
     def __init__(self, domain=(), scale=LINEAR_SCALE, autoscale=True,
                  color_range=(), *args, **kwargs):
