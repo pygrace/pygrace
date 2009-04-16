@@ -240,7 +240,7 @@ class TickLabel(base.GraceObject):
         # check type of AxisLabel specific attribute
         if key == 'angle':
             self._check_type((float, int), key, value)
-            self._check_range(key, value, 0, 32, includeMax=False)
+            self._check_range(key, value, 0, 360, includeMax=True)
         elif key == 'stagger':
             self._check_type(int, key, value)
             self._check_range(key, value, 0, 9)
