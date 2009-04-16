@@ -188,6 +188,10 @@ class ElColorBar(ColorBar):
         self.yaxis.ticklabel.copy_format(ElTickLabel)
         self.yaxis.ticklabel.place = "opposite"
 
+        # make the tick labels slightly smaller
+        self.yaxis.scale_suffix(0.5,"major_size")
+        self.yaxis.scale_suffix(0.5,"minor_size")
+
 class ElLinColorBar(ElColorBar):
     def __init__(self,*args,**kwargs):
         ElColorBar.__init__(self,*args,**kwargs)
@@ -197,6 +201,10 @@ class ElLinColorBar(ElColorBar):
         self.yaxis.ticklabel.copy_format(ElLinTickLabel)
         self.yaxis.ticklabel.place = "opposite"
 
+        # make the tick labels slightly smaller
+        self.yaxis.scale_suffix(0.5,"major_size")
+        self.yaxis.scale_suffix(0.5,"minor_size")
+
 class ElLogColorBar(ElColorBar):
     def __init__(self,*args,**kwargs):
         ElColorBar.__init__(self,*args,**kwargs)
@@ -205,4 +213,8 @@ class ElLogColorBar(ElColorBar):
         self.yaxis.tick.copy_format(ElLogTick)
         self.yaxis.ticklabel.copy_format(ElLogTickLabel)
         self.yaxis.ticklabel.place = "opposite"
+
+        # make the tick labels slightly smaller
+        self.yaxis.scale_suffix(0.5,"major_size")
+        self.yaxis.scale_suffix(0.5,"minor_size")
 
