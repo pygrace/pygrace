@@ -188,7 +188,7 @@ class Panel(Graph):
 
     def __init__(self,parent,index,panel_index=None,
                  *args,**kwargs):
-        Graph.__init__(self,parent,index)
+        Graph.__init__(self,parent,index,*args,**kwargs)
 
         # find a default index for this graph
         if panel_index is None:
