@@ -15,7 +15,7 @@ class PanelLabel(DrawText):
     """
 
     def __init__(self,parent,index=None,dx=0.05,dy=0.05,
-                 placement="iur",label_scheme="LATIN",
+                 placement="iur",label_scheme=None,
                  *args,**kwargs):
         DrawText.__init__(self,parent,*args,**kwargs)
 
@@ -259,5 +259,7 @@ Only labels schemes %s are possible.
         """Overwrite the add_graph of Grace base so that the default
         argument is a panel
         """
-        return MultiGrace.add_graph(self,cls,*args,**kwargs)
-
+        graph = MultiGrace.add_graph(self,cls,*args,**kwargs)
+        if isinstance(graph,Panel):
+            graph.panel_label.configure(label_scheme=self.label_scheme)
+        return graph

@@ -25,6 +25,7 @@ grace = MultiPanelGrace(colors=colors)
 
 # specify the label scheme
 grace.add_label_scheme("my_scheme",data_types)
+grace.set_label_scheme("my_scheme")
 
 # add a Graph as a "child" of the grace instance
 for i in range(len(data_types)):
@@ -54,7 +55,6 @@ for i in range(len(data_types)):
 grace.automulti(width_to_height_ratio=1.0,hgap=0.02,vgap=0.02,
                 hoffset=(0.03,0.03),voffset=(0.03,0.03))
 grace.autoformat()
-grace.set_label_scheme("my_scheme")
 
 # hide all ticklabels and ticks
 for graph in grace.graphs:
