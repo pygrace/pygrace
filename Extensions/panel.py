@@ -213,6 +213,7 @@ class MultiPanelGrace(MultiGrace):
 
         # add default label schemes
         self.label_schemes = {}
+        self.add_label_scheme('',['']*100)
         self.add_label_scheme("latin",[c.lower() for c in latin_alphabet])
         self.add_label_scheme("LATIN",[c.upper() for c in latin_alphabet])
         self.add_label_scheme("roman",[n.lower() for n in roman_numerals])
