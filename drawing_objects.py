@@ -85,7 +85,8 @@ class DrawBox(DrawingObject):
                  linewidth = 2.0,
                  color = 1,
                  fill_color = 1,
-                 fill_pattern = 1
+                 fill_pattern = 1,
+                 **kwargs
                  ):
         DrawingObject.__init__(self, parent, locals())
         self._formatting_template = {'lowleft': '%.20f, %.20f',
@@ -122,7 +123,8 @@ class DrawText(DrawingObject):
                  font = 4,
                  just = 0,
                  char_size = 1.65,
-                 text = 'DrawObjText'
+                 text = 'DrawObjText',
+                 **kwargs
                  ):
         DrawingObject.__init__(self, parent, locals())
 
@@ -159,7 +161,8 @@ class DrawLine(DrawingObject):
                  arrow = 0,
                  arrow_type = 0,
                  arrow_length = 1,
-                 arrow_layout = (1.0,1.0)
+                 arrow_layout = (1.0,1.0),
+                 **kwargs
                  ):
         DrawingObject.__init__(self, parent, locals())
         self._formatting_template = {'start': '%.20f, %.20f',
@@ -220,7 +223,8 @@ class DrawEllipse(DrawingObject):
                  linewidth = 2.0,
                  color = 1,
                  fill_color = 1,
-                 fill_pattern = 1
+                 fill_pattern = 1,
+                 **kwargs
                  ):
         DrawingObject.__init__(self, parent, locals())
         self._formatting_template = {'lowleft': '%.20f, %.20f',
@@ -265,6 +269,7 @@ class LabelledPoint(DrawingObject):
                  outline_color = 1,
                  fill_color = 1,
                  fill_pattern = 1,
+                 **kwargs
                  ):
         DrawingObject.__init__(self, parent, locals())
 
@@ -306,6 +311,7 @@ class MultiLegend(DrawingObject):
                  outline_color = 1,
                  fill_color = 1,
                  fill_pattern = 1,
+                 **kwargs
                  ):
         DrawingObject.__init__(self, parent, locals())
 

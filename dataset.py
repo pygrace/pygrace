@@ -51,7 +51,8 @@ class Symbol(GraceObject):
                  linestyle = 1,
                  char = 65,
                  char_font = 0,
-                 skip = 0
+                 skip = 0,
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
 
@@ -91,7 +92,8 @@ class Line(GraceObject):
                  linestyle = 1,
                  linewidth = 2.0,
                  color = 1,
-                 pattern = 1
+                 pattern = 1,
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
 
@@ -117,7 +119,8 @@ class Baseline(GraceObject):
     _staticType = 'BaseLine'
     def __init__(self, parent,
                  type = 0,
-                 onoff="off"
+                 onoff="off",
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
 
@@ -142,7 +145,8 @@ class Fill(GraceObject):
                  type = 0,
                  rule = 0,
                  color = 1,
-                 pattern = 1
+                 pattern = 1,
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
 
@@ -179,7 +183,8 @@ class AnnotatedValue(GraceObject):
                  prec = 3,
                  prepend = '',
                  append = '',
-                 offset = (0.0,0.0)
+                 offset = (0.0,0.0),
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
         self._formatting_template = {'offset': '%.20f, %.20f'}
@@ -221,7 +226,9 @@ class ErrorBar(GraceObject):
                  riser_linewidth = 2.0,
                  riser_linestyle = 1,
                  riser_clip = "off",
-                 riser_clip_length = 0.1):
+                 riser_clip_length = 0.1,
+                 **kwargs
+                 ):
         GraceObject.__init__(self, parent, locals())
 
     def __setattr__(self, key, value):
@@ -259,6 +266,7 @@ class DataSet(GraceObject):
                  dropline='off',
                  comment='',
                  legend='',
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
         self.baseline = Baseline(self)

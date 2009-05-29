@@ -36,7 +36,7 @@ class GraceObject(object):
         as the attributes of the class."""
 
         # parent gets set in a separate function (and self doesn't need it)
-        for reserved in ['self', 'parent']:
+        for reserved in ['self', 'parent', 'kwargs']:
             if attrDict.has_key(reserved):
                 del attrDict[reserved]
 

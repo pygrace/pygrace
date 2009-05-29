@@ -14,6 +14,7 @@ class Subtitle(GraceObject):
                  font=4,
                  color=1,
                  size=1.75,
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
 
@@ -31,6 +32,7 @@ class Title(GraceObject):
                  font=4,
                  color=1,
                  size=1.75,
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
 
@@ -48,6 +50,7 @@ class View(GraceObject):
                  xmax=1.15,
                  ymin=0.15,
                  ymax=0.85,
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
 
@@ -67,6 +70,7 @@ class World(GraceObject):
                  ymax=1,
                  stack_world=(0,0,0,0),
                  znorm=1,
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
         self._formatting_template = \
@@ -100,7 +104,8 @@ class Frame(GraceObject):
                  color = 1,
                  pattern = 1,
                  background_color = 0,
-                 background_pattern = 0
+                 background_pattern = 0,
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
 
@@ -140,7 +145,8 @@ class Legend(GraceObject):
                  length = 3,
                  vgap = 1,
                  hgap = 1,
-                 invert = 'false'
+                 invert = 'false',
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
         self._formatting_template = {'loc': '%.20f, %.20f'}
@@ -184,7 +190,8 @@ class Graph(GraceObject):
                  hidden='false',
                  type='XY',
                  stacked = 'false',
-                 bar_hgap=0.00
+                 bar_hgap=0.00,
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
         self.legend = Legend(self)
@@ -201,7 +208,7 @@ class Graph(GraceObject):
         self.datasets = []
         self._datasetIndex = INDEX_ORIGIN
 
-        self.drawing_objects = []        
+        self.drawing_objects = []
 
     def __setattr__(self, key, value):
 

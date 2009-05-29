@@ -12,6 +12,7 @@ class AxisBar(base.GraceObject):
                  color=1,
                  linestyle=1,
                  linewidth=2,
+                 **kwargs
                  ):
         base.GraceObject.__init__(self, parent, locals())
 
@@ -35,6 +36,7 @@ class AxisLabel(base.GraceObject):
                  place='normal',
                  place_loc='auto',
                  place_tup=(0, 0.08),
+                 **kwargs
                  ):
         base.GraceObject.__init__(self, parent, locals())
         self._formatting_template = {'place_tup': '%.20f, %.20f'}
@@ -88,6 +90,7 @@ class Tick(base.GraceObject):
                  spec_type='none',
                  spec_typedefault='major',
                  spec_labeldefault='',
+                 **kwargs
                  ):
         base.GraceObject.__init__(self, parent, locals())
 
@@ -231,6 +234,7 @@ class TickLabel(base.GraceObject):
                  char_size = 1.65,
                  font=4,
                  color=1,
+                 **kwargs
                  ):
         base.GraceObject.__init__(self, parent, locals())
         self._formatting_template = {'offset_tup': '%.20f, %.20f'}
@@ -287,6 +291,7 @@ class Axis(base.GraceObject):
                  invert='off',
                  type_zero = 'false',
                  offset = (0.0,0.0),
+                 **kwargs
                  ):
         # for the axis object, the static type is determined by the orientation
         # and whether or not it is the alternative

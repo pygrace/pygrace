@@ -266,7 +266,7 @@ Only labels schemes %s are possible.
             graph.panel_label.configure(label_scheme=self.label_scheme)
         return graph
 
-class NetworkPanel(Network,Panel):
+class NetworkPanel(Panel,Network):
     """A panel to display networks.
     """
     def __init__(self, *args, **kwargs):

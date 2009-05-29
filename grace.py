@@ -19,6 +19,7 @@ class Grace(GraceObject):
                  version='50114',
                  verbose=False,
                  colors=None,
+                 **kwargs
 		 ): 
         GraceObject.__init__(self, None, locals())
 
@@ -360,6 +361,7 @@ class Timestamp(GraceObject):
                  font = 4,
                  rot = 0,
                  char_size = 1.0,
+                 **kwargs
                  ):
         GraceObject.__init__(self, parent, locals())
 
