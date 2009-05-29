@@ -1,6 +1,7 @@
 from PyGrace.graph import Graph
 from PyGrace.drawing_objects import DrawText, DRAWTEXT_JUSTIFICATIONS
 from PyGrace.Extensions.multi_grace import MultiGrace
+from PyGrace.Extensions.network import Network
 
 class PanelLabel(DrawText):
     """This class is useful for adding panel labels to figures.  Note that
@@ -186,9 +187,9 @@ class Panel(Graph):
 
     """
 
-    def __init__(self,parent,index,panel_index=None,
+    def __init__(self,panel_index=None,
                  *args,**kwargs):
-        Graph.__init__(self,parent,index,*args,**kwargs)
+        Graph.__init__(self,*args,**kwargs)
 
         # find a default index for this graph
         if panel_index is None:
@@ -264,3 +265,12 @@ Only labels schemes %s are possible.
         if isinstance(graph,Panel):
             graph.panel_label.configure(label_scheme=self.label_scheme)
         return graph
+
+class NetworkPanel(Network,Panel):
+    """A panel to display networks.
+    """
+    def __init__(self, *args, **kwargs):
+        Panel.__init__(self,*args,**kwargs)
+        drawing_objects = self.drawing_objects
+        Network.__init__(self,*args,**kwargs)
+        self.drawing_objects.extend(drawing_objects)
