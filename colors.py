@@ -67,7 +67,7 @@ class ColorBrewerScheme(ColorScheme):
                 raise ValueError(message)
             random.seed(seed)
             rgbList = list(rgbList)
-            rgbList.sort(key = lambda i: random.random())
+            random.shuffle(rgbList)
             rgbList = tuple(rgbList)
 
         # make color instance from the rgb values
