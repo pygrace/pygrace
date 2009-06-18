@@ -41,7 +41,8 @@ class ColorBrewerScheme(ColorScheme):
     number of colors -- default is the maximum that is explicitly enumerated
     in the colorbrewer definition.  The first two colors (0 and 1) are always
     white and black."""
-    def __init__(self, name, n=None, reverse=False):
+    def __init__(self, name, n=None, reverse=False,
+                 randomize_order=False, seed=None):
 
         # get the colors from a color brewer scheme
         try:
@@ -57,6 +58,16 @@ class ColorBrewerScheme(ColorScheme):
         if reverse:
             rgbList = list(rgbList)
             rgbList.reverse()
+            rgbList = tuple(rgbList)
+
+        # randomize the rgb list?
+        if randomize_order:
+            if seed is None:
+                message = 'For randomizing order, you have to specify a seed'
+                raise ValueError(message)
+            random.seed(seed)
+            rgbList = list(rgbList)
+            rgbList.sort(key = lambda i: random.random())
             rgbList = tuple(rgbList)
 
         # make color instance from the rgb values
