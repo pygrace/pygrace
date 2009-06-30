@@ -804,4 +804,12 @@ There are no datasets or drawing_objects on which to determine the limits.
         for index, dataset in enumerate(self.datasets):
             dataset.line.set_suffix(linewidthsList[index], "linewidth")
 
+    def half_open(self):
+        """Make frame half open
+        """
+        self.frame.type = 1
+        self.xaxis.bar.linestyle = 0
+        self.xaxis.tick.place = "normal"
+        self.yaxis.bar.linestyle = 0
+        self.yaxis.tick.place = "normal"
 
