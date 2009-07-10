@@ -144,6 +144,7 @@ class ColorBar(Graph):
             the_dataset = self.add_dataset([(0, y0), (1, y1)],
                                            SolidRectangle,
                                            self.color_range[i])
+            self.move_dataset_to_back(the_dataset)
 
     def set_label(self,label):
         """Set the axis label. 

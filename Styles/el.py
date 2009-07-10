@@ -126,6 +126,7 @@ class ElLegend(Legend):
         self.box_fill_pattern = 0
         self.font = 4
         self.length = 2
+        self.char_size = 1.0
 
 class ElGraph(Graph):
     def __init__(self, *args, **kwargs):
