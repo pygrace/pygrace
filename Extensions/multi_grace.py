@@ -3,10 +3,13 @@ from PyGrace.grace import Grace
 class MultiGrace(Grace):
     def __init__(self,rows=None,cols=None,hgap=0.1,vgap=0.1,
                  hoffset=(0.15,0.05),voffset=(0.05,0.15),
-		 width_to_height_ratio=1.0/0.7,*args,**kwargs): 
+		 width_to_height_ratio=1.0/0.7,multi_graphs=(),
+                 *args,**kwargs): 
         Grace.__init__(self,*args,**kwargs)
 
         # add all of the keyword arguments as local attributes
+        if len(multi_graphs)==0:
+            multi_graphs = tuple(self.graphs)
         self._set_kwargs_attributes(locals())
 
         # useful for obtaining a graph from a particular row or column
@@ -22,7 +25,8 @@ class MultiGrace(Grace):
             for i in range(self.rows*self.cols):
                 self.add_graph()
             self.multi(self.rows,self.cols,self.hoffset,self.voffset,
-                       self.hgap,self.vgap,self.width_to_height_ratio)
+                       self.hgap,self.vgap,self.width_to_height_ratio,
+                       multi_graphs)
 
     def get_rc(self,row,col):
         """Returns the graph in position [row][col]"""
@@ -71,7 +75,7 @@ class MultiGrace(Grace):
     #--------------------------------------------------------------------------
     def multi(self, rows, cols, hoffset=(0.15,0.05), voffset=(0.05,0.15),
               hgap=0.1, vgap=0.1,
-              width_to_height_ratio=1.0/0.7):
+              width_to_height_ratio=1.0/0.7, multi_graphs=()):
         """Create a grid of graphs with the given number of <rows> and <cols>
            Makes graph frames all the same size.
         """
@@ -91,18 +95,22 @@ class MultiGrace(Grace):
         self.hoffset = hoffset
         self.voffset = voffset
         self.width_to_height_ratio = width_to_height_ratio
+        if multi_graphs==():
+            self.multi_graphs = tuple(self.graphs)
+        else:
+            self.multi_graphs = tuple(multi_graphs)
 
         # compute the frame sizes
         self._calculate_graph_frame()
 
-        if rows*cols >= len(self.graphs):
-            nPlots = len(self.graphs)
+        if rows*cols >= len(self.multi_graphs):
+            nPlots = len(self.multi_graphs)
         else:
             nPlots = rows*cols
 
         r=0;c=0
         for i in range(nPlots):
-            self.put(self.graphs[i],r,c)
+            self.put(self.multi_graphs[i],r,c)
             c += 1
             if c>=cols:
                 c=0
@@ -137,11 +145,11 @@ class MultiGrace(Grace):
         optrows, optcols, optarea = None, None, 0.0
         for rows in range(1,maxrows+1):
             for cols in range(1,maxcols+1):
-                if rows*cols>=len(self.graphs):
+                if rows*cols>=len(self.multi_graphs):
                     self.rows = rows
                     self.cols = cols
                     self._calculate_graph_frame()
-                    area = len(self.graphs)*\
+                    area = len(self.multi_graphs)*\
                            self.frame_height*self.frame_width
                     if area>optarea:
                         optrows = rows
@@ -490,7 +498,7 @@ set_row_xaxislabel.
         """Align the x-axis labels with place_tup for all graphs in
         this Grace instance.
         """
-        for graph in self.graphs:
+        for graph in self.multi_graphs:
             graph.xaxis.label.place_loc = "spec"
             graph.xaxis.label.place_tup = place_tup
 
@@ -498,7 +506,7 @@ set_row_xaxislabel.
         """Align the y-axis labels with place_tup for all graphs in
         this Grace instance.
         """
-        for graph in self.graphs:
+        for graph in self.multi_graphs:
             graph.yaxis.label.place_loc = "spec"
             graph.yaxis.label.place_tup = place_tup
 
