@@ -119,7 +119,7 @@ class MultiGrace(Grace):
     def automulti(self, maxrows=5, maxcols=7,
                   hoffset=(0.15,0.05), voffset=(0.05,0.15), 
                   hgap=0.1, vgap=0.1,
-                  width_to_height_ratio=1.0/0.7):
+                  width_to_height_ratio=1.0/0.7, multi_graphs=()):
         """Automatically determine the number of rows and columns to
         add based on the number of graphs currently in the grace.  The
         number of rows and columns is determined by trying to maximize
@@ -140,6 +140,10 @@ class MultiGrace(Grace):
         self.hgap = hgap
         self.vgap = vgap
         self.width_to_height_ratio = width_to_height_ratio
+        if multi_graphs==():
+            self.multi_graphs = tuple(self.graphs)
+        else:
+            self.multi_graphs = tuple(multi_graphs)
 
         # find optimal number of rows and columns that use the area
         optrows, optcols, optarea = None, None, 0.0
