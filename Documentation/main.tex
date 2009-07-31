@@ -1,27 +1,25 @@
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{epstopdf}
+\usepackage{fullpage}
+\usepackage{url}
 
-\title{PyGrace Documentation}
+\newenvironment{command}[0]{\begin{flushleft} \tt}{\end{flushleft}}
+
+\title{PyGrace Tutorial}
 \date{}
 \begin{document}
 \maketitle
 
 \section*{Introduction}
 \input{introduction}
+
+\section*{Installation}
+\input{installation}
+
 \section*{Data model}
 \input{datamodel}
-\section*{Hello, world!}
-\input{helloworld}
-\section*{Simple example}
-\input{singleplot}
-\section*{More complex example}
-\input{multiplot}
-\section*{Simple subclass}
-\input{simplesubclass}
-\section*{More complex subclass}
-\input{classy}
 
 \end{document}
 
