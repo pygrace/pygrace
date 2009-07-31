@@ -113,7 +113,7 @@ class Tick(base.GraceObject):
             self._check_membership(key, value, ('true', 'false'))
         elif key == 'inout':
             self._check_type(str, key, value)
-            self._check_membership(key, value, ('in', 'out'))
+            self._check_membership(key, value, ('in', 'out', 'both'))
         elif key == 'spec_ticks':
             self._check_type((tuple, list), key, value)
         elif key == 'spec_ticktypes':
