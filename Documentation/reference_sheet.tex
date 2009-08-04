@@ -1,0 +1,638 @@
+\documentclass[10pt]{article}
+\usepackage{savetrees}
+\usepackage{multicol}
+\usepackage{times}
+\title{PyGrace Cheatsheet}
+\date{}
+\begin{document}
+\maketitle
+\pagestyle{empty}
+\thispagestyle{empty}
+\renewcommand{\labelitemi}{}
+\renewcommand{\labelitemii}{}
+\noindent This sheet is intended to be used to quickly look up attribute and method names.  For a complete reference, including descriptions of methods, see the \textit{PyGrace Reference Manual}.
+\begin{multicols}{4}
+\footnotesize
+\subsection*{\footnotesize Global}
+(Shared by all objects)
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item defaultAttributes (dict)
+\item root (Grace)
+\end{itemize}
+\item Methods
+\begin{itemize}
+\item add\_color
+\item children
+\item configure
+\item configure\_group
+\item copy\_format
+\item scale\_suffix
+\item set\_colors
+\item set\_data\_linewidths
+\item set\_fonts
+\item set\_linewidths
+\item set\_suffix
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize AnnotatedValue}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item append (str)
+\item char\_size (float)
+\item color (int)
+\item font (int)
+\item format (str)
+\item offset (tuple)
+\item onoff (str)
+\item parent (DataSet)
+\item prec (int)
+\item prepend (str)
+\item rot (int)
+\item type (int)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize Axis}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item alt (str)
+\item bar (AxisBar)
+\item invert (str)
+\item label (AxisLabel)
+\item offset (tuple)
+\item onoff (str)
+\item orientation (str)
+\item parent (Graph)
+\item scale (str)
+\item tick (Tick)
+\item ticklabel (TickLabel)
+\item type\_zero (str)
+\end{itemize}
+\item Methods
+\begin{itemize}
+\item auto\_precision
+\item set\_format
+\item set\_lin
+\item set\_log
+\item set\_scale
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize AxisBar}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item color (int)
+\item linestyle (int)
+\item linewidth (int)
+\item onoff (str)
+\item parent (Axis)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize AxisLabel}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item char\_size (float)
+\item color (int)
+\item font (int)
+\item layout (str)
+\item parent (Axis)
+\item place (str)
+\item place\_loc (str)
+\item place\_tup (tuple)
+\item text (str)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize Baseline}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item onoff (str)
+\item parent (DataSet)
+\item type (int)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize DataSet}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item avalue (AnnotatedValue)
+\item baseline (Baseline)
+\item comment (str)
+\item data (list)
+\item dropline (str)
+\item errorbar (ErrorBar)
+\item fill (Fill)
+\item hidden (str)
+\item index (int)
+\item legend (str)
+\item line (Line)
+\item parent (Graph)
+\item symbol (Symbol)
+\item type (str)
+\end{itemize}
+\item Methods
+\begin{itemize}
+\item data\_bounds
+\item limits
+\item smallest\_positive
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize DrawBox}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item color (int)
+\item fill\_color (int)
+\item fill\_pattern (int)
+\item linestyle (int)
+\item linewidth (float)
+\item loctype (str)
+\item lowleft (tuple)
+\item onoff (str)
+\item parent (Graph)
+\item upright (tuple)
+\end{itemize}
+\item Methods
+\begin{itemize}
+\item limits
+\item smallest\_positive
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize DrawEllipse}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item color (int)
+\item fill\_color (int)
+\item fill\_pattern (int)
+\item linestyle (int)
+\item linewidth (float)
+\item loctype (str)
+\item lowleft (tuple)
+\item onoff (str)
+\item parent (Graph)
+\item upright (tuple)
+\end{itemize}
+\item Methods
+\begin{itemize}
+\item limits
+\item smallest\_positive
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize DrawLine}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item arrow (int)
+\item arrow\_layout (tuple)
+\item arrow\_length (int)
+\item arrow\_type (int)
+\item color (int)
+\item end (tuple)
+\item linestyle (int)
+\item linewidth (float)
+\item loctype (str)
+\item onoff (str)
+\item parent (Graph)
+\item start (tuple)
+\end{itemize}
+\item Methods
+\begin{itemize}
+\item limits
+\item smallest\_positive
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize DrawText}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item char\_size (float)
+\item color (int)
+\item font (int)
+\item just (int)
+\item loctype (str)
+\item onoff (str)
+\item parent (Graph)
+\item rot (int)
+\item text (str)
+\item x (int)
+\item y (int)
+\end{itemize}
+\item Methods
+\begin{itemize}
+\item limits
+\item smallest\_positive
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize ErrorBar}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item color (int)
+\item linestyle (int)
+\item linewidth (float)
+\item onoff (str)
+\item parent (DataSet)
+\item pattern (int)
+\item place (str)
+\item riser\_clip (str)
+\item riser\_clip\_length (float)
+\item riser\_linestyle (int)
+\item riser\_linewidth (float)
+\item size (float)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize Fill}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item color (int)
+\item parent (DataSet)
+\item pattern (int)
+\item rule (int)
+\item type (int)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize Frame}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item background\_color (int)
+\item background\_pattern (int)
+\item color (int)
+\item linestyle (int)
+\item linewidth (float)
+\item parent (Graph)
+\item pattern (int)
+\item type (int)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize Grace}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item background\_color (int)
+\item background\_fill (str)
+\item colors (DefaultColorScheme)
+\item drawing\_objects (list)
+\item fonts (FontSet)
+\item graphs (list)
+\item height (int)
+\item max\_canvas\_height (float)
+\item max\_canvas\_width (float)
+\item parent (NoneType)
+\item timestamp (Timestamp)
+\item verbose (bool)
+\item version (str)
+\item width (int)
+\end{itemize}
+\item Methods
+\begin{itemize}
+\item add\_drawing\_object
+\item add\_graph
+\item autoformat
+\item autoscale
+\item autoscale\_same
+\item autoscalex\_same
+\item autoscaley\_same
+\item clone\_graph
+\item get\_canvas\_dimensions
+\item get\_eps\_frame\_coords
+\item get\_graph
+\item reference\_tex
+\item set\_landscape
+\item set\_portrait
+\item set\_world\_same
+\item write\_agr
+\item write\_file
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize Graph}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item altxaxis (Axis)
+\item altyaxis (Axis)
+\item bar\_hgap (float)
+\item datasets (list)
+\item drawing\_objects (list)
+\item frame (Frame)
+\item hidden (str)
+\item index (int)
+\item legend (Legend)
+\item onoff (str)
+\item parent (Grace)
+\item stacked (str)
+\item subtitle (Subtitle)
+\item title (Title)
+\item type (str)
+\item view (View)
+\item world (World)
+\item xaxis (Axis)
+\item yaxis (Axis)
+\end{itemize}
+\item Methods
+\begin{itemize}
+\item add\_dataset
+\item add\_drawing\_object
+\item alldata
+\item autoformat
+\item autoscale
+\item autoscale\_old
+\item autoscalex
+\item autoscaley
+\item autotick
+\item autotickx
+\item autoticky
+\item calculate\_sizes
+\item calculate\_ticks
+\item data\_limits
+\item data\_smallest\_positive
+\item drawing\_object\_limits
+\item drawing\_object\_smallest\_positive
+\item format\_for\_print
+\item get\_dataset
+\item get\_view
+\item get\_world
+\item half\_open
+\item limits
+\item linx
+\item linxy
+\item liny
+\item logx
+\item logxy
+\item logy
+\item move\_dataset\_backward
+\item move\_dataset\_forward
+\item move\_dataset\_to\_back
+\item move\_dataset\_to\_front
+\item remove\_extraworld\_drawing\_objects
+\item set\_dataset\_order
+\item set\_different\_colors
+\item set\_different\_linestyles
+\item set\_different\_linewidths
+\item set\_different\_symbols
+\item set\_labels
+\item set\_view
+\item set\_world
+\item set\_world\_to\_limits
+\item smallest\_positive
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize Legend}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item box\_color (int)
+\item box\_fill\_color (int)
+\item box\_fill\_pattern (int)
+\item box\_linestyle (int)
+\item box\_linewidth (float)
+\item box\_pattern (int)
+\item char\_size (float)
+\item color (int)
+\item font (int)
+\item hgap (int)
+\item invert (str)
+\item length (int)
+\item loc (tuple)
+\item loctype (str)
+\item onoff (str)
+\item parent (Graph)
+\item vgap (int)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize Line}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item color (int)
+\item linestyle (int)
+\item linewidth (float)
+\item parent (DataSet)
+\item pattern (int)
+\item type (int)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize Subtitle}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item color (int)
+\item font (int)
+\item parent (Graph)
+\item size (float)
+\item text (str)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize Symbol}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item char (int)
+\item char\_font (int)
+\item color (int)
+\item fill\_color (int)
+\item fill\_pattern (int)
+\item linestyle (int)
+\item linewidth (float)
+\item parent (DataSet)
+\item pattern (int)
+\item shape (int)
+\item size (float)
+\item skip (int)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize Tick}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item default (int)
+\item inout (str)
+\item major (float)
+\item major\_color (int)
+\item major\_grid (str)
+\item major\_linestyle (int)
+\item major\_linewidth (float)
+\item major\_size (float)
+\item minor\_color (int)
+\item minor\_grid (str)
+\item minor\_linestyle (int)
+\item minor\_linewidth (float)
+\item minor\_size (float)
+\item minor\_ticks (int)
+\item onoff (str)
+\item parent (Axis)
+\item place (str)
+\item place\_rounded (str)
+\item spec\_labeldefault (str)
+\item spec\_ticklabels (tuple)
+\item spec\_ticks (tuple)
+\item spec\_ticktypes (tuple)
+\item spec\_type (str)
+\item spec\_typedefault (str)
+\end{itemize}
+\item Methods
+\begin{itemize}
+\item set\_spec\_ticks
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize TickLabel}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item angle (int)
+\item append (str)
+\item char\_size (float)
+\item color (int)
+\item font (int)
+\item format (str)
+\item formula (str)
+\item offset\_loc (str)
+\item offset\_tup (tuple)
+\item onoff (str)
+\item parent (Axis)
+\item place (str)
+\item prec (int)
+\item prepend (str)
+\item skip (int)
+\item stagger (int)
+\item start (float)
+\item start\_type (str)
+\item stop (float)
+\item stop\_type (str)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize Timestamp}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item char\_size (float)
+\item color (int)
+\item font (int)
+\item onoff (str)
+\item parent (Grace)
+\item rot (int)
+\item x (float)
+\item y (float)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize Title}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item color (int)
+\item font (int)
+\item parent (Graph)
+\item size (float)
+\item text (str)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize View}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item parent (Graph)
+\item xmax (float)
+\item xmin (float)
+\item ymax (float)
+\item ymin (float)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\subsection*{\footnotesize World}
+\begin{itemize}
+\item Attributes
+\begin{itemize}
+\item parent (Graph)
+\item stack\_world (tuple)
+\item xmax (int)
+\item xmin (int)
+\item ymax (int)
+\item ymin (int)
+\item znorm (int)
+\end{itemize}
+\end{itemize}
+\vspace{0.5em}
+\hrule
+\vspace{0.1em}
+\end{multicols}
+\end{document}
