@@ -1,3 +1,5 @@
+import sys
+
 from PyGrace.grace import Grace
 from PyGrace.graph import Graph
 from PyGrace.dataset import DataSet
@@ -17,20 +19,27 @@ class NodeSet(DataSet):
     the nodes (or (x,y,size), (x,y,color), and so on if the type is
     'xysize', 'xycolor', and so on).
     """
-    def __init__(self, size=1, color=1, line_width=1, line_color=1,
-                 *args, **kwargs):
+    def __init__(self, size=1, color=1, line_width=1, line_color=1, shape=1,
+                 labels=False, *args, **kwargs):
+        if size > 10:
+            print >> sys.stderr, 'WARNING: Node size > 10: ' + \
+                  'will be set to 10'
         DataSet.__init__(self, *args, **kwargs)
         for aNode in self.data:
             self.parent.node_xy[aNode] = self.data[aNode][0:2]
         try:
-            self.data = self.data.values()
+            self.data = [values + (label, )
+                         for label, values  in self.data.items()]
         except:
             raise TypeError, 'data for a NodeSet must be a dictionary'
         self.symbol.configure(size=size,
                               fill_color=color,
                               linewidth=line_width,
-                              color=line_color)
+                              color=line_color,
+                              shape=shape)
         self.line.linestyle = 0
+        if labels:
+            self.avalue.onoff='on'
 
 class LinkSet(DataSet):
     """A dataset containing network links.
@@ -41,20 +50,32 @@ class LinkSet(DataSet):
     take advantage of any of the properties of regular DataSets.
 
     data for the creation of a link needs to be a list of node pairs.
+
+    Nodes with the right labels need to have been added to the network
+    before their links can be added. Otherwise, a ValueError is raised
+    (unless the keyword ignore_missing is set to True, in which case
+    the link is ignored and there is only a warning sent to stderr).
     """
-    def __init__(self, size=1, color=1,
+    def __init__(self, size=1, color=1, ignore_missing=False, 
                  *args, **kwargs):
         DataSet.__init__(self, *args, **kwargs)
         theData = []
         try:
             for n1, n2, in self.data:
-                x1, y1 = self.parent.node_xy[n1]
-                x2, y2 = self.parent.node_xy[n2]
-                theData.append((x1, y1))
-                theData.append((x2, y2))
+                try:
+                    x1, y1 = self.parent.node_xy[n1]
+                    x2, y2 = self.parent.node_xy[n2]
+                    theData.append((x1, y1))
+                    theData.append((x2, y2))
+                except KeyError:
+                    if ignore_missing:
+                        print >> sys.stderr, 'WARNING: ignoring link %s-%s' % (
+                            n1, n2
+                            )
+                    else:
+                        raise KeyError, \
+                              'nodes should be added to the network first'
             self.data = theData
-        except KeyError:
-            raise KeyError, 'nodes should be in the network before adding links'
         except:
             raise TypeError, 'data must be a list of node pairs'
         self.symbol.shape = 0
