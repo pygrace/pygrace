@@ -19,6 +19,7 @@ exampleList = [
     './09_datasets.py',
     './10_dataset_features.py',
     './11_network.py',
+    './12_cheatsheet.py',
     ]
 
 if __name__ == '__main__':

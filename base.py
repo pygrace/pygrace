@@ -49,7 +49,7 @@ class GraceObject(object):
                 del attrDict[nonformat]
 
         # remove duplicates
-        self.defaultAttributes = dict.fromkeys(attrDict.keys())
+        self._defaultAttributes = dict.fromkeys(attrDict.keys())
         
     def _link(self, parent):
         """If there is no parent, set self as root.  Otherwise, record who the
@@ -269,7 +269,7 @@ class GraceObject(object):
             raise TypeError(message)
 
         # compare all of the default attributes of the two objects
-        for attr in self.defaultAttributes:
+        for attr in self._defaultAttributes:
             if getattr(self,attr)!=getattr(other,attr):
                 return False
         return True
@@ -390,13 +390,189 @@ class GraceObject(object):
         else:
 
             # set all default attibutes to the same values as other
-            for attr in self.defaultAttributes:
+            for attr in self._defaultAttributes:
                 setattr(self, attr, getattr(other, attr))
 
             if all:
                 for thisChild, thatChild in zip(self.children(), 
                                                 other.children()):
                     thisChild.copy_format(thatChild)
+
+    def _make_reference_list(self):
+
+        # this is the name of the class of this object.  for example, if the
+        # object is an instance of Grace, then this is the string 'Grace.'
+        nodeName = self.__class__.__name__
+        nodeModule = self.__module__
+
+        # get all attributes and methods of this object
+        methodList, attrList = [], []
+        for attr in dir(self):
+
+            # if not private or builtin
+            if not attr.startswith('_'):
+
+                # is this a method?
+                if callable(getattr(self, attr)):
+                    methodList.append(attr)
+
+                # this is an attribute
+                else:
+                    thisType = type(getattr(self, attr)).__name__
+                    item = (attr, thisType)
+                    attrList.append(item)
+
+                # FIX: THIS COULD ALSO MAKE A DISTINCTION BETWEEN DEFAULT
+                # ATTRIBUTES AND "CUSTOM" ONES, BY LOOKING IN THE
+                # _defaultAttributes dictionary
+                    
+        # remove duplicates and sort each list
+        methodList = dict.fromkeys(methodList).keys()
+        methodList.sort()
+
+        attrList = dict.fromkeys(attrList).keys()
+        attrList.sort()
+
+        # add the methods and attributes for this object into the reference
+        # list --- the reference list is stored in the root node (and must
+        # exist before this function is called).
+        self.root._reference_list[(nodeName, nodeModule)] = \
+            (methodList, attrList)
+
+        # do the same for all children
+        for child in self.children():
+            child._make_reference_list()
+
+    def _latex_friendly(self, string):
+        """Return a string that won't make latex complain, for example escape
+        all underscores."""
+        return string.replace('_', '\_').replace('&', '\&')
+
+    def write_cheatsheet(self, filename):
+
+        # create a sorted version of the reference list, and delete the
+        # temporary private variable in the root node
+        self.root._reference_list = {}
+        self._make_reference_list()
+        sorted = self.root._reference_list.items()
+        sorted.sort()
+        del self.root._reference_list
+
+        # count the number of classes in which each method appears
+        methodCount = {}
+        attrCount = {}
+        for (cls, mdl), (methodList, attrList) in sorted:
+            for method in methodList:
+                try:
+                    methodCount[method] += 1
+                except KeyError:
+                    methodCount[method] = 1
+            for attr in attrList:
+                try:
+                    attrCount[attr] += 1
+                except KeyError:
+                    attrCount[attr] = 1
+
+        # if it appears the same number of times as there are total classes,
+        # then it must be common to all classes, so add to global list
+        globalMethodList, globalAttrList = [], []
+        for (method, count) in methodCount.iteritems():
+            if count == len(sorted):
+                globalMethodList.append(method)
+        for (attr, count) in attrCount.iteritems():
+            if count == len(sorted):
+                globalAttrList.append(attr)
+
+        globalMethodList.sort()
+        globalAttrList.sort()
+
+        # now remove the "global" attributes and methods from the list of
+        # attributes and methods
+        globalRemoved = []
+        for (cls, mdl), (methodList, attrList) in sorted:
+            newMethodList = [m for m in methodList if not m in globalMethodList]
+            newAttrList = [a for a in attrList if not a in globalAttrList]
+            item = (cls, mdl, newMethodList, newAttrList)
+            globalRemoved.append(item)
+
+        # create latex page
+        result = []
+
+        description = r"""This sheet is intended to be used to quickly look up
+        attribute and method names.  For a complete reference, including
+        descriptions of methods, see the \textit{PyGrace Reference Manual}."""
+
+        result.append(r'\documentclass[10pt]{article}')
+        result.append(r'\usepackage{savetrees}')
+        result.append(r'\usepackage{multicol}')
+        result.append(r'\usepackage{times}')
+        result.append(r'\title{PyGrace Cheatsheet}')
+        result.append(r'\date{}')
+        result.append(r'\begin{document}')
+        result.append(r'\maketitle')
+        result.append(r'\pagestyle{empty}')
+        result.append(r'\thispagestyle{empty}')
+        result.append(r'\renewcommand{\labelitemi}{}')
+        result.append(r'\renewcommand{\labelitemii}{}')
+        result.append(r'\noindent %s' % description)
+        result.append(r'\begin{multicols}{4}')
+        result.append(r'\footnotesize')
+
+        labels = (r'Global', r'PyGrace.base')
+        head = r'\subsection*{\footnotesize %s \tiny \hfill {\tt %s.py}}'
+        result.append(head % labels)
+        result.append(r'\vspace{-0.5em} (Shared by all objects)')
+        result.append(r'\begin{itemize}')
+
+        if globalAttrList:
+
+            result.append( r'\item Attributes')
+            result.append(r'\begin{itemize}')
+            for attr in globalAttrList:
+                result.append( r'\item %s \hfill %s' % attr)
+            result.append(r'\end{itemize}')
+
+        if globalMethodList:
+            result.append( r'\item Methods')
+            result.append(r'\begin{itemize}')
+            for method in globalMethodList:
+                result.append( r'\item %s' % method)
+            result.append(r'\end{itemize}')
+
+        result.append(r'\end{itemize}')
+        result.append(r'\vspace{0.5em}')
+
+        for cls, mdl, methodList, attrList in globalRemoved:
+            
+            result.append(r'\hrule')
+            result.append(head % (cls, mdl))
+            result.append( r'\begin{itemize}')
+
+            if attrList:
+                result.append( r'\item Attributes')
+                result.append(r'\begin{itemize}')
+                for attr in attrList:
+                    result.append( r'\item %s \hfill %s' % attr)
+                result.append(r'\end{itemize}')
+
+            if methodList:
+                result.append( r'\item Methods')
+                result.append(r'\begin{itemize}')
+                for method in methodList:
+                    result.append( r'\item %s' % method)
+                result.append(r'\end{itemize}')
+
+            result.append( r'\end{itemize}')
+            
+        result.append(r'\end{multicols}')
+        result.append(r'\end{document}')
+
+        # print latex page to outfile
+        outStream = open(filename, 'w')
+        print >> outStream,'\n'.join(self._latex_friendly(line)
+                                     for line in result)
+        outStream.close()
+
 
 class BaseSet(object):
     """This is a container class that stores objects by name and index.  This
