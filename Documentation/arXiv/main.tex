@@ -1,0 +1,95 @@
+\documentclass[11pt]{article}
+
+%% ----------------------------------------------------------------------------
+%% INCLUDES
+%% ----------------------------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{times}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage{nicefrac}
+\usepackage{fullpage}
+
+%% ----------------------------------------------------------------------------
+%% ENVIRONMENT DEFINITIONS
+%% ----------------------------------------------------------------------------
+\newenvironment{command}[0]{\begin{flushleft} \tt}{\end{flushleft}}
+
+%% ----------------------------------------------------------------------------
+%% TITLE
+%% ----------------------------------------------------------------------------
+\title{pygrace: Grace plotting tools in Python}
+
+%% ----------------------------------------------------------------------------
+%% AUTHORS
+%% ----------------------------------------------------------------------------
+%% \author
+%% {PyGrace Masters,$^{1,2,3}$
+%% \\
+%% \normalsize{$^{1}$Department of Physics and Astronomy}\\
+%% \normalsize{Northwestern University, Evanston, IL 60208, USA}\\  
+%% \normalsize{$^{2}$Department of Chemical and Biological Engineering}\\
+%% \normalsize{Northwestern University, Evanston, IL 60208, USA}\\  
+%% \normalsize{$^{3}$Northwestern Institute on Complex Systems (NICO)}\\
+%% \normalsize{Northwestern University, Evanston, IL 60208, USA}\\  
+%% \\
+%% }
+
+\author
+{PyGrace Masters,$^{1,2,3}$
+\\ \\
+$^{1}$Department of Physics and Astronomy \\
+Northwestern University, Evanston, IL 60208, USA \\ \\
+$^{2}$Department of Chemical and Biological Engineering \\
+Northwestern University, Evanston, IL 60208, USA \\ \\
+$^{3}$Northwestern Institute on Complex Systems (NICO) \\
+Northwestern University, Evanston, IL 60208, USA
+}
+
+%% ----------------------------------------------------------------------------
+%% DATE
+%% ----------------------------------------------------------------------------
+\date{}
+\begin{document}
+
+%% ----------------------------------------------------------------------------
+%% ABSTRACT
+%% ----------------------------------------------------------------------------
+%% \begin{abstract}
+%% Large data sets require sweet figgies.
+%% \end{abstract}
+
+%% ----------------------------------------------------------------------------
+%% SPACING
+%% ----------------------------------------------------------------------------
+%\baselineskip24pt   % DOUBLE SPACING
+%\baselineskip20pt   % 1.67 SPACING
+\baselineskip18pt   % 1.5 SPACING
+%\baselineskip16pt   % 1.33 SPACING
+
+%% ----------------------------------------------------------------------------
+%% BODY OF PAPER
+%% ----------------------------------------------------------------------------
+\maketitle
+
+\section*{Introduction}
+\input{introduction}
+
+\section*{Examples}
+\input{examples}
+
+\section*{Conclusion}
+\input{conclusion}
+
+\section*{Acknowledgements}
+\input{acknowledgements}
+
+%% ----------------------------------------------------------------------------
+%% REFERENCES
+%% ----------------------------------------------------------------------------
+\bibliographystyle{nature}
+\bibliography{refs.bib}
+
+\end{document}
