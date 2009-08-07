@@ -3,7 +3,7 @@ import os
 
 from base import GraceObject
 from graph import Graph
-from drawing_objects import DrawingObject
+from drawing_objects import DrawingObject, CompoundDrawingObject
 from colors import DefaultColorScheme
 from fonts import default as default_fonts
 
@@ -210,7 +210,7 @@ using the 'filetype' keyword argument.
     def add_drawing_object(self, cls, *args, **kwargs):
 
         # make sure that cls is a subclass of DrawingObject
-        if not issubclass(cls, DrawingObject):
+        if not issubclass(cls, (DrawingObject, CompoundDrawingObject)):
             message = '%s is not a subclass of DrawingObject' % cls.__name__
             raise TypeError(message)
 

@@ -6,7 +6,7 @@ NAMED_CHILD_TYPES = dict.fromkeys(
      'World', 'BaseLine', 'Symbol', 'Line', 'Fill', 'AnnotatedValue',
      'ErrorBar']
     )
-DYNAMIC_CHILD_TYPES = ['Graph', 'DataSet', 'DrawingObject']
+DYNAMIC_CHILD_TYPES = ['Graph', 'DataSet', 'DrawingObject', 'CompoundDrawingObject']
 
 class GraceObject(object):
     """Since most of the classes in PyGrace are basically just dictionaries
