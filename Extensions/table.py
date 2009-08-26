@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
     graph.add_drawing_object(DrawTable, table, xSpace=0.15)
 
-    graph.add_drawing_object(DrawText, text='test', loctype='world')
+    graph.add_drawing_object(DrawText, text='test', loctype='world', font=59)
 
 #     a = [(DrawText, {'text': 'Gomer'}), (DrawText, {'text': 'Spiff'})]
 

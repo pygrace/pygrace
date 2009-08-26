@@ -189,6 +189,16 @@ class GraceObject(object):
         elif key.endswith('size'):
             self._check_type((float, int), key, value)
             self._check_range(key, value, 0, None)
+#         elif key.endswith('color'):
+#             self._check_type((str, int), key, value)
+#             if isinstance(value, str):
+#                 colorNames = self.root.colors.name2item.keys()
+#                 self._check_membership(key, value, colorNames)
+#             else:
+#                 n = len(self.root.colors.name2item.keys())
+# #                self._check_range(key, value, 0, 100)
+#                 self._check_range(key, value, 0, n)
+
         elif key == 'x' or key == 'y':
             self._check_type((float, int), key, value)
         elif key == 'xmin' or key == 'xmax' or key == 'ymin' or key == 'ymax':
@@ -236,7 +246,6 @@ class GraceObject(object):
         elif key == 'place':
             self._check_type(str, key, value)
             self._check_membership(key, value, ('normal', 'opposite', 'both'))
-            
         # actually set the value of the attribute here
         object.__setattr__(self, key, value)
         
@@ -414,7 +423,9 @@ class GraceObject(object):
 
                 # is this a method?
                 if callable(getattr(self, attr)):
-                    methodList.append(attr)
+                    doc = getattr(self, attr).__doc__
+                    item = (attr, doc)
+                    methodList.append(item)
 
                 # this is an attribute
                 else:
@@ -446,7 +457,8 @@ class GraceObject(object):
     def _latex_friendly(self, string):
         """Return a string that won't make latex complain, for example escape
         all underscores."""
-        return string.replace('_', '\_').replace('&', '\&')
+        return string.replace('_', '\_')
+#        return string.replace('_', '\_').replace('&', '\&')
 
     def write_cheatsheet(self, filename):
 
@@ -565,6 +577,151 @@ class GraceObject(object):
             result.append( r'\end{itemize}')
             
         result.append(r'\end{multicols}')
+        result.append(r'\end{document}')
+
+        # print latex page to outfile
+        outStream = open(filename, 'w')
+        print >> outStream,'\n'.join(self._latex_friendly(line)
+                                     for line in result)
+        outStream.close()
+
+    def write_reference_sheet(self, filename):
+
+        # create a sorted version of the reference list, and delete the
+        # temporary private variable in the root node
+        self.root._reference_list = {}
+        self._make_reference_list()
+        sorted = self.root._reference_list.items()
+        sorted.sort()
+        del self.root._reference_list
+
+        # count the number of classes in which each method appears
+        methodCount = {}
+        attrCount = {}
+        for (cls, mdl), (methodList, attrList) in sorted:
+            for method in methodList:
+                try:
+                    methodCount[method] += 1
+                except KeyError:
+                    methodCount[method] = 1
+            for attr in attrList:
+                try:
+                    attrCount[attr] += 1
+                except KeyError:
+                    attrCount[attr] = 1
+
+        # if it appears the same number of times as there are total classes,
+        # then it must be common to all classes, so add to global list
+        globalMethodList, globalAttrList = [], []
+        for (method, count) in methodCount.iteritems():
+            if count == len(sorted):
+                globalMethodList.append(method)
+        for (attr, count) in attrCount.iteritems():
+            if count == len(sorted):
+                globalAttrList.append(attr)
+
+        globalMethodList.sort()
+        globalAttrList.sort()
+
+        # now remove the "global" attributes and methods from the list of
+        # attributes and methods
+        globalRemoved = []
+        for (cls, mdl), (methodList, attrList) in sorted:
+            newMethodList = [m for m in methodList if not m in globalMethodList]
+            newAttrList = [a for a in attrList if not a in globalAttrList]
+            item = (cls, mdl, newMethodList, newAttrList)
+            globalRemoved.append(item)
+
+        # create latex page
+        result = []
+
+        result.append(r'\documentclass[12pt]{report}')
+        result.append(r'\usepackage{fullpage}')
+#         result.append(r'\usepackage{savetrees}')
+#         result.append(r'\usepackage{multicol}')
+        result.append(r'\usepackage{times}')
+        result.append(r'\title{PyGrace Reference Manual}')
+        result.append(r'\date{}')
+        result.append(r'\begin{document}')
+        result.append(r'\maketitle')
+        result.append(r'\tableofcontents')
+
+#         result.append(r'\pagestyle{empty}')
+#         result.append(r'\thispagestyle{empty}')
+        result.append(r'\renewcommand{\labelitemi}{}')
+        result.append(r'\renewcommand{\labelitemii}{}')
+#         result.append(r'\begin{multicols}{4}')
+#         result.append(r'\footnotesize')
+
+        result.append(r'\chapter{Chapter title}')
+        result.append(r'\label{ch-1}')
+
+        head = r'\section{%s} {\tt %s.py}'
+        labels = (r'Global', r'PyGrace.base')
+        head = r'\section{%s} {\tt %s.py}'
+        result.append(head % labels)
+#         result.append(r'\vspace{-0.5em} (Shared by all objects)')
+
+        if globalAttrList:
+
+            result.append( r'\subsection*{Attributes}')
+            result.append(r'\begin{description}')
+            result.append(r'\setlength{\itemsep}{1pt}')
+            result.append(r'\setlength{\parskip}{0pt}')
+            result.append(r'\setlength{\parsep}{0pt}')
+            for attr in globalAttrList:
+                result.append( r'\item[%s] %s' % attr)
+            result.append(r'\end{description}')
+
+        if globalMethodList:
+            result.append( r'\subsection*{Methods}')
+            result.append(r'\begin{description}')
+            for method in globalMethodList:
+                print method
+                result.append( r'\item[%s] %s' % method)
+            result.append(r'\end{description}')
+
+        result.append(r'\vspace{0.5em}')
+
+        for cls, mdl, methodList, attrList in globalRemoved:
+            
+#            result.append(r'\hrule')
+            result.append(head % (cls, mdl))
+
+            if attrList:
+
+#                result.append(r'\begin{table}[h!]')
+                result.append(r'\begin{center}')
+                result.append(r'\begin{tabular*}{\textwidth}[3]{lll}')
+                result.append(r'\hline')
+                result.append(r'Name & Type & Allowed values \\')
+                result.append(r'\hline')
+
+                for attr in attrList:
+                    result.append(r'%s & %s & lskdjfklj \\' % attr)
+
+#                 result.append( r'\subsection*{Attributes}')
+#                 result.append(r'\begin{description}')
+#                 result.append(r'\setlength{\itemsep}{1pt}')
+#                 result.append(r'\setlength{\parskip}{0pt}')
+#                 result.append(r'\setlength{\parsep}{0pt}')
+#                 result.append(r'\end{description}')
+
+                result.append(r'\hline')
+                result.append(r'\end{tabular*}')
+#                result.append(r'\caption{caption}')
+                result.append(r'\end{center}')
+#                result.append(r'\end{table}')
+
+
+            if methodList:
+                result.append( r'\subsection*{Methods}')
+                result.append(r'\begin{description}')
+                for method in methodList:
+                    result.append( r'\item[%s] %s' % method)
+                result.append(r'\end{description}')
+            
+#         result.append(r'\end{multicols}')
         result.append(r'\end{document}')
 
         # print latex page to outfile
