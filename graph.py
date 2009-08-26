@@ -1,5 +1,5 @@
 from base import GraceObject
-from drawing_objects import DrawingObject, CompoundDrawingObject
+from drawing_objects import DrawingObject
 from dataset import DataSet, SYMBOLS, INDEX2SYMBOLS, LINESTYLES, \
     INDEX2LINESTYLES
 from axis import Axis,LINEAR_SCALE,LOGARITHMIC_SCALE
@@ -264,14 +264,13 @@ class Graph(GraceObject):
     def add_drawing_object(self, cls, *args, **kwargs):
 
         # make sure that cls is a subclass of DrawingObject
-        if not issubclass(cls, (DrawingObject, CompoundDrawingObject)):
+        if not issubclass(cls, DrawingObject):
             message = '%s is not a subclass of DrawingObject' % cls.__name__
             raise TypeError(message)
         
         # here, the class argument is mandatory, because there are many built
         # in types of drawing objects
         drawingObject = cls(self, *args, **kwargs)
-#        drawingObject = cls(parent=self, *args, **kwargs)
         self.drawing_objects.append(drawingObject)
 
         # return the instance of the drawing object

@@ -17,61 +17,6 @@ DRAWTEXT_JUSTIFICATIONS = {"l":0,
                            "mc":14,
                            }
 
-class CompoundDrawingObject(GraceObject):
-    _staticType = 'CompoundDrawingObject'
-    def __init__(self, parent, **kwargs):
-        GraceObject.__init__(self, parent, locals())
-        self.drawing_objects = []
-
-        # these are needed for the parent checking by drawing objects, but
-        # should not be imported everything else has been (to avoid a cycle
-        # in the dependency graph)
-        import graph
-        import grace
-
-        # if the drawing object is added by a Graph, then record the index of
-        # the graph.  Otherwise the parent of the drawing object is the grace.
-        # The case in which self.parent = None occurs when Base.copy_format
-        # is used with a DrawingObject subclass.  In this case, since there
-        # is no instance to associate with a graph (or not), then the drawing
-        # object is linked to the grace (not any particular graph)
-        if isinstance(self.parent, grace.Grace):
-            self._linked_graph = None
-        elif isinstance(self.parent, graph.Graph):
-            self._linked_graph = self.parent.index
-        elif self.parent == None:
-            self._linked_graph = None            
-        else:
-            message = 'parent of drawing object (%s) is not graph or grace.' % \
-                type(self.parent)
-            raise TypeError(message)
-
-    def add_drawing_object(self, cls, *args, **kwargs):
-
-        # make sure that cls is a subclass of DrawingObject
-        if not issubclass(cls, DrawingObject):
-            message = '%s is not a subclass of DrawingObject' % cls.__name__
-            raise TypeError(message)
-        
-        # here, the class argument is mandatory, because there are many built
-        # in types of drawing objects
-        drawingObject = cls(self, *args, **kwargs)
-        self.drawing_objects.append(drawingObject)
-
-        # return the instance of the drawing object
-        return drawingObject
-
-    def __str__(self):
-        return '\n'.join(str(i) for i in self.drawing_objects)
-
-    def limits(self):
-        """Find the limits for autoscaling axes"""
-        limitList = []
-        for d in self._drawing_objects:
-            limitList.append(d.limits())
-        xMin, yMin, xMax, yMax = zip(*limitList)
-        return min(xMin), min(yMin), max(xMax), max(yMax)
-
 class DrawingObject(GraceObject):
     _staticType = 'DrawingObject'
     def __init__(self, parent, attrs, *args, **kwargs):
@@ -93,8 +38,6 @@ class DrawingObject(GraceObject):
             self._linked_graph = None
         elif isinstance(self.parent, graph.Graph):
             self._linked_graph = self.parent.index
-        elif isinstance(self.parent, CompoundDrawingObject):
-            self._linked_graph = self.parent._linked_graph
         elif self.parent == None:
             self._linked_graph = None            
         else:
@@ -131,8 +74,6 @@ class DrawingObject(GraceObject):
         else:
             y = None
         return x,y        
-
-
         
 class DrawBox(DrawingObject):
     def __init__(self, parent,
