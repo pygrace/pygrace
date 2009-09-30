@@ -210,7 +210,7 @@ class DrawLine(DrawingObject):
         """Find the limits of a DrawLine for autoscaling axes (among
         other things?)
         """
-        x,y = zip(self.lowleft, self.upright)
+        x,y = zip(self.start, self.end)
         return min(x), min(y), max(x), max(y)
 
 class DrawEllipse(DrawingObject):
