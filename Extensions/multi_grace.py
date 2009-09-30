@@ -237,12 +237,12 @@ Grace.autohide_multi_labels only works with a multigraph
                 redundant_ticklabel = True
                 for r in range(_rows):
                     g = self.graphs_rc[r][c]
-                    gxmin,blah,gxmax,blek = g.get_world()
-                    if (g is not None and 
-                        (g.xaxis.ticklabel!=graph.xaxis.ticklabel or
-                         g.xaxis.tick!=graph.xaxis.tick or 
-                         xmin!=gxmin or xmax!=gxmax)):
-                        redundant_ticklabel = False
+                    if g is not None:
+                        gxmin,blah,gxmax,blek = g.get_world()
+                        if (g.xaxis.ticklabel!=graph.xaxis.ticklabel or
+                            g.xaxis.tick!=graph.xaxis.tick or 
+                            xmin!=gxmin or xmax!=gxmax):
+                            redundant_ticklabel = False
                 
                 # hide redundant labels
                 if redundant_ticklabel:
@@ -328,12 +328,12 @@ Grace.autohide_multi_labels only works with a multigraph
                 redundant_ticklabel = True
                 for c in range(_cols,self.cols):
                     g = self.graphs_rc[r][c]
-                    blah,gymin,blek,gymax = g.get_world()
-                    if (g is not None and 
-                        (g.yaxis.ticklabel!=graph.yaxis.ticklabel or
-                         g.yaxis.tick!=graph.yaxis.tick or
-                         ymin!=gymin or ymax!=gymax)):
-                        redundant_ticklabel = False
+                    if g is not None:
+                        blah,gymin,blek,gymax = g.get_world()
+                        if (g.yaxis.ticklabel!=graph.yaxis.ticklabel or
+                            g.yaxis.tick!=graph.yaxis.tick or
+                            ymin!=gymin or ymax!=gymax):
+                            redundant_ticklabel = False
                 
                 # hide redundant labels
                 if redundant_ticklabel:
