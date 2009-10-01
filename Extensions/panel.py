@@ -261,8 +261,9 @@ Only labels schemes %s are possible.
         """Place all labels in grace at the same time.
         """
         for graph in self.graphs:
-            graph.panel_label.place_label(placement=placement,
-                                          dx=dx,dy=dy,just=just)
+            if isinstance(graph,Panel):
+                    graph.panel_label.place_label(placement=placement,
+                                                  dx=dx,dy=dy,just=just)
 
     def add_graph(self, cls=Panel, *args, **kwargs):
         """Overwrite the add_graph of Grace base so that the default
