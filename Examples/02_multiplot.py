@@ -1,3 +1,7 @@
+import sys
+sys.path.append('../../')
+sys.path.append('../')
+
 from PyGrace.grace import Grace
 from PyGrace.colors import ColorBrewerScheme
 from PyGrace.drawing_objects import DrawText

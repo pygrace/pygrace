@@ -1,3 +1,7 @@
+import sys
+sys.path.append('../../')
+sys.path.append('../')
+
 from PyGrace.colors import RandomColorScheme, MarkovChainColorScheme
 from PyGrace.dataset import SYMBOLS
 from PyGrace.Extensions.panel import Panel,MultiPanelGrace

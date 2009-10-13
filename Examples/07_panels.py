@@ -1,3 +1,7 @@
+import sys
+sys.path.append('../../')
+sys.path.append('../')
+
 from PyGrace.Extensions.panel import Panel, MultiPanelGrace
 from PyGrace.Styles.el import ElCircleDataSet
 from PyGrace.Styles.journals import NaturePanelLabel

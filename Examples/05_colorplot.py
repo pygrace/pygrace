@@ -18,6 +18,8 @@
 
 import sys
 import random
+sys.path.append('../../')
+sys.path.append('../')
 
 from PyGrace.grace import Grace
 from PyGrace.Extensions.colorbar import SolidRectangle, ColorBar
