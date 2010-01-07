@@ -28,8 +28,11 @@ class NodeSet(DataSet):
         for aNode in self.data:
             self.parent.node_xy[aNode] = self.data[aNode][0:2]
         try:
-            self.data = [values + (label, )
-                         for label, values  in self.data.items()]
+            if labels:
+                self.data = [values + (label, )
+                             for label, values  in self.data.iteritems()]
+            else:
+                self.data = [values for label,values in self.data.iteritems()]
         except:
             raise TypeError, 'data for a NodeSet must be a dictionary'
         self.symbol.configure(size=size,

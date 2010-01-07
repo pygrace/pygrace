@@ -404,18 +404,18 @@ set_row_xaxislabel.
             if graph is not None:
                 graph.yaxis.label.text = ''
 
-        # determine offsets for resulting new label
-        if (rowspan[1]-rowspan[0]+1)%2==1:
+        # determine row for new label
+        if (rowspan[1]-rowspan[0]+1)%2==1:  # odd number of columns
             row = int(float(rowspan[1]-rowspan[0]+1)/2.0+rowspan[0])
-            graph = self.graphs_rc[row][col]
-            parallel_offset = 0.0
-        else:
+        else: # even number of columns
             row = (rowspan[1]-rowspan[0]+1)/2 + rowspan[0]
-            graph = self.graphs_rc[row][col]
-            graph_up = self.graphs_rc[row-1][col]
-            upmid = 0.5*(graph_up.view.ymax + graph_up.view.ymin)
-            dnmid = 0.5*(graph.view.ymax + graph.view.ymin)
-            parallel_offset = 0.5*(upmid - dnmid)
+
+        # determine offset
+        graph_1 = self.graphs_rc[0][col]
+        graph_0 = self.graphs_rc[-1][col]
+        mid_1 = 0.5*(graph_1.view.ymax + graph_1.view.ymin)
+        mid_0 = 0.5*(graph_0.view.ymax + graph_0.view.ymin)
+        parallel_offset = 0.5*(mid_1 - mid_0)
 
         # set label
         graph.yaxis.label.configure(text=label,
@@ -468,18 +468,18 @@ set_row_xaxislabel.
             if graph is not None:
                 graph.xaxis.label.text = ''
 
-        # determine offsets for resulting new label
-        if (colspan[1]-colspan[0]+1)%2==1:
+        # determine row for new label
+        if (colspan[1]-colspan[0]+1)%2==1:  # odd number of rows
             col = int(float(colspan[1]-colspan[0]+1)/2.0+colspan[0])
-            graph = self.graphs_rc[row][col]
-            parallel_offset = 0.0
-        else:
-            col = (colspan[1]-colspan[0]+1)/2+colspan[0]
-            graph = self.graphs_rc[row][col]
-            graph_left = self.graphs_rc[row][col-1]
-            lmid = 0.5*(graph_left.view.xmax + graph_left.view.xmin)
-            rmid = 0.5*(graph.view.xmax + graph.view.xmin)
-            parallel_offset = 0.5*(lmid - rmid)
+        else: # even number of rows
+            col = (colspan[1]-colspan[0]+1)/2 + colspan[0]
+
+        # determine offset
+        graph_1 = self.graphs_rc[row][0]
+        graph_0 = self.graphs_rc[row][-1]
+        mid_1 = 0.5*(graph_1.view.xmax + graph_1.view.xmin)
+        mid_0 = 0.5*(graph_0.view.xmax + graph_0.view.xmin)
+        parallel_offset = 0.5*(mid_1 - mid_0)
 
         # set label
         graph.xaxis.label.configure(text=label,
