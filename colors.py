@@ -21,6 +21,15 @@ class Color(object):
         """Return RGB tuple."""
         return self.red, self.green, self.blue
 
+    def change_opacity(self, percent):
+        new_rgb = []
+        for color_channel in self.rgb():
+            alpha = 1. - (color_channel /255.)
+            alpha *= percent / 100.
+            new_rgb.append((1. - alpha) * 255.)
+        self.red, self.green, self.blue = new_rgb
+            
+
 class ColorScheme(BaseSet):
     """This subclass of the base set has a method that checks for conflicts
     in the color scheme."""

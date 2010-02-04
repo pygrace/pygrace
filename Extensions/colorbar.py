@@ -1,4 +1,7 @@
 import math
+
+from datastat import frange
+
 from PyGrace.graph import Graph
 from PyGrace.dataset import DataSet
 from PyGrace.drawing_objects import DrawBox
@@ -44,6 +47,7 @@ class SolidOutlinedRectangle(DataSet):
         self.fill.configure(type=2, rule=0, color=color)
         self.baseline.configure(type=1)
     
+
 class ColorBar(Graph):
     def __init__(self, domain=(), scale=LINEAR_SCALE, autoscale=True,
                  color_range=(), *args, **kwargs):
