@@ -47,6 +47,10 @@ for pdf in pdfs:
 
 # instantiate a sweet figgy fig
 colors = ColorBrewerScheme("YlOrBr",n=253) # this is the maximum number of colors
+
+# you can change the opacity percent of a colorscheme if you want:
+# colors.change_opacity(20, exclude_black=False)
+
 grace = Grace(colors=colors)
 
 # add a colorbar
@@ -59,6 +63,8 @@ graph.copy_format(ElGraph)
 for (x0,y0,x1,y1,pdf) in data:
     if pdf > 0.0:
         color = colorbar.z2color(pdf)
+        # you can change the opacity percentage of a single color, as well
+        # color.change_opacity(60)
         graph.add_dataset([(x0,y0), (x1,y1)], SolidRectangle, color)
 
 # move things around

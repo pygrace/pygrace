@@ -22,6 +22,10 @@ class Color(object):
         return self.red, self.green, self.blue
 
     def change_opacity(self, percent):
+        if percent < 0 or percent > 100:
+            message = 'Opacity percentage can only be changed to a value ' + \
+            'between 0 and 100.'
+            raise ValueError(message)
         new_rgb = []
         for color_channel in self.rgb():
             alpha = 1. - (color_channel /255.)
@@ -44,6 +48,13 @@ class ColorScheme(BaseSet):
                 message += ' ' * 12 + "old (%i, %i, %i)" % color.rgb()
                 message += " != new (%i, %i, %i)" % (red, green, blue)
                 raise ValueError(message)
+            
+    def change_opacity(self, percent, exclude_black=False):
+        for color in self.items:
+            if exclude_black and (color.red,color.green,color.blue)==(0,0,0):
+                continue
+            color.change_opacity(percent)
+
 
 class ColorBrewerScheme(ColorScheme):
     """Instantiate with a name of the color brewer scheme (and an optional
