@@ -364,7 +364,7 @@ class DirectedLinkSet(LinkSet):
                                 (not hasattr(node2, 'in_circle')):
                             domain.append(curveData[0])
                             for i in range (1, len(curveData)-1, 2):
-                                domain.append(CurveData[i])
+                                domain.append(curveData[i])
                             domain.append(curveData[-1])
                             return domain
                         # Otherwise, scan for when we get out
@@ -404,7 +404,7 @@ class DirectedLinkSet(LinkSet):
                         if domain == []:
                             domain.append(curveData[0])
                             for i in range (1, len(curveData)-1, 2):
-                                domain.append(CurveData[i])
+                                domain.append(curveData[i])
                             domain.append(curveData[-1])
                         # you found it, return it
                         return domain
