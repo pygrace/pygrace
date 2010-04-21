@@ -1,7 +1,5 @@
 import math
 
-from datastat import frange
-
 from PyGrace.graph import Graph
 from PyGrace.dataset import DataSet
 from PyGrace.drawing_objects import DrawBox
