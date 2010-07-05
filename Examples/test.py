@@ -20,6 +20,8 @@ exampleList = [
     './10_dataset_features.py',
     './11_network.py',
     './12_cheatsheet.py',
+    './13_directed_network.py',
+    './14_phylogenetic_tree.py',
     ]
 
 if __name__ == '__main__':

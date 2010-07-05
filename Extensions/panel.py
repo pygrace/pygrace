@@ -2,6 +2,7 @@ from PyGrace.graph import Graph
 from PyGrace.drawing_objects import DrawText, DRAWTEXT_JUSTIFICATIONS
 from PyGrace.Extensions.multi_grace import MultiGrace
 from PyGrace.Extensions.network import Network
+from PyGrace.Extensions.tree import Tree
 
 class PanelLabel(DrawText):
     """This class is useful for adding panel labels to figures.  Note that
@@ -281,4 +282,13 @@ class NetworkPanel(Panel,Network):
         Panel.__init__(self,*args,**kwargs)
         drawing_objects = self.drawing_objects
         Network.__init__(self,*args,**kwargs)
+        self.drawing_objects.extend(drawing_objects)
+
+class TreePanel(Panel,Tree):
+    """A panel to display trees.
+    """
+    def __init__(self, *args, **kwargs):
+        Panel.__init__(self,*args,**kwargs)
+        drawing_objects = self.drawing_objects
+        Tree.__init__(self,*args,**kwargs)
         self.drawing_objects.extend(drawing_objects)
