@@ -48,8 +48,11 @@ class SolidOutlinedRectangle(DataSet):
 
 class ColorBar(Graph):
     def __init__(self, domain=(), scale=LINEAR_SCALE, autoscale=True,
-                 color_range=(), *args, **kwargs):
+                 reverse=False, color_range=(), *args, **kwargs):
         Graph.__init__(self,*args,**kwargs)
+
+        # should we reverse the colors
+        self.reverse = reverse
 
         # turn off the xaxis labels
         self.xaxis.ticklabel.onoff = "off"
@@ -71,8 +74,10 @@ class ColorBar(Graph):
                 self.color_range = []
             else:
                 self.color_range = range(2,len(self.parent.colors))
+                self.color_range.reverse()
         else:
             self.color_range = color_range
+            self.color_range.reverse()
 
         # set the domain
         if domain:

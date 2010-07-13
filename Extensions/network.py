@@ -374,7 +374,7 @@ class DirectedLinkSet(LinkSet):
                                                    color=color,
                                                    arrow=2,
                                                    arrow_type=1,
-                                                   arrow_length = 1.5,
+                                                   arrow_length = 0.85,
                                                    arrow_layout=(0.8,0.8))
                 #                                                                #
                 #                                                                #
