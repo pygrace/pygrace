@@ -64,15 +64,15 @@ class Tree(Graph):
             empty_name = 0
             leaf_x = 1
             while ")" in newick_tree:
-                # find the two nodes to be merged
+                # find the nodes to be merged
                 firstclose = newick_tree.index(")")
                 lastopen = newick_tree[:firstclose].rindex("(")
                 tomerge = newick_tree[lastopen:firstclose+1]
 
-                # cut this into the two components
-                first, second = tomerge.replace("(","").replace(")","").split(",")
+                # cut this into the components
+                localnodes = tomerge.replace("(","").replace(")","").split(",")
 
-                for node in [first, second]:
+                for node in localnodes:
                     name, length = node.split(":")
 
                     # if it is a leaf node
@@ -93,15 +93,14 @@ class Tree(Graph):
                     tree.append([x,y])
                     tree.append([x,y+dy])
 
-                # split each component into their two parts, the name and the branch length
-                name_1, length_1 = first.split(":")
-                name_2, length_2 = second.split(":")
+                # split each component into their parts, the name and the branch length
+                localnodes = [i.split(':') for i in localnodes]
 
                 # the merged node gets the average x-value of those who are merged
-                x = 0.5*(nodes[name_1][0] + nodes[name_2][0])
+                x = sum([nodes[i[0]][0] for i in localnodes])/float(len(localnodes))
 
                 # and starts from y+dy
-                y = nodes[name_1][1] + float(length_1)
+                y = nodes[localnodes[0][0]][1] + float(localnodes[0][1])
 
                 # add this guy to the node list
                 merged_node = ''
@@ -111,9 +110,11 @@ class Tree(Graph):
                     nodes[merged_node] = [x,y]
 
                 # add the horizontal line
-                tree += [[nodes[name_1][0],y],[nodes[name_2][0],y]]
+                for i in xrange(len(localnodes)):
+                    for j in xrange(i+1,len(localnodes)):
+                        tree += [[nodes[localnodes[i][0]][0],y],[nodes[localnodes[j][0]][0],y]]
 
-                # strip out the two nodes that we just merged and put a new name in their place
+                # strip out the nodes that we just merged and put a new name in their place
                 newick_tree = newick_tree[:lastopen] + merged_node + newick_tree[firstclose+1+next_colon:]
 
                 c+=1
