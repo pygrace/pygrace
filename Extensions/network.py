@@ -331,6 +331,8 @@ class DirectedLinkSet(LinkSet):
                         # visible go backwards, say the visible
                         # part is the intersection of nodes!
                         if point_under_node(x,y,node2):
+                            if node_1_out == 1:
+                                domain=[curveData[0],curveData[1]]
                             for i in range(node_1_out, 1, -2):
                                 domain.insert(0, curveData[i])
                                 x,y = curveData[i]
@@ -416,7 +418,6 @@ class Network(Graph):
 
         self.node_xy = {}  # stores node coordinates
         self.node_sz = {}  # stores node sizes
-        self.nodes = {}    # stores node instances (if needed)
         self.xaxis.onoff='off'
         self.yaxis.onoff='off'
         if not bounding_box:

@@ -1,3 +1,4 @@
+import sys
 import math
 
 from PyGrace.graph import Graph
@@ -45,6 +46,198 @@ class SolidOutlinedRectangle(DataSet):
         self.fill.configure(type=2, rule=0, color=color)
         self.baseline.configure(type=1)
     
+class SolidPixelatedShape(DataSet):
+    """A dataset that shows up as a solid object. The shape can be
+    anything made up of squares. The data is given as the (x,y) values
+    of pixels. If pixel size is not given, this acquires it
+    automatically from the data (min distance between neighboring
+    pixels).
+
+    Traces the outer line of the shape defined by the pixels. The
+    trace is greedy, if there are holes in the middle of the shape,
+    they will be filled.
+
+    This is way more efficient compared to drawing a single color
+    object box by box (pixel by pixel).
+    It's useful in cases where you have a data matrix with a large
+    region of the same color. The major functionality is tracing the
+    outline of a region.
+
+    data should be a list of tuples in [(x1,y1), (x2,y2), ...] form.
+    Each tuple is the center coordinate of a pixel.
+    """
+    def __init__(self, color,
+                 pixelsize=None,
+                 square_pixels=True,
+                 *args, **kwargs):
+        DataSet.__init__(self, *args, **kwargs)
+
+        # Sort
+        print >> sys.stderr, "Sorting data."
+        pixeldata = sorted(self.data, key=lambda (x,y): (y,x))
+        
+        # Determine pixel size
+        if pixelsize is not None:
+            step_x = step_y = pixelsize / 2.
+        else:
+            print >> sys.stderr, "Acquiring pixel size."
+            pixelsizes_x, pixelsizes_y = set(), set()
+            for i in range(len(pixeldata)-1):
+                x0,y0 = pixeldata[i]
+                x1,y1 = pixeldata[i+1]
+                dy = round(y1-y0, 12)
+                dx = round(x1-x0, 12)
+                if dy != 0:
+                    pixelsizes_y.add(dy)
+                elif dx != 0:
+                    pixelsizes_x.add(dx)
+
+            if len(pixelsizes_x) > 0 and len(pixelsizes_y) > 0:
+                step_x = min(pixelsizes_x)/2.
+                step_y = min(pixelsizes_y)/2.
+            elif len(pixelsizes_x) == 0  and len(pixelsizes_y) > 0:
+                step_y = min(pixelsizes_y)/2.
+                step_x = step_y
+            elif len(pixelsizes_x) > 0  and len(pixelsizes_y) == 0:
+                step_x = min(pixelsizes_x)/2.
+                step_y = step_x
+            else:
+                step_x = step_y = 0.5
+
+            if square_pixels:
+                step_x = step_y = min([step_x, step_y])
+
+
+        # Now we have pixel locations. Draw around the outer pixels,
+        # ignore holes in the middle.
+        print >> sys.stderr, "Tracing the outline of the shape from given pixels."
+        self.data = []
+
+        # ---Bottom----------
+        x,y = pixeldata[0]
+        # first pixel, bottom left
+        xp = x - step_x
+        yp = y - step_y
+        self.data.append((xp,yp))
+        current_y = round(y,12)
+
+        # rightmost pixel of first row, bottom right
+        for x,y in pixeldata:
+            if round(y,12) != current_y:
+                # last pixel, bottom right
+                xp = last_x + step_x
+                yp = last_y - step_y
+                self.data.append((xp,yp))
+                break
+            last_x, last_y = x,y
+
+        # in case there was only one row and you missed this
+        if round(y,12) == current_y:
+            # still current_y after iteration, we missed it!
+                xp = last_x + step_x
+                yp = last_y - step_y
+                self.data.append((xp,yp))
+            
+        # ---Right side (scan up, line by line)------
+        groove_flag = False
+        for x,y in pixeldata:
+            if round(y,12) != current_y:
+                # Last pixel of a row
+                # Finish last groove if you started one
+                if groove_flag:
+                    # last pixel, bottom right
+                    xp = last_x + step_x
+                    yp = last_y - step_y
+                    self.data.append((xp,yp))
+                    groove_flag = False
+                # Are we starting a new groove?
+                if round(x,12) != round(last_x,12):
+                    # yes, a new groove encountered
+                    # last pixel, top right
+                    xp = last_x + step_x
+                    yp = last_y + step_y
+                    self.data.append((xp,yp))
+                    groove_flag = True
+                current_y = round(y,12)
+            last_x, last_y = x,y
+
+        # in case there was a groove you didn't finish because
+        # we ran out of rows, do it now
+        if groove_flag:
+            # last pixel, bottom right
+            xp = last_x + step_x
+            yp = last_y - step_y
+            self.data.append((xp,yp))
+            groove_flag = False
+
+        # ---Top-------
+        x,y = pixeldata[-1]
+        # final pixel, top right
+        xp = x + step_x
+        yp = y + step_y
+        self.data.append((xp,yp))
+        current_y = round(y,12)
+
+        # leftmost pixel of highest row, top left
+        for x,y in reversed(pixeldata):
+            if round(y,12) != current_y:
+                # last pixel, top left
+                xp = last_x - step_x
+                yp = last_y + step_y
+                self.data.append((xp,yp))
+                break
+            last_x, last_y = x,y
+
+        # in case there was only one row and you missed this
+        if round(y,12) == current_y:
+            # still current_y after iteration, we missed it!
+                xp = last_x - step_x
+                yp = last_y + step_y
+                self.data.append((xp,yp))
+
+        # --- Left side (scan backwards [down])------
+        groove_flag = False
+        for x,y in reversed(pixeldata):
+            if round(y,12) != current_y:
+                # Last pixel of a row
+                # Finish last groove if you started one
+                if groove_flag:
+                    # last pixel, top left
+                    xp = last_x - step_x
+                    yp = last_y + step_y
+                    self.data.append((xp,yp))
+                    groove_flag = False
+                # Are we starting a new groove?
+                if round(x,12) != round(last_x,12):
+                    # yes, a new groove encountered
+                    # last pixel, bottom left
+                    xp = last_x - step_x
+                    yp = last_y - step_y
+                    self.data.append((xp,yp))
+                    groove_flag = True
+                current_y = round(y,12)
+            last_x, last_y = x,y
+
+        # in case there was a groove you didn't finish because
+        # we ran out of rows, do it now
+        if groove_flag:
+            # last pixel, top left
+            xp = last_x - step_x
+            yp = last_y + step_y
+            self.data.append((xp,yp))
+            groove_flag = False
+
+
+        # --- Complete the shape by repeating the first ever point ---
+        self.data.append(self.data[0])
+        print >> sys.stderr, "Tracing complete."
+
+        self.symbol.configure(shape=0)
+        self.line.configure(linewidth=0, color=color)
+        self.fill.configure(type=2, rule=0, color=color)
+        self.baseline.configure(type=1)
+
+
 
 class ColorBar(Graph):
     def __init__(self, domain=(), scale=LINEAR_SCALE, autoscale=True,
