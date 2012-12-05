@@ -1,7 +1,3 @@
-import sys
-sys.path.append('../../')
-sys.path.append('../')
-
 from PyGrace.grace import Grace
 from PyGrace.graph import Graph
 from PyGrace.drawing_objects import DrawText, DrawLine

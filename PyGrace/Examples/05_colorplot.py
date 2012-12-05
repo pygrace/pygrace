@@ -16,10 +16,7 @@
 # It also demonstrates how to use a PyGrace.Style to format figures in
 # a customized format
 
-import sys
 import random
-sys.path.append('../../')
-sys.path.append('../')
 
 from PyGrace.grace import Grace
 from PyGrace.Extensions.colorbar import SolidRectangle, ColorBar
