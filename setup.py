@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # 
 # Michael McKerns
-# mmckerns@caltech.edu 
+# mmckerns@caltech.edu
+# Daniel B. Stouffer
+# daniel.stouffer@canterbury.ac.nz
 
 try: # see if easy_install is available
     from setuptools import setup
@@ -13,13 +15,26 @@ except ImportError:
 # build the 'setup' call
 setup_code = """
 setup(name='pygrace',
-      version='0.4',
-      description='Python bindings for grace',
-      author = 'Mike McKerns',
-      author_email = 'mmckerns@caltech.edu',
-      url = 'http://www.its.caltech.edu/~mmckerns/software/',
-      packages=['pygrace'],
-      package_dir={'pygrace':''},
+      version='0.5',
+      description='Python bindings and wrapper for grace',
+      author = 'Mike McKerns, Daniel B. Stouffer',
+      author_email = 'mmckerns@caltech.edu, daniel.stouffer@canterbury.ac.nz',
+      url = 'http://pygrace.github.com/',
+      packages=['pygrace',
+                'pygrace.templates',
+                'pygrace.templates.Extensions',
+                'pygrace.templates.Styles',
+                'pygrace.templates.Styles.ColorBrewer',
+                ],
+      package_dir={'pygrace':'session',
+                   'pygrace.templates':'templates',
+                   'pygrace.templates.Extensions':'templates/Extensions',
+                   'pygrace.templates.Styles':'templates/Styles',
+                   'pygrace.templates.Styles.ColorBrewer':'templates/Styles/ColorBrewer',
+                  },
+     package_data={'pygrace.templates.Styles.ColorBrewer':['*.dat'],
+                   },
+     scripts=['templates/Scripts/pg_cdf'],
 """
 
 # add dependencies
