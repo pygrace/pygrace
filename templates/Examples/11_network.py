@@ -1,11 +1,7 @@
-import sys
-sys.path.append('../../')
-sys.path.append('../')
-
-from PyGrace.grace import Grace
-from PyGrace.graph import Graph
-from PyGrace.dataset import DataSet
-from PyGrace.Extensions.network import Network
+from pygrace.templates.grace import Grace
+from pygrace.templates.graph import Graph
+from pygrace.templates.dataset import DataSet
+from pygrace.templates.Extensions.network import Network
 
 # Define a couple of node sets, a xysize set and a regular xy set
 nodeset1_xysize = {

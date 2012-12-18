@@ -1,10 +1,10 @@
 import sys
 import math
 
-from PyGrace.graph import Graph
-from PyGrace.dataset import DataSet
-from PyGrace.drawing_objects import DrawBox
-from PyGrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
+from pygrace.templates.graph import Graph
+from pygrace.templates.dataset import DataSet
+from pygrace.templates.drawing_objects import DrawBox
+from pygrace.templates.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
 
 class SolidRectangle(DataSet):
     """A dataset that shows up as a solid rectangle.

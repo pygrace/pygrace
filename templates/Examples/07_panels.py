@@ -1,10 +1,6 @@
-import sys
-sys.path.append('../../')
-sys.path.append('../')
-
-from PyGrace.Extensions.panel import Panel, MultiPanelGrace
-from PyGrace.Styles.el import ElCircleDataSet
-from PyGrace.Styles.journals import NaturePanelLabel
+from pygrace.templates.Extensions.panel import Panel, MultiPanelGrace
+from pygrace.templates.Styles.el import ElCircleDataSet
+from pygrace.templates.Styles.journals import NaturePanelLabel
 
 import example_tools
 dataList = example_tools.panels()

@@ -1,10 +1,6 @@
-import sys
-sys.path.append('../../')
-sys.path.append('../')
-
-from PyGrace.colors import RandomColorScheme, MarkovChainColorScheme
-from PyGrace.dataset import SYMBOLS
-from PyGrace.Extensions.panel import Panel,MultiPanelGrace
+from pygrace.templates.colors import RandomColorScheme, MarkovChainColorScheme
+from pygrace.templates.dataset import SYMBOLS
+from pygrace.templates.Extensions.panel import Panel,MultiPanelGrace
 
 # This example illustrates how to use all of the different types of
 # data sets.

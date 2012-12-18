@@ -1,8 +1,4 @@
-import sys
-sys.path.append('../../')
-sys.path.append('../')
-
-from PyGrace.grace import Grace
+from pygrace.templates.grace import Grace
 
 # make an instance of the Grace class
 grace = Grace()

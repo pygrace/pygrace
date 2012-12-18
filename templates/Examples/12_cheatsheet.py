@@ -1,9 +1,5 @@
-import sys
-sys.path.append('../../')
-sys.path.append('../')
-
-from PyGrace.grace import Grace
-from PyGrace.drawing_objects import DrawBox, DrawText, DrawLine, DrawEllipse
+from pygrace.templates.grace import Grace
+from pygrace.templates.drawing_objects import DrawBox, DrawText, DrawLine, DrawEllipse
 
 grace = Grace()
 

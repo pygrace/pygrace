@@ -1,4 +1,4 @@
-from PyGrace.drawing_objects import CompoundDrawingObject, DrawText
+from pygrace.templates.drawing_objects import CompoundDrawingObject, DrawText
 
 class DrawTable(CompoundDrawingObject):
     def __init__(self, table,
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     
     from random import normalvariate as nv
 
-    from PyGrace.grace import Grace
+    from pygrace.templates.grace import Grace
 
     grace = Grace()
 

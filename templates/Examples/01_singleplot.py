@@ -1,9 +1,5 @@
-import sys
-sys.path.append('../../')
-sys.path.append('../')
-
-from PyGrace.grace import Grace
-from PyGrace.colors import ColorBrewerScheme
+from pygrace.templates.grace import Grace
+from pygrace.templates.colors import ColorBrewerScheme
 
 # ---------------------------------- this is the part where YOU do the analysis
 # data1 and data2 are both lists of (x, y) points.

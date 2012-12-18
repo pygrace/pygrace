@@ -1,12 +1,8 @@
-import sys
-sys.path.append('../../')
-sys.path.append('../')
-
-from PyGrace.grace import Grace
-from PyGrace.colors import ColorBrewerScheme
-from PyGrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
-from PyGrace.drawing_objects import DrawText
-from PyGrace.Styles.el import ElSquareGraph, ElCircleDataSet
+from pygrace.templates.grace import Grace
+from pygrace.templates.colors import ColorBrewerScheme
+from pygrace.templates.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
+from pygrace.templates.drawing_objects import DrawText
+from pygrace.templates.Styles.el import ElSquareGraph, ElCircleDataSet
 
 import example_tools
 data = example_tools.logautoscale()

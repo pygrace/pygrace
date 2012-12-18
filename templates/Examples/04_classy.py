@@ -1,9 +1,5 @@
-import sys
-sys.path.append('../../')
-sys.path.append('../')
-
-from PyGrace.grace import Grace
-from PyGrace.Styles.el import *
+from pygrace.templates.grace import Grace
+from pygrace.templates.Styles.el import *
 
 # the purpose of this example is to illustrate how to use different
 # grace styles rather than manipulating the standard grace styles all

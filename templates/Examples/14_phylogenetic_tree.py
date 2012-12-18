@@ -1,11 +1,7 @@
-import sys
-sys.path.append('../../')
-sys.path.append('../')
-
-from PyGrace.grace import Grace
-from PyGrace.colors import ColorBrewerScheme
-from PyGrace.dataset import SYMBOLS, LINESTYLES
-from PyGrace.Extensions.tree import Tree
+from pygrace.templates.grace import Grace
+from pygrace.templates.colors import ColorBrewerScheme
+from pygrace.templates.dataset import SYMBOLS, LINESTYLES
+from pygrace.templates.Extensions.tree import Tree
 
 # ---------------------------------- this is the part where YOU do the analysis
 # data is a string of a newick tree
