@@ -11,7 +11,7 @@
 # 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-from pygrace import grace
+from pygrace import session
 from numpy import *
 
 import unittest
@@ -21,7 +21,7 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
     def setUp(self):
         '''grace: instantiate a grace session'''
         time.sleep(1)
-        self.session = grace()
+        self.session = session()
         self.int = 1
         self.list = [1,2]
         self.array = array(self.list)

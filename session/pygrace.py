@@ -54,8 +54,8 @@ following paper in your publication:
 
 __author__='Mike McKerns'
 __doc__ = '''Instructions for pygrace:
-Import the grace class          >>> from pygrace import grace
-Instantiate the grace class     >>> pg = grace()
+Import the session class        >>> from pygrace import session
+Instantiate the session class   >>> pg = session()
 Get help                        >>> pg.doc()
 '''
 
@@ -72,7 +72,7 @@ except ImportError:
     hasnumeric = False
 
 
-class grace:   #Nathan Gray's gracePlot with interactive prompt added
+class session:   #Nathan Gray's gracePlot with interactive prompt added
     '''Python-grace bindings
 Methods:
   prompt() --> start interactive session
@@ -331,7 +331,7 @@ if __name__ == "__main__":
     y = []
     for i in x:
         y.append(i*i)
-    g = grace()
+    g = session()
     g.plot(x,y)
     g.put('x',x)
     g.put('y',y)
