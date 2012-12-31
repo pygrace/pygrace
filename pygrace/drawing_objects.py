@@ -26,7 +26,7 @@ class DrawingObject(GraceObject):
         # should not be imported everything else has been (to avoid a cycle
         # in the dependency graph)
         import graph
-        import grace
+        import canvas
 
         # if the drawing object is added by a Graph, then record the index of
         # the graph.  Otherwise the parent of the drawing object is the grace.

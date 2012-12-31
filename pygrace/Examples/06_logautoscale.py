@@ -1,8 +1,8 @@
-from pygrace.templates.grace import Grace
-from pygrace.templates.colors import ColorBrewerScheme
-from pygrace.templates.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
-from pygrace.templates.drawing_objects import DrawText
-from pygrace.templates.Styles.el import ElSquareGraph, ElCircleDataSet
+from pygrace import PyGrace as Grace
+from pygrace.colors import ColorBrewerScheme
+from pygrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
+from pygrace.drawing_objects import DrawText
+from pygrace.Styles.el import ElSquareGraph, ElCircleDataSet
 
 import example_tools
 data = example_tools.logautoscale()

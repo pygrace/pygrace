@@ -1,9 +1,9 @@
-from pygrace.templates.grace import Grace
-from pygrace.templates.graph import Graph
-from pygrace.templates.drawing_objects import DrawText, DrawLine
+from pygrace import PyGrace as Grace
+from pygrace.graph import Graph
+from pygrace.drawing_objects import DrawText, DrawLine
 
-from pygrace.templates.Extensions.distribution import CDFGraph, PDFGraph
-from pygrace.templates.Extensions.latex_string import LatexString, CONVERT
+from pygrace.Extensions.distribution import CDFGraph, PDFGraph
+from pygrace.Extensions.latex_string import LatexString, CONVERT
 
 # this is the step where YOU do the analysis
 import example_tools

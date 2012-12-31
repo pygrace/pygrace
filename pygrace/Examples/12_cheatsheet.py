@@ -1,5 +1,5 @@
-from pygrace.templates.grace import Grace
-from pygrace.templates.drawing_objects import DrawBox, DrawText, DrawLine, DrawEllipse
+from pygrace import PyGrace as Grace
+from pygrace.drawing_objects import DrawBox, DrawText, DrawLine, DrawEllipse
 
 grace = Grace()
 

@@ -1,10 +1,10 @@
-from pygrace.templates.grace import Grace
-from pygrace.templates.graph import Graph, INDEX_ORIGIN, Legend
-from pygrace.templates.dataset import DataSet
-from pygrace.templates.axis import Tick, TickLabel, Axis, AxisLabel, \
+from pygrace import PyGrace as Grace
+from pygrace.graph import Graph, INDEX_ORIGIN, Legend
+from pygrace.dataset import DataSet
+from pygrace.axis import Tick, TickLabel, Axis, AxisLabel, \
      LINEAR_SCALE, LOGARITHMIC_SCALE
-from pygrace.templates.Extensions.colorbar import ColorBar
-from pygrace.templates.Extensions.panel import PanelLabel
+from pygrace.Extensions.colorbar import ColorBar
+from pygrace.Extensions.panel import PanelLabel
 
 #------------------------------------------------------------------------------
 # The 'El' style of data sets

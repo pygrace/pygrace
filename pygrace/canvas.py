@@ -7,7 +7,7 @@ from drawing_objects import DrawingObject
 from colors import DefaultColorScheme
 from fonts import default as default_fonts
 
-HEADER_COMMENT = '# Amaral Group python interface for xmgrace. OH YEAH!'
+HEADER_COMMENT = '# written with pygrace: python interface for xmgrace'
 INDEX_ORIGIN = 0  # zero or one (one is for losers)
 
 class Grace(GraceObject):
@@ -52,6 +52,10 @@ class Grace(GraceObject):
             self._check_membership(key, value, ('on', 'off'))
             
         GraceObject.__setattr__(self, key, value)
+
+    def interactive(self):
+        from pygrace import Session
+        return Session()
         
     def set_portrait(self):
         self.width = 612

@@ -1,4 +1,4 @@
-from pygrace.templates.grace import Grace
+from pygrace import PyGrace as Grace
 
 class MultiGrace(Grace):
     def __init__(self,rows=None,cols=None,hgap=0.1,vgap=0.1,

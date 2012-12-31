@@ -1,4 +1,4 @@
-from pygrace.templates.grace import Grace
+from pygrace import PyGrace as Grace
 
 # make an instance of the Grace class
 grace = Grace()

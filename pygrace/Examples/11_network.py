@@ -1,7 +1,7 @@
-from pygrace.templates.grace import Grace
-from pygrace.templates.graph import Graph
-from pygrace.templates.dataset import DataSet
-from pygrace.templates.Extensions.network import Network
+from pygrace import PyGrace as Grace
+from pygrace.graph import Graph
+from pygrace.dataset import DataSet
+from pygrace.Extensions.network import Network
 
 # Define a couple of node sets, a xysize set and a regular xy set
 nodeset1_xysize = {

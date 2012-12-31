@@ -1,4 +1,4 @@
-from pygrace.templates.Extensions.panel import Panel, PanelLabel, MultiPanelGrace
+from pygrace.Extensions.panel import Panel, PanelLabel, MultiPanelGrace
 
 #------------------------------------------------------------------------------
 # Nature style
