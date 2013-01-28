@@ -1,8 +1,8 @@
 import sys
 
-from pygrace import PyGrace as Grace
-from pygrace.graph import Graph
-from pygrace.dataset import DataSet
+from PyGrace.grace import Grace
+from PyGrace.graph import Graph
+from PyGrace.dataset import DataSet
 
 class Tree(Graph):
     """A graph to display trees (such as phylogenetic trees).
