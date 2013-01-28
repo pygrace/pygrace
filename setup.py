@@ -33,7 +33,6 @@ setup(name='pygrace',
                   },
      package_data={'pygrace.Styles.ColorBrewer':['*.dat'],
                    },
-     scripts=['pygrace/Scripts/pg_cdf'],
 """
 
 # add dependencies
