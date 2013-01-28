@@ -5,9 +5,9 @@
 from pygrace import __doc__ as gracedoc
 __doc__ = gracedoc
 
-def session():
-    '''get usage: gr = session(); gr.doc()'''
-    from pygrace import session as graceFactory
+def grace():
+    '''get usage: gr = grace(); gr.doc()'''
+    from pygrace import grace as graceFactory
     return graceFactory()
 
 def copyright():

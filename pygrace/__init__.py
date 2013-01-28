@@ -7,7 +7,7 @@ __all__ = [
 # backward compatibility for pygrace.session
 def grace():
     from pygrace import session as interactive
-    return interactive.session()
+    return interactive.grace()
 
 import session
 import template
