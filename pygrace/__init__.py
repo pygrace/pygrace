@@ -1,32 +1,15 @@
 __all__ = [
-    'axis',
-    'colors',
-    'dataset',
-    'drawing_objects',
-    'fonts',
-    'graph',
-    'PyGrace',
-    'Session',
+    'grace',
+    'session',
+    'template',
     ]
 
-import axis
-import colors
-import dataset
-import drawing_objects
-import fonts
-import graph
-
-def PyGrace():
-    from pygrace import canvas
-    return canvas.Grace()
-
-def Session():
+# backward compatibility for pygrace.session
+def grace():
     from pygrace import session as interactive
     return interactive.session()
 
-
-# backward compatibility
-grace = Session
-
+import session
+import template
 
 # EOF
