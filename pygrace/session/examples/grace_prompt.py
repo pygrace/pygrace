@@ -20,8 +20,8 @@ print 'y: %s' % y
 raw_input('Please press return to continue...\n')
 
 ##### grace #####
-from pygrace import session
-pg = session()
+from pygrace import Session
+pg = Session()
 #pg.doc()
 pg.plot(x,y)
 print '''EXAMPLE SCRIPT:

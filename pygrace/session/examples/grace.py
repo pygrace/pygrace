@@ -17,10 +17,10 @@ ym = y[NewAxis,:]
 m = (sin(xm) + 0.1*xm) - ym**2
 
 print '''instantiate the grace session class'''
-print '''>>> from pygrace import session
->>> gr = session()'''
-from pygrace import session
-gr = session()
+print '''>>> from pygrace import Session
+>>> gr = Session()'''
+from pygrace import Session
+gr = Session()
 
 #get help
 #>>> gr.doc()
