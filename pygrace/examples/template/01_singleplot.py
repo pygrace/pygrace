@@ -1,5 +1,5 @@
-from pygrace import PyGrace as Grace
-from pygrace.colors import ColorBrewerScheme
+from PyGrace.grace import Grace
+from PyGrace.colors import ColorBrewerScheme
 
 # ---------------------------------- this is the part where YOU do the analysis
 # data1 and data2 are both lists of (x, y) points.

@@ -13,18 +13,18 @@
 # removing all of the drawing objects that appear in the world
 # coordinates and are out of bounds.
 #
-# It also demonstrates how to use a pygrace.Style to format figures in
+# It also demonstrates how to use a PyGrace.Style to format figures in
 # a customized format
 
 import random
 
-from pygrace import PyGrace as Grace
-from pygrace.Extensions.colorbar import SolidRectangle, ColorBar
-from pygrace.colors import ColorBrewerScheme
-from pygrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
-from pygrace.drawing_objects import DrawBox
+from PyGrace.grace import Grace
+from PyGrace.Extensions.colorbar import SolidRectangle, ColorBar
+from PyGrace.colors import ColorBrewerScheme
+from PyGrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
+from PyGrace.drawing_objects import DrawBox
 
-from pygrace.Styles.el import ElGraph, ElLogColorBar
+from PyGrace.Styles.el import ElGraph, ElLogColorBar
 
 
 #------------------------------------------------------------------------------

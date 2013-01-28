@@ -1,6 +1,6 @@
-from pygrace import PyGrace as Grace
-from pygrace.colors import ColorBrewerScheme
-from pygrace.drawing_objects import DrawText
+from PyGrace.grace import Grace
+from PyGrace.colors import ColorBrewerScheme
+from PyGrace.drawing_objects import DrawText
 
 # ---------------------------------- this is the part where YOU do the analysis
 # all datasets are lists of (x, y) points

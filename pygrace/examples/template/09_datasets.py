@@ -1,6 +1,7 @@
-from pygrace.colors import RandomColorScheme, MarkovChainColorScheme
-from pygrace.dataset import SYMBOLS
-from pygrace.Extensions.panel import Panel,MultiPanelGrace
+from PyGrace.grace import Grace
+from PyGrace.colors import RandomColorScheme, MarkovChainColorScheme
+from PyGrace.dataset import SYMBOLS
+from PyGrace.Extensions.panel import Panel,MultiPanelGrace
 
 # This example illustrates how to use all of the different types of
 # data sets.

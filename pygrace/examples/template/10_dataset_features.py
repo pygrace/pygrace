@@ -1,6 +1,6 @@
-from pygrace import PyGrace as Grace
-from pygrace.colors import ColorBrewerScheme
-from pygrace.dataset import SYMBOLS, LINESTYLES
+from PyGrace.grace import Grace
+from PyGrace.colors import ColorBrewerScheme
+from PyGrace.dataset import SYMBOLS, LINESTYLES
 
 # ---------------------------------- this is the part where YOU do the analysis
 # data0, data1, and data2 are all lists of (x, y) points.
