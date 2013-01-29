@@ -54,8 +54,8 @@ class Grace(GraceObject):
         GraceObject.__setattr__(self, key, value)
 
     def interactive(self):
-        from pygrace import Session
-        return Session()
+        from pygrace import session
+        return session.grace()
         
     def set_portrait(self):
         self.width = 612
