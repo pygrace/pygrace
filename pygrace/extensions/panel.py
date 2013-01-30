@@ -1,8 +1,8 @@
-from PyGrace.graph import Graph
-from PyGrace.drawing_objects import DrawText, DRAWTEXT_JUSTIFICATIONS
-from PyGrace.Extensions.multi_grace import MultiGrace
-from PyGrace.Extensions.network import Network
-from PyGrace.Extensions.tree import Tree
+from pygrace.ploth import Plot
+from pygrace.drawing_objects import DrawText, DRAWTEXT_JUSTIFICATIONS
+from pygrace.Extensions.multi_plot import MultiPlot
+from pygrace.Extensions.network import Network
+from pygrace.Extensions.tree import Tree
 
 class PanelLabel(DrawText):
     """This class is useful for adding panel labels to figures.  Note that
@@ -202,12 +202,12 @@ class Panel(Graph):
         # specify the default justification for the label
         self.panel_label = self.add_drawing_object(PanelLabel,panel_index)
 
-class MultiPanelGrace(MultiGrace):
-    """Grace object to hold panel schemes.
+class MultiPanelPlot(MultiPlot):
+    """Plot object to hold panel schemes.
     """
 
     def __init__(self,label_scheme="LATIN",*args,**kwargs):
-        MultiGrace.__init__(self,*args,**kwargs)
+        MultiPlot.__init__(self,*args,**kwargs)
 
         # dummy variables
         latin_alphabet = "abcdefghijklmnopqrstuvwxyz"
@@ -225,7 +225,7 @@ class MultiPanelGrace(MultiGrace):
         self.set_label_scheme(label_scheme)
 
     def add_label_scheme(self,label_scheme,labels):
-        """Add a label scheme to this Grace.
+        """Add a label scheme to this Plot.
         """
 
         if (self.label_schemes.has_key(label_scheme) and 
@@ -267,10 +267,10 @@ Only labels schemes %s are possible.
                                                   dx=dx,dy=dy,just=just)
 
     def add_graph(self, cls=Panel, *args, **kwargs):
-        """Overwrite the add_graph of Grace base so that the default
+        """Overwrite the add_graph of Plot base so that the default
         argument is a panel
         """
-        graph = MultiGrace.add_graph(self,cls,*args,**kwargs)
+        graph = MultiPlot.add_graph(self,cls,*args,**kwargs)
         if isinstance(graph,Panel):
             graph.panel_label.configure(label_scheme=self.label_scheme)
         return graph
@@ -292,3 +292,6 @@ class TreePanel(Panel,Tree):
         drawing_objects = self.drawing_objects
         Tree.__init__(self,*args,**kwargs)
         self.drawing_objects.extend(drawing_objects)
+
+# preserving backward compatibility with PyGrace
+MultiPanelGrace = MultiPanelPlot
