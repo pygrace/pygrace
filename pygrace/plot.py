@@ -381,6 +381,3 @@ class Timestamp(GraceObject):
 @timestamp font %(font)s
 @timestamp char size %(char_size)s
 @timestamp def "%(time)s" """ % self
-
-# preserving backward compatibility with PyGrace
-Grace = Plot
