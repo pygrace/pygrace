@@ -1,7 +1,12 @@
 import random
 
 from base import BaseSet
-from PyGrace.Styles.ColorBrewer import colorbrewer
+
+try:
+    from styles.colorbrewer import colorbrewer
+except ImportError:
+    # preserving backward compatibility with PyGrace
+    from Styles.ColorBrewer import colorbrewer
 
 class Color(object):
     """Object that stores a mapping between an index an a name for a color,
