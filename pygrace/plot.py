@@ -10,7 +10,7 @@ from fonts import default as default_fonts
 HEADER_COMMENT = '# written with pygrace: python interface for xmgrace'
 INDEX_ORIGIN = 0  # zero or one (one is for losers)
 
-class Grace(GraceObject):
+class Plot(GraceObject):
     def __init__(self,
                  width=792,
                  height=612,
@@ -39,7 +39,7 @@ class Grace(GraceObject):
 
     def __setattr__(self, key, value):
 
-        # check Grace specific attributes
+        # check Plot specific attributes
         if key == 'width' or key == 'height':
             self._check_type(int, key, value)
             self._check_range(key, value, 0, None)
@@ -53,9 +53,11 @@ class Grace(GraceObject):
             
         GraceObject.__setattr__(self, key, value)
 
+    """
     def interactive(self):
         from pygrace import session
         return session.grace()
+    """
         
     def set_portrait(self):
         self.width = 612
@@ -68,7 +70,7 @@ class Grace(GraceObject):
         return 792.0 / 612.0, 1.0
 
     def get_canvas_dimensions(self):
-        """Get dimensions of Grace canvas
+        """Get dimensions of Plot canvas
         """
         # maximum canvas ratios in viewport units
         if self.height>self.width:
@@ -339,7 +341,7 @@ can not be used simultaneously.
             graph.autoticky()
 
     def autoscale_same(self,padx=0,pady=0, graphs=(), exclude_graphs=()):
-        """Autoscale all graphs in a this MultiGrace to have the same x,y
+        """Autoscale all graphs in a this MultiPlot to have the same x,y
         world coordinates.
         """
         self.autoscalex_same(pad=padx,graphs=graphs,
@@ -348,7 +350,7 @@ can not be used simultaneously.
                              exclude_graphs=exclude_graphs)
 
     def set_world_same(self,xmin,ymin,xmax,ymax):
-        """Rescale all graphs in a MultiGrace to have the same x,y world
+        """Rescale all graphs in a MultiPlot to have the same x,y world
         coordinates.
         """
         for graph in self.graphs:
@@ -380,3 +382,5 @@ class Timestamp(GraceObject):
 @timestamp char size %(char_size)s
 @timestamp def "%(time)s" """ % self
 
+# preserving backward compatibility with PyGrace
+Grace = Plot
