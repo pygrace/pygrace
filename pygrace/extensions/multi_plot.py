@@ -521,5 +521,3 @@ set_row_xaxislabel.
         self.align_axislabelx(xplace_tup)
         self.align_axislabely(yplace_tup)
 
-# preserving backward compatibility with PyGrace
-MultiGrace = MultiPlot
