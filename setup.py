@@ -44,7 +44,7 @@ setup(name='pygrace',
                    'PyGrace.Styles':'pygrace/styles',
                    'PyGrace.Styles.ColorBrewer':'pygrace/styles/colorbrewer',
                    },
-      package_data={'pygrace.template.styles.colorbrewer':['*.dat','*.pdf'],
+      package_data={'pygrace.styles.colorbrewer':['*.dat','*.pdf'],
                     'PyGrace.Styles.ColorBrewer':['*.dat','*.pdf'],
                     },
 """

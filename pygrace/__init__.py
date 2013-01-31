@@ -29,17 +29,38 @@
 #-----------------------------------------------------------------------------
 
 __all__ = [
-    'grace',
-    'session',
-    'template',
-    ]
+    'axis',
+    'colors',
+    'dataset',
+    'drawing_objects',
+	'fonts',
+	'grace',
+	'graph',
+	]
+ 
+import axis
+import colors
+import dataset
+import drawing_objects
+import fonts
+import graph
+ 
+# dealing with backward compatibility
+if __name__ == 'PyGrace':
+       # backward compatibility for PyGrace
+       from PyGrace import grace
+       del plot # I cannot for the life of me figure out where this is getting imported
+ 
+elif __name__ == 'pygrace':
+       __all__.append('plot')
+       __all__.append('session')
 
-import session
-import template
+       import plot
+       import session
 
-# backward compatibility for pygrace.session
-def grace():
-    from pygrace import session as interactive
-    return interactive.grace()
+       # backward compatibility for pygrace
+       def grace():
+               from pygrace import session as interactive
+               return interactive.grace()
 
 # EOF
