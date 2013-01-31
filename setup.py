@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 # 
-# Authors:
-#  Michael McKerns    (mmckerns@caltech.edu)
+# Maintainer:
 #  Daniel B. Stouffer (daniel.stouffer@canterbury.ac.nz)
+#
+# Authors:
+#  Daniel B. Stouffer (daniel.stouffer@canterbury.ac.nz)
+#  Michael McKerns    (mmckerns@caltech.edu)
 #  Dean Malmgren
 #  Mike Stringer
 
@@ -18,8 +21,8 @@ setup_code = """
 setup(name='pygrace',
       version='0.5',
       description='Python bindings and wrapper for grace',
-      maintainer = 'Daniel B. Stouffer',
-      maintainer_email = 'daniel.stouffer@canterbury.ac.nz',
+      author = 'Daniel B. Stouffer',
+      author_email = 'daniel.stouffer@canterbury.ac.nz',
       url = 'http://pygrace.github.com/',
       py_modules=['pygrace.axis',
                   'pygrace.base',
