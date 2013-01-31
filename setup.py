@@ -21,22 +21,28 @@ setup(name='pygrace',
       maintainer = 'Daniel B. Stouffer',
       maintainer_email = 'daniel.stouffer@canterbury.ac.nz',
       url = 'http://pygrace.github.com/',
-      packages=['pygrace',
-                'pygrace.session',
-                'pygrace.template',
-                'pygrace.template.extensions',
-                'pygrace.template.styles',
-                'pygrace.template.styles.colorbrewer',
+      py_modules=['pygrace.axis',
+                  'pygrace.base',
+                  'pygrace.colors',
+                  'pygrace.dataset',
+                  'pygrace.drawing_objects',
+                  'pygrace.fonts',
+                  'pygrace.graph',
+                  'pygrace.plot',
+                  ],
+      packages=['pygrace.session',
+                'pygrace.extensions',
+                'pygrace.styles',
+                'pygrace.styles.colorbrewer',
                 'PyGrace',
                 'PyGrace.Extensions',
                 'PyGrace.Styles',
                 'PyGrace.Styles.ColorBrewer',
                 ],
-      package_dir={'pygrace':'pygrace',
-                   'PyGrace':'pygrace/template',
-                   'PyGrace.Extensions':'pygrace/template/extensions',
-                   'PyGrace.Styles':'pygrace/template/styles',
-                   'PyGrace.Styles.ColorBrewer':'pygrace/template/styles/colorbrewer',
+      package_dir={'PyGrace':'pygrace',
+                   'PyGrace.Extensions':'pygrace/extensions',
+                   'PyGrace.Styles':'pygrace/styles',
+                   'PyGrace.Styles.ColorBrewer':'pygrace/styles/colorbrewer',
                    },
       package_data={'pygrace.template.styles.colorbrewer':['*.dat','*.pdf'],
                     'PyGrace.Styles.ColorBrewer':['*.dat','*.pdf'],
@@ -60,9 +66,11 @@ exec setup_code
 # if dependencies are missing, print a warning
 try:
     import numpy
-    from os import system
-    xmgrace_missing = system("xmgrace -v") #grep "Grace-" | sed -e "s/Grace-//"
-    if xmgrace_missing: raise ImportError
+    from os import devnull
+    from subprocess import call
+    xmgrace_missing = call("xmgrace -v", stdout=open(devnull, 'wb'), shell=True)
+    if xmgrace_missing:
+      raise ImportError
 except ImportError:
     print "\n***********************************************************"
     print "WARNING: One of the following dependencies is unresolved:"
