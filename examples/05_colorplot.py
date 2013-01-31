@@ -18,13 +18,13 @@
 
 import random
 
-from PyGrace.grace import Grace
-from PyGrace.Extensions.colorbar import SolidRectangle, ColorBar
-from PyGrace.colors import ColorBrewerScheme
-from PyGrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
-from PyGrace.drawing_objects import DrawBox
+from pygrace.plot import Plot
+from pygrace.colors import ColorBrewerScheme
+from pygrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
+from pygrace.drawing_objects import DrawBox
 
-from PyGrace.Styles.el import ElGraph, ElLogColorBar
+from pygrace.extensions.colorbar import SolidRectangle, ColorBar
+from pygrace.styles.el import ElGraph, ElLogColorBar
 
 
 #------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ colors = ColorBrewerScheme("YlOrBr",n=253) # this is the maximum number of color
 # you can change the opacity percent of a colorscheme if you want:
 # colors.change_opacity(20, exclude_black=False)
 
-grace = Grace(colors=colors)
+grace = Plot(colors=colors)
 
 # add a colorbar
 colorbar = grace.add_graph(ElLogColorBar,domain=(minpdf,maxpdf),

@@ -1,8 +1,9 @@
-from PyGrace.grace import Grace
-from PyGrace.colors import ColorBrewerScheme
-from PyGrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
-from PyGrace.drawing_objects import DrawText
-from PyGrace.Styles.el import ElSquareGraph, ElCircleDataSet
+from pygrace.plot import Plot
+from pygrace.colors import ColorBrewerScheme
+from pygrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
+from pygrace.drawing_objects import DrawText
+
+from pygrace.styles.el import ElSquareGraph, ElCircleDataSet
 
 import example_tools
 data = example_tools.logautoscale()
@@ -16,7 +17,7 @@ data = example_tools.logautoscale()
 #------------------------------------------------------------------------------
 # instantiate a sweet figgy fig
 colors = ColorBrewerScheme("Set1")
-grace = Grace(colors=colors)
+grace = Plot(colors=colors)
 
 # to add some data to graph, just add the DrawBox to the 'world'
 # coordinates.  this ensures that all of the autoscaling will work

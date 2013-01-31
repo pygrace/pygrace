@@ -1,7 +1,7 @@
-from PyGrace.grace import Grace
+from pygrace.plot import Plot
 
 # make an instance of the Grace class
-grace = Grace()
+grace = Plot()
 
 # add a Graph as a "child" of the grace instance
 graph = grace.add_graph()

@@ -1,7 +1,7 @@
-from PyGrace.grace import Grace
-from PyGrace.Extensions.panel import Panel, MultiPanelGrace
-from PyGrace.Styles.el import ElCircleDataSet
-from PyGrace.Styles.journals import NaturePanelLabel
+from pygrace.plot import Plot
+from pygrace.extensions.panel import Panel, MultiPanelGrace
+from pygrace.styles.el import ElCircleDataSet
+from pygrace.styles.journals import NaturePanelLabel
 
 import example_tools
 dataList = example_tools.panels()

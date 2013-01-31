@@ -1,7 +1,8 @@
-from PyGrace.grace import Grace
-from PyGrace.colors import RandomColorScheme, MarkovChainColorScheme
-from PyGrace.dataset import SYMBOLS
-from PyGrace.Extensions.panel import Panel,MultiPanelGrace
+from pygrace.plot import Plot
+from pygrace.colors import RandomColorScheme, MarkovChainColorScheme
+from pygrace.dataset import SYMBOLS
+
+from pygrace.extensions.panel import Panel,MultiPanelPlot
 
 # This example illustrates how to use all of the different types of
 # data sets.
@@ -22,7 +23,7 @@ from random import random, randint
 seed = randint(0,10000)
 colors = RandomColorScheme(seed,len(data_types))
 # colors = MarkovChainColorScheme(seed,len(data_types))
-grace = MultiPanelGrace(colors=colors)
+grace = MultiPanelPlot(colors=colors)
 
 # specify the label scheme
 grace.add_label_scheme("my_scheme",data_types)

@@ -1,7 +1,7 @@
-from PyGrace.grace import Grace
-from PyGrace.drawing_objects import DrawBox, DrawText, DrawLine, DrawEllipse
+from pygrace.plot import Plot
+from pygrace.drawing_objects import DrawBox, DrawText, DrawLine, DrawEllipse
 
-grace = Grace()
+grace = Plot()
 
 graph = grace.add_graph()
 
@@ -13,4 +13,3 @@ graph.add_drawing_object(DrawLine)
 graph.add_drawing_object(DrawEllipse)
 
 grace.write_cheatsheet('cheatsheet.tex')
-

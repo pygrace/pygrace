@@ -1,13 +1,13 @@
-from PyGrace.grace import Grace
-from PyGrace.colors import ColorBrewerScheme
-from PyGrace.dataset import SYMBOLS, LINESTYLES
+from pygrace.plot import Plot
+from pygrace.colors import ColorBrewerScheme
+from pygrace.dataset import SYMBOLS, LINESTYLES
 
 # ---------------------------------- this is the part where YOU do the analysis
 # data0, data1, and data2 are all lists of (x, y) points.
 import example_tools
 data0, data1, data2 = example_tools.dataset_features()
 
-grace = Grace(colors=ColorBrewerScheme('Set1'))
+grace = Plot(colors=ColorBrewerScheme('Set1'))
 
 graph = grace.add_graph()
 graph.xaxis.label.text = 'x'

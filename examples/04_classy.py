@@ -1,12 +1,12 @@
-from PyGrace.grace import Grace
-from PyGrace.Styles.el import *
+from pygrace.plot import Plot
+from pygrace.styles.el import *
 
 # the purpose of this example is to illustrate how to use different
 # grace styles rather than manipulating the standard grace styles all
 # the time
 
 # instantiate a grace object
-grace = Grace()
+grace = Plot()
 
 # add a graph
 graph = grace.add_graph(ElEmptySquareGraph)

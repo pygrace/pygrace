@@ -1,9 +1,9 @@
-from PyGrace.grace import Grace
-from PyGrace.graph import Graph
-from PyGrace.drawing_objects import DrawText, DrawLine
+from pygrace.plot import Plot
+from pygrace.graph import Graph
+from pygrace.drawing_objects import DrawText, DrawLine
 
-from PyGrace.Extensions.distribution import CDFGraph, PDFGraph
-from PyGrace.Extensions.latex_string import LatexString, CONVERT
+from pygrace.extensions.distribution import CDFGraph, PDFGraph
+from pygrace.extensions.latex_string import LatexString, CONVERT
 
 # this is the step where YOU do the analysis
 import example_tools
@@ -28,7 +28,7 @@ class Graph2(PDFGraph):
             LatexString(r'\6X\4 = $\langle$ \xb\4\sj\N $\rangle$')
 
 # make the plot
-grace = Grace()
+grace = Plot()
 
 grace.add_drawing_object(DrawText, text='Currently available LaTeX characters',
                          x=0.08, y=0.92, char_size=0.8, font=6, just=4)
