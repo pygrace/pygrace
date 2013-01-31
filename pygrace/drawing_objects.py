@@ -26,7 +26,7 @@ class DrawingObject(GraceObject):
         # should not be imported everything else has been (to avoid a cycle
         # in the dependency graph)
         import graph
-        import grace
+        import plot
 
         # if the drawing object is added by a Graph, then record the index of
         # the graph.  Otherwise the parent of the drawing object is the grace.
@@ -34,7 +34,7 @@ class DrawingObject(GraceObject):
         # is used with a DrawingObject subclass.  In this case, since there
         # is no instance to associate with a graph (or not), then the drawing
         # object is linked to the grace (not any particular graph)
-        if isinstance(self.parent, grace.Grace):
+        if isinstance(self.parent, plot.Plot):
             self._linked_graph = None
         elif isinstance(self.parent, graph.Graph):
             self._linked_graph = self.parent.index
