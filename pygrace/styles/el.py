@@ -2,8 +2,8 @@ from pygrace.graph import Graph, INDEX_ORIGIN, Legend
 from pygrace.dataset import DataSet
 from pygrace.axis import Tick, TickLabel, Axis, AxisLabel, \
      LINEAR_SCALE, LOGARITHMIC_SCALE
-from pygrace.Extensions.colorbar import ColorBar
-from pygrace.Extensions.panel import PanelLabel
+from pygrace.extensions.colorbar import ColorBar
+from pygrace.extensions.panel import PanelLabel
 
 #------------------------------------------------------------------------------
 # The 'El' style of data sets
