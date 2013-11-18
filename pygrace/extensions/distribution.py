@@ -1,5 +1,5 @@
-from pygrace.graph import Graph
-from pygrace.extensions.latex_string import LatexString
+from ..graph import Graph
+from ..extensions.latex_string import LatexString
 
 class DistributionGraph(Graph):
     def __init__(self, data, *args, **kwargs):

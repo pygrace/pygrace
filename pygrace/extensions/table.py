@@ -1,4 +1,4 @@
-from pygrace.drawing_objects import CompoundDrawingObject, DrawText
+from ..drawing_objects import CompoundDrawingObject, DrawText
 
 class DrawTable(CompoundDrawingObject):
     def __init__(self, table,
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     
     from random import normalvariate as nv
 
-    from pygrace.plot import Plot
+    from ..plot import Plot
 
     grace = Plot()
 

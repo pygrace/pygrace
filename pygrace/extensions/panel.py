@@ -1,9 +1,9 @@
-from pygrace.graph import Graph
-from pygrace.plot import Plot
-from pygrace.drawing_objects import DrawText, DRAWTEXT_JUSTIFICATIONS
-from pygrace.extensions.multi_plot import MultiPlot
-from pygrace.extensions.network import Network
-from pygrace.extensions.tree import Tree
+from ..graph import Graph
+from ..plot import Plot
+from ..drawing_objects import DrawText, DRAWTEXT_JUSTIFICATIONS
+from multi_plot import MultiPlot
+from network import Network
+from tree import Tree
 
 class PanelLabel(DrawText):
     """This class is useful for adding panel labels to figures.  Note that

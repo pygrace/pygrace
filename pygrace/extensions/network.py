@@ -1,8 +1,8 @@
 import sys
 
-from pygrace.graph import Graph
-from pygrace.dataset import DataSet
-from pygrace.drawing_objects import DrawLine, DrawText
+from ..graph import Graph
+from ..dataset import DataSet
+from ..drawing_objects import DrawLine, DrawText
 from math import sqrt, sin, cos
 
 class NodeSet(DataSet):

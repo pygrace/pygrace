@@ -1,4 +1,4 @@
-from pygrace.plot import Plot
+from ..plot import Plot
 
 class MultiPlot(Plot):
     def __init__(self,rows=None,cols=None,hgap=0.1,vgap=0.1,
