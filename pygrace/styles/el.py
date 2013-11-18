@@ -1,9 +1,12 @@
-from pygrace.graph import Graph, INDEX_ORIGIN, Legend
-from pygrace.dataset import DataSet
-from pygrace.axis import Tick, TickLabel, Axis, AxisLabel, \
-     LINEAR_SCALE, LOGARITHMIC_SCALE
-from pygrace.extensions.colorbar import ColorBar
-from pygrace.extensions.panel import PanelLabel
+from ..graph import Graph, INDEX_ORIGIN, Legend
+from ..dataset import DataSet
+from ..axis import Tick, TickLabel, Axis, AxisLabel, LINEAR_SCALE, LOGARITHMIC_SCALE
+try:
+    from ..extensions.colorbar import ColorBar
+    from ..extensions.panel import PanelLabel
+except ImportError: # for "legacy" pygrace
+    from ..Extensions.colorbar import ColorBar
+    from ..Extensions.panel import PanelLabel
 
 #------------------------------------------------------------------------------
 # The 'El' style of data sets

@@ -1,4 +1,7 @@
-from pygrace.extensions.panel import Panel, PanelLabel, MultiPanelPlot
+try:
+    from ..extensions.panel import Panel, PanelLabel, MultiPanelPlot
+except ImportError: # for "legacy" PyGrace
+    from ..Extensions.panel import Panel, PanelLabel, MultiPanelPlot
 
 #------------------------------------------------------------------------------
 # Nature style
