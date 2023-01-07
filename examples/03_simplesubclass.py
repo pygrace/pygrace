@@ -1,7 +1,7 @@
-from PyGrace.grace import Grace
-from PyGrace.graph import Graph
-from PyGrace.dataset import DataSet
-from PyGrace.colors import ColorBrewerScheme
+from pygrace.grace import Grace
+from pygrace.graph import Graph
+from pygrace.dataset import DataSet
+from pygrace.colors import ColorBrewerScheme
 
 class ScatterPoints(DataSet):
     def __init__(self, color, *args, **kwargs):
