@@ -255,7 +255,7 @@ Notes:
                 try: #if intended for grace
                     self.session._send(com)
                 except: #is unknown command
-                    raise "CommandError", com
+                    raise RuntimeError, com
         for name in outlist: #use outlist to update state variables
             if name in locals().keys():
                 exec 'self._putlocal("'+name+'",locals()["'+name+'"])'
@@ -305,7 +305,7 @@ Notes:
                         try: #if intended for grace
                             self.session._send(com)
                         except: #is unknown command
-                            print "CommandError: %s" % com
+                            print "RuntimeError: %s" % com
         for name in outlist: #use outlist to update state variables
             if name in locals().keys():
                 exec 'self._putlocal("'+name+'",locals()["'+name+'"])'

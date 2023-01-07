@@ -265,7 +265,11 @@ class GraceProcess:
                 # generated the exception.
                 pass # drop through kill code below
             else:
-                os.waitpid(self.pid, 0)
+                try:
+                    os.waitpid(self.pid, 0)
+                except OSError:
+                    # No such process; it must already be dead
+                    pass
                 self.pipe.close()
                 self.pid = None
                 return
