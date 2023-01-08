@@ -40,7 +40,7 @@ setup(name='pygrace',
                 ],
       package_data={'pygrace.styles.colorbrewer':['*.dat','*.pdf'],
                     },
-      scripts=['scripts/pg_cdf'],
+      scripts=['scripts/pygrace_cdf'],
 """
 
 # add dependencies
