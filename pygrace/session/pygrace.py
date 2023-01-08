@@ -167,8 +167,8 @@ Notes:
         return False
 
     def doc(self):
-        print self.__doc__
-        print __license__[-416:] # print copyright and reference
+        print(self.__doc__)
+        print(__license__[-416:]) # print copyright and reference
         return
 
     def restart(self):
@@ -264,9 +264,9 @@ Notes:
     def prompt(self):
         '''an interactive grace session'''
         outlist = []
-        print "grace interface:"
+        print("grace interface:")
         if self.whos: #print 'put' variables, add to outlist
-            print "vars="
+            print("vars=")
             for name,val in self.whos.items():
 #               if numerix:
                 if (type(val) is type(array([]))) or \
@@ -275,11 +275,11 @@ Notes:
                     val = val.tolist()
                     exec name+' = array('+str(val)+')'
                 else: exec name+' = '+str(val)
-                exec 'print "    ","'+name+'"'
+                exec 'print("    ","'+name+'")'
                 exec 'outlist.append("'+name+'")'
         while 1:
             com = raw_input('grace> ')
-##          print com
+##          print(com)
             if com == 'exit':
                 break
             elif com == 'exit()':
@@ -305,7 +305,7 @@ Notes:
                         try: #if intended for grace
                             self.session._send(com)
                         except: #is unknown command
-                            print "RuntimeError: %s" % com
+                            print("RuntimeError: %s" % com)
         for name in outlist: #use outlist to update state variables
             if name in locals().keys():
                 exec 'self._putlocal("'+name+'",locals()["'+name+'"])'
@@ -316,13 +316,13 @@ Notes:
 #               try:
 #                   exec pcom
 #               except:
-#                   print "PythonError: %s" % pcom
+#                   print("PythonError: %s" % pcom)
 #           elif com.startswith('*'):
 #               pcom = com[1:]
 #               try:
 #                   exec 'self.session.'+pcom
 #               except:
-#                   print "GraceError: %s" % pcom
+#                   print("GraceError: %s" % pcom)
 #           else:
 #               self.session._send(com)
 
@@ -336,5 +336,5 @@ if __name__ == "__main__":
     g.put('x',x)
     g.put('y',y)
     g.prompt()
-    print g.who()
+    print(g.who())
     g.exit()

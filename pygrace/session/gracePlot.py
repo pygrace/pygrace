@@ -79,11 +79,11 @@ class gracePlot:
         self.focus(0,0)
         
     def _send(self, cmd): 
-        #print cmd
+        #print(cmd)
         self.grace.command(cmd)
         
     def _flush(self):
-        #print 'flush()'
+        #print('flush()')
         self.grace.flush()
         
     def __del__(self):
@@ -98,7 +98,7 @@ class gracePlot:
 
     def redraw(self):
         """Refresh the plot"""
-        #print 'redraw'
+        #print('redraw')
         self.grace('redraw')
         
     def multi(self, rows, cols, offset=0.1, hgap=0.1, vgap=0.15):
@@ -131,7 +131,7 @@ class gracePlot:
         try:
             ext = devs[string.lower(format)]
         except KeyError:
-            print 'Unknown format.  Known formats are\n%s' % devs.keys()
+            print('Unknown format.  Known formats are\n%s' % devs.keys())
             return
             
         if filename[-len(ext):] != ext:
@@ -190,12 +190,12 @@ class graceGraph:
         self.gID = gID
     
     def _send(self, cmd):
-        #print cmd
-        #raise NameError, "duh"
+        #print(cmd)
+        #raise NameErrorr("duh")
         self.grace.command(cmd)
         
     def _flush(self):
-        #print 'flush()'
+        #print('flush()')
         self.grace.flush()
 
     def _send_2(self, var, X, Y):

@@ -60,4 +60,4 @@ if __name__ == '__main__':
     grace.autoformat(options.print_width)
 
     if options.out_file: grace.write_file(options.out_file)
-    else: print grace
+    else: print(grace)

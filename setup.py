@@ -66,10 +66,10 @@ try:
     if xmgrace_missing:
       raise ImportError
 except ImportError:
-    print "\n***********************************************************"
-    print "WARNING: One of the following dependencies is unresolved:"
-    print "    Numpy %s" % numpy_version
-    print "    Grace %s" % grace_version
-    print "***********************************************************\n"
+    print("\n***********************************************************")
+    print("WARNING: One of the following dependencies is unresolved:")
+    print("    Numpy %s" % numpy_version)
+    print("    Grace %s" % grace_version)
+    print("***********************************************************\n")
 
 # end of file
