@@ -1,7 +1,6 @@
 from pygrace.plot import Plot
 from pygrace.colors import ColorBrewerScheme
 from pygrace.dataset import SYMBOLS, LINESTYLES
-
 from pygrace.extensions.tree import Tree
 
 # ---------------------------------- this is the part where YOU do the analysis

@@ -1,4 +1,3 @@
-
 # This example demonstrates how to use a color plot.
 #
 # One important feature of color plots is that drawing objects in

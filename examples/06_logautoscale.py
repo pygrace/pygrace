@@ -2,7 +2,6 @@ from pygrace.plot import Plot
 from pygrace.colors import ColorBrewerScheme
 from pygrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
 from pygrace.drawing_objects import DrawText
-
 from pygrace.styles.el import ElSquareGraph, ElCircleDataSet
 
 import example_tools

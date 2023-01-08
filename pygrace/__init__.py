@@ -33,9 +33,10 @@ __all__ = [
     'colors',
     'dataset',
     'drawing_objects',
-	'fonts',
-	'grace',
-	'graph',
+    'fonts',
+    'grace',
+    'graph',
+    'parser',
 	]
  
 import axis
@@ -44,12 +45,13 @@ import dataset
 import drawing_objects
 import fonts
 import graph
+import parser
  
 # dealing with backward compatibility
 if __name__ == 'PyGrace':
        # backward compatibility for PyGrace
        from PyGrace import grace
-       del plot # I cannot for the life of me figure out where this is getting imported
+       del plot #FIXME: somehow this is getting imported
  
 elif __name__ == 'pygrace':
        __all__.append('plot')

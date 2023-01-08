@@ -1,7 +1,6 @@
 from pygrace.plot import Plot
 from pygrace.graph import Graph
 from pygrace.drawing_objects import DrawText, DrawLine
-
 from pygrace.extensions.distribution import CDFGraph, PDFGraph
 from pygrace.extensions.latex_string import LatexString, CONVERT
 

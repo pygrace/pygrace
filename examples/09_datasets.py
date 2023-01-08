@@ -1,7 +1,6 @@
 from pygrace.plot import Plot
 from pygrace.colors import RandomColorScheme, MarkovChainColorScheme
 from pygrace.dataset import SYMBOLS
-
 from pygrace.extensions.panel import Panel,MultiPanelPlot
 
 # This example illustrates how to use all of the different types of

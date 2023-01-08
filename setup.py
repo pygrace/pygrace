@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 # 
-# Maintainer:
-#  Daniel B. Stouffer (daniel.stouffer@canterbury.ac.nz)
-#
 # Authors:
-#  Daniel B. Stouffer (daniel.stouffer@canterbury.ac.nz)
-#  Michael McKerns    (mmckerns@caltech.edu)
+#  Daniel B. Stouffer (daniel@stoufferlab.org)
+#  Michael McKerns    (mmckerns@uqfoundation.org)
 #  Dean Malmgren
 #  Mike Stringer
 
@@ -19,11 +16,13 @@ except ImportError:
 # build the 'setup' call
 setup_code = """
 setup(name='pygrace',
-      version='0.5',
-      description='Python bindings and wrapper for grace',
+      version='1.1',
+      description='Python bindings to Grace and for writing Grace files',
       author = 'Daniel B. Stouffer',
-      author_email = 'daniel.stouffer@canterbury.ac.nz',
-      url = 'http://pygrace.github.io/',
+      author_email = 'daniel@stoufferlab.org',
+      maintainer = 'Michael McKerns',
+      maintainer_email = 'mmckerns@uqfoundation.org',
+      url = 'http://pygrace.github.com',
       py_modules=['pygrace.axis',
                   'pygrace.base',
                   'pygrace.colors',
@@ -37,19 +36,10 @@ setup(name='pygrace',
                 'pygrace.extensions',
                 'pygrace.styles',
                 'pygrace.styles.colorbrewer',
-                'PyGrace',
-                'PyGrace.Extensions',
-                'PyGrace.Styles',
-                'PyGrace.Styles.ColorBrewer',
                 ],
-      package_dir={'PyGrace':'pygrace',
-                   'PyGrace.Extensions':'pygrace/extensions',
-                   'PyGrace.Styles':'pygrace/styles',
-                   'PyGrace.Styles.ColorBrewer':'pygrace/styles/colorbrewer',
-                   },
       package_data={'pygrace.styles.colorbrewer':['*.dat','*.pdf'],
-                    'PyGrace.Styles.ColorBrewer':['*.dat','*.pdf'],
                     },
+      scripts=['scripts/pg_cdf'],
 """
 
 # add dependencies

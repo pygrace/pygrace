@@ -2,9 +2,7 @@ from pygrace.plot import Plot
 from pygrace.drawing_objects import DrawBox, DrawText, DrawLine, DrawEllipse
 
 grace = Plot()
-
 graph = grace.add_graph()
-
 graph.add_dataset([(0, 0), (1, 1)])
 
 graph.add_drawing_object(DrawBox)

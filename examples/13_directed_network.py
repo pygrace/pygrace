@@ -1,7 +1,6 @@
 from pygrace.plot import Plot
 from pygrace.graph import Graph
 from pygrace.dataset import DataSet
-
 from pygrace.extensions.network import Network
 
 # Define a couple of node sets, a xysize set and a regular xy set
