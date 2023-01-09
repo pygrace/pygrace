@@ -1,26 +1,24 @@
-#! /usr/bin/env python
-# $Id: grace_np.py,v 1.1 2004/09/18 22:37:38 mmckerns Exp $
+#!/usr/local/bin/python -t
+# $Id: grace_np.py,v 2.6 1999/09/26 03:16:19 mhagger Exp $
 
 """A python replacement for grace_np.c, a pipe-based interface to xmgrace.
 
 Copyright (C) 1999 Michael Haggerty
 
-Written by Michael Haggerty <mhagger@alum.mit.edu>.  Based on
-grace_np.c distributed with grace, which was written by Henrik Seidel
-and the Grace Development Team.
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.  This program is distributed in the
+hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.  See the GNU General Public License for more details; it is
+available at <http://www.fsf.org/copyleft/gpl.html>, or by writing to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details; it is available
-    at <http://www.fsf.org/copyleft/lgpl.html>, or by writing to the
-    Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-    Boston, MA 02111-1307, USA.
+Written by Michael Haggerty <mhagger@blizzard.harvard.edu>.  Based on
+the grace_np library distributed with grace, which was written by
+Henrik Seidel and the Grace Development Team.
 
 Grace (xmgrace) is a very nice X program for doing 2-D graphics.  It
 is very flexible, produces beautiful output, and has a graphical user
@@ -65,7 +63,7 @@ pipe).]
 """
 
 __version__ = '1.0'
-__cvs_version__ = 'CVS version $Revision: 1.1 $'
+__cvs_version__ = 'CVS version $Revision: 2.6 $'
 
 import sys, os, signal, errno
 
@@ -131,7 +129,7 @@ class GraceProcess:
         if self.fixedsize is None:
             cmd = cmd + ('-free',)
         else:
-            cmd = cmd + ('-fixed', `self.fixedsize[0]`, `self.fixedsize[1]`)
+            cmd = cmd + ('-fixed', repr(self.fixedsize[0]), repr(self.fixedsize[1]))
 
         if self.ask is None:
             cmd = cmd + ('-noask',)
@@ -145,7 +143,9 @@ class GraceProcess:
 
         # Make the pipe that will be used for communication:
         (fd_r, fd_w) = os.pipe()
-        cmd = cmd + ('-dpipe', `fd_r`)
+        os.set_inheritable(fd_w, True)
+        os.set_inheritable(fd_r, True)
+        cmd = cmd + ('-dpipe', repr(fd_r))
 
         # Fork the subprocess that will start grace:
         self.pid = os.fork()
@@ -176,7 +176,7 @@ class GraceProcess:
                 os._exit(2) # exit child but not parent
 
         # We are the parent -> keep only the writeable side of the pipe
-        os.close(fd_r)
+        #os.close(fd_r)
 
         # turn the writeable side into a buffered file object:
         self.pipe = os.fdopen(fd_w, 'w', bufsize)
@@ -194,7 +194,7 @@ class GraceProcess:
 
         try:
             self.pipe.write(cmd + '\n')
-        except IOError, err:
+        except IOError as err:
             if err.errno == errno.EPIPE:
                 self.pipe.close()
                 raise Disconnected()
@@ -206,7 +206,7 @@ class GraceProcess:
 
         try:
             self.pipe.flush()
-        except IOError, err:
+        except IOError as err:
             if err.errno == errno.EPIPE:
                 # grace is no longer reading from the pipe:
                 self.pipe.close()
@@ -278,7 +278,7 @@ class GraceProcess:
         if self.pid is not None:
             try:
                 os.kill(self.pid, signal.SIGTERM)
-            except OSError, err:
+            except OSError as err:
                 if err.errno == errno.ESRCH:
                     # No such process; it must already be dead
                     self.pid = None
