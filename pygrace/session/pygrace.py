@@ -95,7 +95,7 @@ Notes:
 '''
 
     def __init__(self):
-        from gracePlot import gracePlot as grace_plot
+        from .gracePlot import gracePlot as grace_plot
         self.session = grace_plot()
         self.whos = {}
         self.reserved = ['and','assert','break','class','continue','def','del',
@@ -275,7 +275,7 @@ Notes:
                     val = val.tolist()
                     exec name+' = array('+str(val)+')'
                 else: exec name+' = '+str(val)
-                exec 'print("    ","'+name+'")'
+                exec 'print("     "+"'+name+'")'
                 exec 'outlist.append("'+name+'")'
         while 1:
             com = raw_input('grace> ')

@@ -143,8 +143,9 @@ class GraceProcess:
 
         # Make the pipe that will be used for communication:
         (fd_r, fd_w) = os.pipe()
-        os.set_inheritable(fd_w, True)
-        os.set_inheritable(fd_r, True)
+        if hasattr(os, 'set_inheritable'):
+            os.set_inheritable(fd_w, True)
+            os.set_inheritable(fd_r, True)
         cmd = cmd + ('-dpipe', repr(fd_r))
 
         # Fork the subprocess that will start grace:

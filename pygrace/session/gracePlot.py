@@ -57,7 +57,7 @@ __version__ = "0.5.2"
 __author__ = "Nathaniel Gray <n8gray@caltech.edu>"
 __date__ = "September 16, 2001"
 
-import grace_np
+from . import grace_np
 import numpy, string
 N = numpy
 del numpy
@@ -131,7 +131,7 @@ class gracePlot:
         try:
             ext = devs[string.lower(format)]
         except KeyError:
-            print('Unknown format.  Known formats are\n%s' % devs.keys())
+            print('Unknown format.  Known formats are\n%s' % list(devs.keys()))
             return
             
         if filename[-len(ext):] != ext:
@@ -174,10 +174,10 @@ class gracePlot:
             return self.g[item]
         elif type(item) == type( () ) and len(item) <= 2:
             if item[0] >= self.rows or item[1] >= self.cols:
-                raise IndexError, 'graph index out of range'
+                raise IndexError('graph index out of range')
             return self.g[item[0]*self.cols + item[1]]
         else:
-            raise TypeError, 'graph index must be integer or two integers'
+            raise TypeError('graph index must be integer or two integers')
 
 class graceGraph:
     
@@ -200,7 +200,7 @@ class graceGraph:
 
     def _send_2(self, var, X, Y):
         send = self.grace.command
-        for i in xrange(len(X)):
+        for i in range(len(X)):
             send( 'g%s.s%s point %s, %s' % (self.gID, var, X[i], Y[i]) )
             if i%50 == 0:
                 self._flush()
@@ -227,7 +227,7 @@ class graceGraph:
             self._hold = not self._hold
             return lastVal
         if onoff not in [0, 1]:
-            raise RuntimeError, "Valid arguments to hold() are 0 or 1."
+            raise RuntimeError("Valid arguments to hold() are 0 or 1.")
         self._hold = onoff
         return lastVal
     
@@ -298,8 +298,8 @@ class graceGraph:
                 the mouse.
         """
         if len(labels) != self.nSets:
-            raise RuntimeError, 'Wrong number of legends (%s) for number' \
-                    ' of lines in plot (%s).' % (len(labels), self.nSets)
+            raise RuntimeError('Wrong number of legends (%s) for number' \
+                    ' of lines in plot (%s).' % (len(labels), self.nSets))
             
         for i in range(len(labels)):
             self._send( ('g%s.s%s legend "' % (self.gID, i)) + labels[i] + '"' )
@@ -340,11 +340,11 @@ class graceGraph:
             edges = 0
         
         if x_max <= x_min:
-            raise RuntimeError, "x_max must be > x_min"
+            raise RuntimeError("x_max must be > x_min")
             
         if dy is not None:
             if len(dy) != len(y):
-                raise RuntimeError, 'len(dy) != len(y)'
+                raise RuntimeError('len(dy) != len(y)')
             dy = N.array(dy)
         
         if not self._hold: self.clear()
@@ -417,11 +417,11 @@ class graceGraph:
         if not ( Y.shape == dy.shape and
                  X.shape[0] == Y.shape[0] and
                  ( X.shape[1] == Y.shape[1] or X.shape[1] == 1 ) ):
-            raise RuntimeError, 'X, Y, and dy have mismatched shapes'
+            raise RuntimeError('X, Y, and dy have mismatched shapes')
             
         if not self._hold: self.clear()
         
-        for i in xrange(self.nSets, Y.shape[1] + self.nSets):
+        for i in range(self.nSets, Y.shape[1] + self.nSets):
             me = 'g%s.s%s ' % (self.gID, i)
             self._send( me + 'on')
             self._send( me + 'type ' + pType)
@@ -497,7 +497,7 @@ class graceGraph:
         if X.shape[0] != Y.shape[0] or (  # Different number of points per line
               X.shape[1] != X.shape[1] and  # Different number of lines
               X.shape[1] != 1):             # But if X is just 1 line it's ok.
-            raise RuntimeError, 'X and Y have mismatched shapes'
+            raise RuntimeError('X and Y have mismatched shapes')
             
         ############# Grace commands start here ###########
         
