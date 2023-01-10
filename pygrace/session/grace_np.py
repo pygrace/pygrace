@@ -98,7 +98,7 @@ class Disconnected(Error):
 class GraceProcess:
     """Represents a running xmgrace program."""
 
-    def __init__(self, bufsize=-1, debug=0, fixedsize=None, ask=None):
+    def __init__(self, bufsize=-1, debug=0, fixedsize=None, ask=None, safe=None):
         """Start xmgrace, reading from a pipe that we control.
 
         Parameters:
@@ -118,21 +118,27 @@ class GraceProcess:
           ask -- if set, xmgrace will ask before doing `dangerous'
                  things, like overwriting a file or even clearing the
                  display.  Default is not to ask.
+          safe -- if set, xmgrace will ignore commands like `saveall',
+                  which write to files. Default is not to be overly safe.
         """
 
         self.debug = debug
         self.fixedsize = fixedsize
         self.ask = ask
+        self.safe = safe
 
         cmd = ('xmgrace',)
 
-        if self.fixedsize is None:
+        if self.fixedsize in (None, False):
             cmd = cmd + ('-free',)
         else:
             cmd = cmd + ('-fixed', repr(self.fixedsize[0]), repr(self.fixedsize[1]))
 
-        if self.ask is None:
+        if self.ask in (None, False):
             cmd = cmd + ('-noask',)
+
+        if self.safe in (None, False):
+            cmd = cmd + ('-nosafe',)
 
         # Python, by default, ignores SIGPIPE signals anyway
         #signal.signal(signal.SIGPIPE, signal.SIG_IGN)
