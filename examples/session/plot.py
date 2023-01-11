@@ -1,9 +1,9 @@
-from pygrace.session.plot import gracePlot
+from pygrace import grace
 import numpy as np
 
 def _test():
     from time import sleep
-    p = gracePlot()
+    p = grace()
     joe = np.arange(5,50)
     p.plot(joe, joe**2, symbols=1)
     p.title('Parabola')

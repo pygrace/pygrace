@@ -84,7 +84,11 @@ class gracePlot:
     def _flush(self):
         #print('flush()')
         self.grace.flush()
-        
+
+    def pexec(self, cmd):
+        self.grace.command(cmd)
+        self.grace.flush()
+
     def __del__(self):
         """Destroy the pipe but leave the grace window open for interaction.
         This is the best action for the destructor so that unexpected crashes
@@ -195,6 +199,10 @@ class graceGraph:
         
     def _flush(self):
         #print('flush()')
+        self.grace.flush()
+
+    def pexec(self, cmd):
+        self.grace.command(cmd)
         self.grace.flush()
 
     def _send_2(self, var, X, Y):
