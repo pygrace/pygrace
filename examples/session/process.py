@@ -1,12 +1,13 @@
 if __name__ == '__main__':
-    # Test
     import time
 
+    # get the low-level parameter command interface
+    # for an interactive grace instance
     from pygrace import grace
     gr = grace()
     p = gr.session.pexec
 
-    # Send some initialization commands to Grace:
+    # send some initialization commands to xmgrace:
     p('world xmax 100')
     p('world ymax 10000')
     p('xaxis tick major 20')
@@ -22,19 +23,19 @@ if __name__ == '__main__':
     p('s1 symbol size 0.3')
     p('s1 symbol fill pattern 1')
 
-    # Display sample data
+    # display sample data
     for i in range(1,101):
         p('g0.s0 point %d, %d' % (i, i))
         p('g0.s1 point %d, %d' % (i, i * i))
-        # Update the Grace display after every ten steps
+        # update the xmgrace display after every ten steps
         if i % 10 == 0:
             p('redraw')
-            # Wait a second, just to simulate some time needed for
+            # wait a second, just to simulate some time needed for
             # calculations. Your real application shouldn't wait.
             time.sleep(1)
 
-    # Tell Grace to save the data:
+    # tell xmgrace to save the data:
     p('saveall "sample.agr"')
 
-    # Close Grace:
+    # close xmgrace:
     gr.exit()

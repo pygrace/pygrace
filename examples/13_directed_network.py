@@ -1,4 +1,4 @@
-from pygrace.plot import Plot
+from pygrace.project import Project
 from pygrace.graph import Graph
 from pygrace.dataset import DataSet
 from pygrace.extensions.network import Network
@@ -43,7 +43,7 @@ links2 = [
    ]
 
 # Create the grace instance
-grace = Plot()
+grace = Project()
 
 # Create the network graph instance
 network = grace.add_graph(Network)
@@ -102,7 +102,7 @@ network.add_node_set(nodeset4_xy, size=2, color=13, line_width=6, line_color=12)
 #                               also, if target and source are close and
 #                               big, so that almost all the link is under
 #                               them, try to curve away to show yourself)
-# put_arrows = True            (put arrowheads -Drawing objects-)
+# put_arrows = True            (put arrowheads -drawing objects-)
 # arrow_position = 0.75        (where to put the arrow. 1.0 means at the 
 #                               farthest visible point, 0.0 means at
 #                               nearest visible point from the origin.)
@@ -139,5 +139,5 @@ network.add_directed_link(('k', 'l'), curvature=0,
 # ------------------------------------
 
 # Print out the grace
-grace.write_file('13_directed_network.agr')
+grace.saveall('13_directed_network.agr')
 

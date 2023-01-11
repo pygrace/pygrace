@@ -1,10 +1,9 @@
-from pygrace.plot import Plot
+from pygrace.project import Project
 from pygrace.graph import Graph
 from pygrace.drawing_objects import DrawText, DrawLine
 from pygrace.extensions.distribution import CDFGraph, PDFGraph
 from pygrace.extensions.latex_string import LatexString, CONVERT
 
-# this is the step where YOU do the analysis
 import example_tools
 cdf, pdf = example_tools.latexlabels()
                 
@@ -27,7 +26,7 @@ class Graph2(PDFGraph):
             LatexString(r'\6X\4 = $\langle$ \xb\4\sj\N $\rangle$')
 
 # make the plot
-grace = Plot()
+grace = Project()
 
 grace.add_drawing_object(DrawText, text='Currently available LaTeX characters',
                          x=0.08, y=0.92, char_size=0.8, font=6, just=4)
@@ -53,5 +52,5 @@ graph1 = grace.add_graph(Graph1, cdf, True)
 
 graph2 = grace.add_graph(Graph2, pdf)
 
-grace.write_file('08_latexlabels.agr')
+grace.saveall('08_latexlabels.agr')
 

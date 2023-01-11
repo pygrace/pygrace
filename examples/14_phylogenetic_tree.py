@@ -1,17 +1,16 @@
-from pygrace.plot import Plot
+from pygrace.project import Project
 from pygrace.colors import ColorBrewerScheme
 from pygrace.dataset import SYMBOLS, LINESTYLES
 from pygrace.extensions.tree import Tree
 
-# ---------------------------------- this is the part where YOU do the analysis
 # data is a string of a newick tree
 import example_tools
 data = example_tools.tree()
 
-# make an instance of the Grace class
-grace = Plot(colors=ColorBrewerScheme('Set1'))
+# make an instance of the grace Project class
+grace = Project(colors=ColorBrewerScheme('Set1'))
 
-# add a Tree Graph as a "child" of the grace instance
+# add a Tree graph as a "child" of the Project instance
 graph = grace.add_graph(Tree,orientation='down')
 
 # load the data
@@ -26,6 +25,6 @@ graph.xaxis.ticklabel.configure(angle=0,)
 graph.autoscale()
 #graph.autoformat()
 
-# print out the grace
-grace.write_file('14_phylogenetic_tree.agr')
+# print out the Project
+grace.saveall('14_phylogenetic_tree.agr')
 

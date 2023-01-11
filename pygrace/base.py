@@ -9,7 +9,7 @@ NAMED_CHILD_TYPES = dict.fromkeys(
 DYNAMIC_CHILD_TYPES = ['Graph', 'DataSet', 'DrawingObject']
 
 class GraceObject(object):
-    """Since most of the classes in PyGrace are basically just dictionaries
+    """Since most of the classes in pygrace are basically just dictionaries
     with special string representations and a place to specify defaults for
     attributes, this class does the work that most of the classes need to do.
     The __init__ method just sets all of the parameters passed as the values
@@ -451,6 +451,11 @@ class GraceObject(object):
         all underscores."""
         return string.replace('_', '\_').replace('&', '\&')
 
+    def cheatsheet(self, filename):
+        """produce a latex file listing the object's attributes and methods"""
+        return self.write_cheatsheet(filename)
+
+    # Deprecated
     def write_cheatsheet(self, filename):
 
         # create a sorted version of the reference list, and delete the
@@ -503,13 +508,13 @@ class GraceObject(object):
 
         description = r"""This sheet is intended to be used to quickly look up
         attribute and method names.  For a complete reference, including
-        descriptions of methods, see the \textit{PyGrace Reference Manual}."""
+        descriptions of methods, see the \textit{pygrace Reference Manual}."""
 
         result.append(r'\documentclass[10pt]{article}')
         result.append(r'\usepackage{savetrees}')
         result.append(r'\usepackage{multicol}')
         result.append(r'\usepackage{times}')
-        result.append(r'\title{PyGrace Cheatsheet}')
+        result.append(r'\title{pygrace Cheatsheet}')
         result.append(r'\date{}')
         result.append(r'\begin{document}')
         result.append(r'\maketitle')
@@ -521,7 +526,7 @@ class GraceObject(object):
         result.append(r'\begin{multicols}{4}')
         result.append(r'\footnotesize')
 
-        labels = (r'Global', r'PyGrace.base')
+        labels = (r'Global', r'pygrace.base')
         head = r'\subsection*{\footnotesize %s \tiny \hfill {\tt %s.py}}'
         result.append(head % labels)
         result.append(r'\vspace{-0.5em} (Shared by all objects)')

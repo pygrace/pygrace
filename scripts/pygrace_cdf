@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from pygrace.parser import XYParser
-from pygrace.plot import Plot
+from pygrace.project import Project
 from pygrace.extensions.distribution import CDFGraph
 
 class CDFParser(XYParser):
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     parser = CDFParser('usage: %prog [options] filename')
     options, data = parser.parse_args()
 
-    grace = Plot()
+    grace = Project()
     graph = grace.add_graph(CDFGraph, data, options.fancy_dots)
 
     if options.log_xaxis: graph.logx()

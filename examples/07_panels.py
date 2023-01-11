@@ -1,5 +1,5 @@
-from pygrace.plot import Plot
-from pygrace.extensions.panel import Panel, MultiPanelGrace
+from pygrace.project import Project
+from pygrace.extensions.panel import Panel, MultiPanelProject
 from pygrace.styles.el import ElCircleDataSet
 from pygrace.styles.journals import NaturePanelLabel
 
@@ -11,10 +11,10 @@ dataList = example_tools.panels()
 # illustrates the use of panels which automatically come with a panel
 # label.
 
-# make an instance of the Grace class
-grace = MultiPanelGrace()
+# make an instance of the Project class
+grace = MultiPanelProject()
 
-# add a Graph as a "child" of the grace instance
+# add a Panel as a "child" of the Project instance
 for data in dataList:
     graph = grace.add_graph(Panel)
 
@@ -40,23 +40,20 @@ for data in dataList:
 grace.automulti(width_to_height_ratio=1.0,hgap=0.05,vgap=0.05,
                 hoffset=(0.1,0.05),voffset=(0.05,0.1))
 
-# Grace.autoscale_same can be used to autoscale all graphs to have the
-# same bounds.  Convenient, eh?
+# autoscale all graphs to have the same bounds.
 grace.autoscale_same()
 
-# hide all of the interior labels to make this look v. nice
+# hide all of the interior labels
 grace.hide_redundant_labels()
 
 # add axis labels to matrix of figures
 grace.set_row_xaxislabel(2,"x")
 grace.set_col_yaxislabel(0,"y")
 
-# Whoa there partner, those are some rather large ticks and labels you
-# have there.  You can scale them down to look more appropriate with
-# the GraceObject.scale_suffix method
+# scale down the large ticks and labels
 grace.scale_suffix(0.5,"major_size")
 grace.scale_suffix(0.5,"minor_size")
 grace.scale_suffix(0.5,"char_size")
 
-# print the grace (.agr format) to a file
-grace.write_file('07_panels.agr')
+# print the Project (.agr format) to a file
+grace.saveall('07_panels.agr')

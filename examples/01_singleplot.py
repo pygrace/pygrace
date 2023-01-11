@@ -1,12 +1,11 @@
-from pygrace.plot import Plot
+from pygrace.project import Project
 from pygrace.colors import ColorBrewerScheme
 
-# ---------------------------------- this is the part where YOU do the analysis
 # data1 and data2 are both lists of (x, y) points.
 import example_tools
 data1, data2 = example_tools.singleplot()
 
-grace = Plot(colors=ColorBrewerScheme('Paired'))
+grace = Project(colors=ColorBrewerScheme('Paired'))
 
 graph = grace.add_graph()
 graph.xaxis.label.text = 'Fake X'
@@ -21,5 +20,5 @@ dataset2.symbol.fill_color = 'Paired-1'
 graph.set_world_to_limits()
 graph.logxy()
 
-grace.write_file('01_singleplot.agr')
+grace.saveall('01_singleplot.agr')
 

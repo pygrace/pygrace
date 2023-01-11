@@ -1,4 +1,4 @@
-from pygrace.plot import Plot
+from pygrace.project import Project
 from pygrace.styles.el import *
 
 # the purpose of this example is to illustrate how to use different
@@ -6,7 +6,7 @@ from pygrace.styles.el import *
 # the time
 
 # instantiate a grace object
-grace = Plot()
+grace = Project()
 
 # add a graph
 graph = grace.add_graph(ElEmptySquareGraph)
@@ -34,4 +34,4 @@ dataset.symbol.linestyle = 0
 graph.autoscale()
 
 # print the grace (.agr format) to a file
-grace.write_file('04_classy.agr')
+grace.saveall('04_classy.agr')

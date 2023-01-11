@@ -1,7 +1,4 @@
-try:
-    from ..extensions.panel import Panel, PanelLabel, MultiPanelPlot
-except ImportError: # for "legacy" PyGrace
-    from ..Extensions.panel import Panel, PanelLabel, MultiPanelPlot
+from ..extensions.panel import Panel, PanelLabel, MultiPanelProject
 
 #------------------------------------------------------------------------------
 # Nature style
@@ -20,9 +17,9 @@ class NaturePanel(Panel):
         index = self.panel_label.label_index
         self.panel_label = self.add_drawing_object(NaturePanelLabel,index)
 
-class NatureMultiPlot(MultiPanelPlot):
+class NatureMultiPanelProject(MultiPanelProject):
     def __init__(self,*args,**kwargs):
-        MultiPanelPlot.__init__(self,*args,**kwargs)
+        MultiPanelProject.__init__(self,*args,**kwargs)
         
         # configure text
         self.set_label_scheme("latin")
@@ -44,9 +41,13 @@ class SciencePanel(Panel):
         index = self.panel_label.label_index
         self.panel_label = self.add_drawing_object(SciencePanelLabel,index)
 
-class ScienceMultiPlot(MultiPanelPlot):
+class ScienceMultiPanelProject(MultiPanelProject):
     def __init__(self,*args,**kwargs):
-        MultiPanelPlot.__init__(self,*args,**kwargs)
+        MultiPanelProject.__init__(self,*args,**kwargs)
         
         # configure text
         self.set_label_scheme("LATIN")
+
+# preserving backward compatibility with PyGrace
+NatureMultiPlot = NatureMultiPanelProject
+ScienceMultiPlot = ScienceMultiPanelProject

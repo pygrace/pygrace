@@ -1,7 +1,7 @@
 from ..graph import Graph
-from ..plot import Plot
+from ..project import Project
 from ..drawing_objects import DrawText, DRAWTEXT_JUSTIFICATIONS
-from .multi_plot import MultiPlot
+from .multi_plot import MultiPlotProject
 from .network import Network
 from .tree import Tree
 
@@ -203,12 +203,12 @@ class Panel(Graph):
         # specify the default justification for the label
         self.panel_label = self.add_drawing_object(PanelLabel,panel_index)
 
-class MultiPanelPlot(MultiPlot):
-    """Plot object to hold panel schemes.
+class MultiPanelProject(MultiPlotProject):
+    """Project object to hold panel schemes.
     """
 
     def __init__(self,label_scheme="LATIN",*args,**kwargs):
-        MultiPlot.__init__(self,*args,**kwargs)
+        MultiPlotProject.__init__(self,*args,**kwargs)
 
         # dummy variables
         latin_alphabet = "abcdefghijklmnopqrstuvwxyz"
@@ -226,7 +226,7 @@ class MultiPanelPlot(MultiPlot):
         self.set_label_scheme(label_scheme)
 
     def add_label_scheme(self,label_scheme,labels):
-        """Add a label scheme to this Plot.
+        """Add a label scheme to this Project.
         """
 
         if (label_scheme in self.label_schemes and 
@@ -268,10 +268,10 @@ Only labels schemes %s are possible.
                                                   dx=dx,dy=dy,just=just)
 
     def add_graph(self, cls=Panel, *args, **kwargs):
-        """Overwrite the add_graph of Plot base so that the default
+        """Overwrite the add_graph of Project base so that the default
         argument is a panel
         """
-        graph = MultiPlot.add_graph(self,cls,*args,**kwargs)
+        graph = MultiPlotProject.add_graph(self,cls,*args,**kwargs)
         if isinstance(graph,Panel):
             graph.panel_label.configure(label_scheme=self.label_scheme)
         return graph
@@ -295,4 +295,4 @@ class TreePanel(Panel,Tree):
         self.drawing_objects.extend(drawing_objects)
 
 # preserving backward compatibility with PyGrace
-MultiPanelGrace = MultiPanelPlot
+MultiPanelGrace = MultiPanelPlot = MultiPanelProject

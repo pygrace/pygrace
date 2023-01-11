@@ -1,14 +1,13 @@
-from pygrace.plot import Plot
+from pygrace.project import Project
 from pygrace.colors import ColorBrewerScheme
 from pygrace.drawing_objects import DrawText
 
-# ---------------------------------- this is the part where YOU do the analysis
 # all datasets are lists of (x, y) points
 import example_tools
 data1, data2, data3, data4, data5 = example_tools.multiplot()
 
-# make a Grace instance with the "Set1" color scheme
-grace = Plot(colors=ColorBrewerScheme('Set1'))
+# make a Project instance with the "Set1" color scheme
+grace = Project(colors=ColorBrewerScheme('Set1'))
 
 # this function returns the maximum x and y "view" values to fit in the page
 xView, yView = grace.set_landscape()
@@ -89,6 +88,6 @@ grace.set_fonts('Helvetica')
 grace.configure_group(title1, title2, title3,
                       font='Helvetica-Bold', char_size=1.25)
 
-# print the grace (.agr format) to a file
-grace.write_file('02_multiplot.agr')
+# print the Project (.agr format) to a file
+grace.saveall('02_multiplot.agr')
 

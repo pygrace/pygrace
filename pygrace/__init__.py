@@ -51,13 +51,16 @@ from . import parser
 if __name__ == 'PyGrace':
        # backward compatibility for PyGrace
        from PyGrace import grace
-       del plot #FIXME: somehow this is getting imported
+       try: del plot
+       except: pass
+       try: del project
+       except: pass
  
 elif __name__ == 'pygrace':
-       __all__.append('plot')
+       __all__.append('project')
        __all__.append('session')
 
-       from . import plot
+       from . import project
        from . import session
 
        # backward compatibility for pygrace

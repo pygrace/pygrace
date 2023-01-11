@@ -1,11 +1,11 @@
-from ..plot import Plot
+from ..project import Project
 
-class MultiPlot(Plot):
+class MultiPlotProject(Project):
     def __init__(self,rows=None,cols=None,hgap=0.1,vgap=0.1,
                  hoffset=(0.15,0.05),voffset=(0.05,0.15),
 		 width_to_height_ratio=1.0/0.7,multi_graphs=(),
                  *args,**kwargs): 
-        Plot.__init__(self,*args,**kwargs)
+        Project.__init__(self,*args,**kwargs)
 
         # add all of the keyword arguments as local attributes
         if len(multi_graphs)==0:
@@ -19,8 +19,7 @@ class MultiPlot(Plot):
         self.frame_height = None   # height of one graph
         self.frame_width = None    # width of one graph
 
-        # if rows and cols have been specified, add graphs to the
-        # MultiPlot
+        # if rows and cols are specified, add graphs to the MultiPlotProject
         if self.rows is not None and self.cols is not None:
             for i in range(self.rows*self.cols):
                 self.add_graph()
@@ -71,7 +70,7 @@ class MultiPlot(Plot):
             self.frame_height = self.frame_width/self.width_to_height_ratio
         
     #--------------------------------------------------------------------------
-    # methods for arranging graphs in a MultiPlot
+    # methods for arranging graphs in a MultiPlotProject
     #--------------------------------------------------------------------------
     def multi(self, rows, cols, hoffset=(0.15,0.05), voffset=(0.05,0.15),
               hgap=0.1, vgap=0.1,
@@ -165,7 +164,7 @@ class MultiPlot(Plot):
                    width_to_height_ratio)
 
     #--------------------------------------------------------------------------
-    # methods for hiding redundant information in a MultiPlot
+    # methods for hiding redundant information in a MultiPlotProject
     #--------------------------------------------------------------------------
     def hide_redundant_xaxislabels(self):
         """Hide all x-axis axis labels on the interior of a multigraph that
@@ -175,7 +174,7 @@ class MultiPlot(Plot):
 
         if not self.graphs_rc:
             message = """
-Plot.autohide_multi_labels only works with a multigraph
+Project.autohide_multi_labels only works with a multigraph
 """
             raise TypeError(message)
 
@@ -214,7 +213,7 @@ Plot.autohide_multi_labels only works with a multigraph
 
         if not self.graphs_rc:
             message = """
-Plot.autohide_multi_labels only works with a multigraph
+Project.autohide_multi_labels only works with a multigraph
 """
             raise TypeError(message)
 
@@ -266,7 +265,7 @@ Plot.autohide_multi_labels only works with a multigraph
 
         if not self.graphs_rc:
             message = """
-Plot.autohide_multi_labels only works with a multigraph
+Project.autohide_multi_labels only works with a multigraph
 """
             raise TypeError(message)
 
@@ -305,7 +304,7 @@ Plot.autohide_multi_labels only works with a multigraph
 
         if not self.graphs_rc:
             message = """
-Plot.autohide_multi_labels only works with a multigraph
+Project.autohide_multi_labels only works with a multigraph
 """
             raise TypeError(message)
 
@@ -368,7 +367,7 @@ Plot.autohide_multi_labels only works with a multigraph
         self.hide_redundant_ylabels()
 
     #--------------------------------------------------------------------------
-    # methods for adding a single label for multiple graphs in a MultiPlot
+    # methods for adding a single label for multiple graphs in MultiPlotProject
     #--------------------------------------------------------------------------
     def set_col_yaxislabel(self,col,label,perpendicular_offset=0.08,
                            opposite_side=False,rowspan=(None,None),
@@ -496,11 +495,11 @@ set_row_xaxislabel.
                 graph.xaxis.ticklabel.place = 'opposite'
             
     #--------------------------------------------------------------------------
-    # methods for aligning axis labels on graphs in a MultiPlot
+    # methods for aligning axis labels on graphs in a MultiPlotProject
     #--------------------------------------------------------------------------
     def align_axislabelx(self,place_tup=(0, 0.08)):
         """Align the x-axis labels with place_tup for all graphs in
-        this Plot instance.
+        this Project instance.
         """
         for graph in self.multi_graphs:
             graph.xaxis.label.place_loc = "spec"
@@ -508,7 +507,7 @@ set_row_xaxislabel.
 
     def align_axislabely(self,place_tup=(0, 0.08)):
         """Align the y-axis labels with place_tup for all graphs in
-        this Plot instance.
+        this Project instance.
         """
         for graph in self.multi_graphs:
             graph.yaxis.label.place_loc = "spec"
@@ -516,8 +515,11 @@ set_row_xaxislabel.
 
     def align_axislabel(self,xplace_tup=(0, 0.08),yplace_tup=(0,0.08)):
         """Align the x- and y-axis labels with place_tup for all
-        graphs in this Plot instance.
+        graphs in this Project instance.
         """
         self.align_axislabelx(xplace_tup)
         self.align_axislabely(yplace_tup)
 
+
+# preserving backward compatibility
+MultiPlot = MultiPlotProject

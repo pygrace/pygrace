@@ -9,7 +9,7 @@ from math import sqrt, sin, cos
 class NodeSet(DataSet):
     """A dataset containing network nodes.
 
-    Nodes in the same dataset can be treated as any dataset in Grace,
+    Nodes in the same dataset can be treated as any dataset in xmgrace,
     which means that color, size, and so on can be changed
     simultaneously for all nodes in the set. In general, a NodeSet can
     take advantage of any of the properties of regular DataSets. For
@@ -56,7 +56,7 @@ class NodeSet(DataSet):
 class LinkSet(DataSet):
     """A dataset containing network links.
 
-    Link in the same dataset can be treated as any dataset in Grace,
+    Link in the same dataset can be treated as any dataset in xmgrace,
     which means that color, width, and so on can be changed
     simultaneously for all links in the set. In general, a LinkSet can
     take advantage of any of the properties of regular DataSets.

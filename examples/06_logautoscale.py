@@ -1,4 +1,4 @@
-from pygrace.plot import Plot
+from pygrace.project import Project
 from pygrace.colors import ColorBrewerScheme
 from pygrace.axis import LINEAR_SCALE, LOGARITHMIC_SCALE
 from pygrace.drawing_objects import DrawText
@@ -16,7 +16,7 @@ data = example_tools.logautoscale()
 #------------------------------------------------------------------------------
 # instantiate a sweet figgy fig
 colors = ColorBrewerScheme("Set1")
-grace = Plot(colors=colors)
+grace = Project(colors=colors)
 
 # to add some data to graph, just add the DrawBox to the 'world'
 # coordinates.  this ensures that all of the autoscaling will work
@@ -45,4 +45,4 @@ graph.xaxis.label.text = "Negative X's are hidden"
 graph.yaxis.label.text = "Negative Y's are hidden"
 
 # print out the grace
-grace.write_file('06_logautoscale.agr')
+grace.saveall('06_logautoscale.agr')

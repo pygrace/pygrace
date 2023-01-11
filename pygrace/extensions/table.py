@@ -36,9 +36,9 @@ if __name__ == '__main__':
     
     from random import normalvariate as nv
 
-    from ..plot import Plot
+    from ..project import Project
 
-    grace = Plot()
+    grace = Project()
 
     graph = grace.add_graph()
 

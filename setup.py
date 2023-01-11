@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # 
 # Authors:
-#  Daniel B. Stouffer (daniel@stoufferlab.org)
 #  Michael McKerns    (mmckerns@uqfoundation.org)
+#  Daniel B. Stouffer (daniel@stoufferlab.org)
 #  Dean Malmgren
 #  Mike Stringer
 
@@ -17,9 +17,9 @@ except ImportError:
 setup_code = """
 setup(name='pygrace',
       version='1.1',
-      description='Python bindings to Grace and for writing Grace files',
-      author = 'Daniel B. Stouffer',
-      author_email = 'daniel@stoufferlab.org',
+      description='Python interface to xmgrace and xmgrace project files',
+      author = 'Michael McKerns, Daniel B. Stouffer',
+      author_email = 'mmckerns@uqfoundation.org, daniel@stoufferlab.org',
       maintainer = 'Michael McKerns',
       maintainer_email = 'mmckerns@uqfoundation.org',
       url = 'http://pygrace.github.com',
@@ -31,7 +31,7 @@ setup(name='pygrace',
                   'pygrace.fonts',
                   'pygrace.graph',
                   'pygrace.parser',
-                  'pygrace.plot',
+                  'pygrace.project',
                   ],
       packages=['pygrace.session',
                 'pygrace.extensions',

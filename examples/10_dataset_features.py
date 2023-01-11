@@ -1,13 +1,12 @@
-from pygrace.plot import Plot
+from pygrace.project import Project
 from pygrace.colors import ColorBrewerScheme
 from pygrace.dataset import SYMBOLS, LINESTYLES
 
-# ---------------------------------- this is the part where YOU do the analysis
 # data0, data1, and data2 are all lists of (x, y) points.
 import example_tools
 data0, data1, data2 = example_tools.dataset_features()
 
-grace = Plot(colors=ColorBrewerScheme('Set1'))
+grace = Project(colors=ColorBrewerScheme('Set1'))
 
 graph = grace.add_graph()
 graph.xaxis.label.text = 'x'
@@ -84,5 +83,5 @@ graph.set_different_linewidths(linewidthsList=linewidthsList)
 #xxxx this clearly is not working yet
 
 # print out the grace
-grace.write_file('10_dataset_features.agr')
+grace.saveall('10_dataset_features.agr')
 

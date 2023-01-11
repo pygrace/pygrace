@@ -1,4 +1,4 @@
-from pygrace.plot import Plot
+from pygrace.project import Project
 from pygrace.graph import Graph
 from pygrace.dataset import DataSet
 from pygrace.colors import ColorBrewerScheme
@@ -25,16 +25,15 @@ class ManyScatterGraph(Graph):
         # autoscale the axes
         self.autoscale()
 
-# ---------------------------------- this is the part where YOU do the analysis
 # dataList is a list of lists, each one of (x, y) points
 import example_tools
 dataList = example_tools.simplesubclass()
 
 # make the plot
-grace = Plot(colors=ColorBrewerScheme('Set1'))
+grace = Project(colors=ColorBrewerScheme('Set1'))
 graph = grace.add_graph(ManyScatterGraph, dataList)
 graph.set_labels('Snerdwump', 'Sneezle')
 graph.format_for_print(6)
 
 # print the grace (.agr format) to a file
-grace.write_file('03_simplesubclass.agr')
+grace.saveall('03_simplesubclass.agr')

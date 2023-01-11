@@ -7,3 +7,4 @@ rm -f *.aux;
 rm -f *~;
 rm -f cheatsheet.tex;
 rm -f cheatsheet.pdf;
+rm -rf __pycache__;

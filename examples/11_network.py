@@ -1,4 +1,4 @@
-from pygrace.plot import Plot
+from pygrace.project import Project
 from pygrace.graph import Graph
 from pygrace.dataset import DataSet
 from pygrace.extensions.network import Network
@@ -28,7 +28,7 @@ links2 = [
     ]
 
 # Create the grace instance
-grace = Plot()
+grace = Project()
 
 # Create the network graph instance
 network = grace.add_graph(Network)
@@ -47,4 +47,4 @@ network.add_node('alone', (.3, .4, 5), type='xycolor')
 network.add_link(('alone', 'B'))
 
 # Print out the grace
-grace.write_file('11_network.agr')
+grace.saveall('11_network.agr')
