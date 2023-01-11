@@ -81,7 +81,7 @@ push variables into xmgrace and interact with the xmgrace scripting language::
 
 ![cos](docs/Diagrams/cos.png)
 
-use the interactive grace prompt::
+use the interactive xmgrace prompt::
 
     >>> pg.prompt()
     grace interface:
@@ -95,18 +95,16 @@ use the interactive grace prompt::
 
 ![histoPlot](docs/Diagrams/histoPlot.png)
 
-check variables in grace session::
+check variables in xmgrace session::
 
-    >>> pg.who().keys()
-    ['y', 'x']
+    >>> list(pg.who().keys())
+    ['x', 'y']
     >>> pg.who('x')
-    [0.0, 0.31415926535897931, 0.62831853071795862, 0.94247779607693793,
-     1.2566370614359172, 1.5707963267948966, 1.8849555921538759,
-     2.1991148575128552, 2.5132741228718345, 2.8274333882308138,
-     3.1415926535897931, 3.455751918948772, 3.7699111843077517,
-     4.0840704496667311, 4.3982297150257104, 4.7123889803846897,
-     5.026548245743669, 5.3407075111026483, 5.6548667764616276,
-     5.9690260418206069, 6.2831853071795862]
+    array([0.        , 0.31415927, 0.62831853, 0.9424778 , 1.25663706,
+           1.57079633, 1.88495559, 2.19911486, 2.51327412, 2.82743339,
+           3.14159265, 3.45575192, 3.76991118, 4.08407045, 4.39822972,
+           4.71238898, 5.02654825, 5.34070751, 5.65486678, 5.96902604,
+           6.28318531])
 
 get variables back into python from xmgrace::
 
@@ -115,12 +113,22 @@ get variables back into python from xmgrace::
 use shortcuts for put, eval, and get::
 
     >>> pg.z = 0.5
-    >>> pg('print z')
+    >>> pg('print(z)')
     0.5
-    >>> pg.z + 1
-    1.5
+    >>> pg.z + cosx
+    array([ 1.5       ,  1.45105652,  1.30901699,  1.08778525,  0.80901699,
+            0.5       ,  0.19098301, -0.08778525, -0.30901699, -0.45105652,
+           -0.5       , -0.45105652, -0.30901699, -0.08778525,  0.19098301,
+            0.5       ,  0.80901699,  1.08778525,  1.30901699,  1.45105652,
+            1.5       ])
 
-delete variables from grace::
+delete variables from xmgrace::
 
     >>> pg.delete('x')
     >>> pg.delete('y')
+
+save current session to a project file, then exit::
+
+    >>> pg('saveall "histoPlot.agr"')
+    >>> pg.exit()
+
