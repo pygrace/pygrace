@@ -129,6 +129,6 @@ delete variables from xmgrace::
 
 save current session to a project file, then exit::
 
-    >>> pg('saveall "histoPlot.agr"')
+    >>> pg.saveall('histoPlot.agr')
     >>> pg.exit()
 

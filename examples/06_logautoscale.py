@@ -44,5 +44,5 @@ graph.remove_extraworld_drawing_objects()
 graph.xaxis.label.text = "Negative X's are hidden"
 graph.yaxis.label.text = "Negative Y's are hidden"
 
-# print out the grace
+# print out the Project
 grace.saveall('06_logautoscale.agr')

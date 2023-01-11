@@ -1,4 +1,4 @@
-from pygrace.session import grace
+from pygrace import grace
 
 if __name__ == "__main__":
     x = list(range(1,15))

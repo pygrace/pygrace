@@ -25,8 +25,6 @@ class NodeSet(DataSet):
                  labels=False, *args, **kwargs):
         if size > 10:
             print('WARNING: Node size > 10: will be set to 10', file=sys.stdout)
-            #print >> sys.stderr, 'WARNING: Node size > 10: ' + \
-            #      'will be set to 10'
         DataSet.__init__(self, *args, **kwargs)
         for aNode in self.data:
             self.parent.node_xy[aNode] = self.data[aNode][0:2]
@@ -82,7 +80,6 @@ class LinkSet(DataSet):
                 except KeyError:
                     if ignore_missing:
                         print('WARNING: ignoring link %s-%s' % (n1, n2), file=sys.stderr)
-                        #print >> sys.stderr, 'WARNING: ignoring link %s-%s' % (n1, n2)
                     else:
                         raise KeyError('nodes should be added to the network first')
             self.data = theData

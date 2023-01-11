@@ -68,7 +68,7 @@ print('''>>> gr.prompt()''')
 gr.prompt()
 
 print('''inspect variables within grace''')
-print('''>>> gr.who().keys()''')
+print('''>>> list(gr.who().keys())''')
 print(list(gr.who().keys()))
 print('''>>> gr.who('x')''')
 print(gr.who('x'))

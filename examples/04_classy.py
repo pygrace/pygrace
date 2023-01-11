@@ -33,5 +33,5 @@ dataset.symbol.linestyle = 0
 
 graph.autoscale()
 
-# print the grace (.agr format) to a file
+# print the Project (.agr format) to a file
 grace.saveall('04_classy.agr')

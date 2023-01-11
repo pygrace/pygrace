@@ -58,14 +58,14 @@ if __name__ == 'PyGrace':
  
 elif __name__ == 'pygrace':
        __all__.append('project')
-       __all__.append('session')
+       __all__.append('interactive')
 
        from . import project
-       from . import session
+       from . import interactive
 
        # backward compatibility for pygrace
        def grace():
-               from pygrace import session as interactive
-               return interactive.grace()
+               from pygrace import interactive
+               return interactive.session()
 
 # EOF

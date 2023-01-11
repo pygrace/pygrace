@@ -35,5 +35,5 @@ graph = grace.add_graph(ManyScatterGraph, dataList)
 graph.set_labels('Snerdwump', 'Sneezle')
 graph.format_for_print(6)
 
-# print the grace (.agr format) to a file
+# print the Project (.agr format) to a file
 grace.saveall('03_simplesubclass.agr')

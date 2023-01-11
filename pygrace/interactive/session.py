@@ -1,14 +1,10 @@
 #!/usr/bin/env python
 #
-# 3/2/2009 version 0.4
-# mmckerns@caltech.edu
-# (C) 2005-2009 All Rights Reserved
-
 # Author: Mike McKerns (mmckerns @caltech and @uqfoundation)
-# Copyright (c) 2005-2015 California Institute of Technology.
+# Copyright (c) 2004-2016 California Institute of Technology.
 # Copyright (c) 2016-2023 The Uncertainty Quantification Foundation.
 # License: 3-clause BSD.  The full license text is available at:
-#  - https://github.com/pygrace/pygrace/blob/altmerge/pygrace/session/interactive.py
+#  - https://github.com/pygrace/pygrace/blob/altmerge/LICENSE
 #
 __license__ = """    
 Copyright (c) 2004-2016 California Institute of Technology.
@@ -70,22 +66,23 @@ class grace:   #Nathan Gray's gracePlot with interactive prompt added
     '''Python-grace bindings
 Methods:
   prompt() --> start interactive session
-  eval(command) --> execute a grace command
+  eval(command) --> execute a xmgrace command
   put(name,val) --> put variable into interactive session
   get(name) --> get variable from interactive session
-  who([name]) --> return the existing grace variables
-  delete(name) --> destroy selected grace variables
-  restart() --> restart a grace window
+  who([name]) --> return the existing xmgrace variables
+  delete(name) --> destroy selected xmgrace variables
+  restart() --> restart a xmgrace window
+  saveall(filename) --> save project to xmgrace.agr or given filename
 Notes:
-  grace and numpy must be installed, grace also relies on (open)motif
+  xmgrace and numpy must be installed, xmgrace also relies on (open)motif
 '''
     _privdoc='''Private methods:
  _validate(name) --> raise NameError if is invalid python name
  _putlocal(name,value) --> add a variable to local store
  _getlocal(name) --> return variable value from local store
  _poplocal(name) --> delete variable from local store, return value
- _wholist() --> get list of strings containing grace variables 
- _exists(name) --> True if is a variable in grace
+ _wholist() --> get list of strings containing xmgrace variables 
+ _exists(name) --> True if is a variable in xmgrace
 '''
 
     def __init__(self):
@@ -160,11 +157,11 @@ Notes:
         return self.whos.pop(name,None)
 
     def _wholist(self):
-        '''_wholist() --> get list of strings containing grace variables''' 
+        '''_wholist() --> get list of strings containing xmgrace variables''' 
         return list(self.whos.keys())
 
     def _exists(self,name):
-        '''_exists(name) --> True if is a variable in grace'''
+        '''_exists(name) --> True if is a variable in xmgrace'''
         exists = self._wholist().count(name)
         if exists: return True
         return False
@@ -176,7 +173,7 @@ Notes:
         return
 
     def restart(self):
-        '''restart() --> restart a grace window'''
+        '''restart() --> restart a xmgrace window'''
         vars = self.who()
         self.exit()
         self.session = None
@@ -185,7 +182,7 @@ Notes:
         return
 
     def put(self,name,val):
-        '''put(name,val) --> add variable to grace session'''
+        '''put(name,val) --> add variable to xmgrace session'''
         _locals = dict(self=self, name=name, val=val)
         if name.count('[') or name.count('.') or name.count('('):
             varlist = self._wholist()
@@ -213,7 +210,7 @@ Notes:
         return self._putlocal(name,val)
 
     def get(self,name):
-        '''get(name) --> value; get value from grace session'''
+        '''get(name) --> value; get value from xmgrace session'''
         #if name.count('+') or ...
         #if name.count('[') or name.count('.') or name.count('('):
         _locals = dict(self=self, name=name)
@@ -233,12 +230,12 @@ Notes:
         #return self._getlocal(name)
 
     def who(self,name=None):
-        '''who([name]) --> return the existing grace variables'''
+        '''who([name]) --> return the existing xmgrace variables'''
         if name: return self._getlocal(name,skip=False)
         return self.whos
 
     def delete(self,name):
-        '''delete(name) --> destroy selected grace variables'''
+        '''delete(name) --> destroy selected xmgrace variables'''
         if not name.count(','):
             self._poplocal(name)
             return
@@ -247,8 +244,14 @@ Notes:
             self.delete(var.strip())
         return
 
+    def saveall(self,filename=None):
+        '''saveall(filename) --> save project to xmgrace.agr or given filename'''
+        if filename is None: filename = 'xmgrace.agr'
+        com = 'saveall "%s"' % filename
+        return self.eval(com)
+
     def eval(self,com):
-        '''eval(command) --> execute a grace command'''
+        '''eval(command) --> execute a xmgrace command'''
         outlist = []
         _locals = dict(outlist=outlist, self=self, com=com)
         if self.whos: #add to outlist
@@ -300,7 +303,7 @@ Notes:
         return
 
     def prompt(self):
-        '''an interactive grace session'''
+        '''an interactive xmgrace session'''
         outlist = []
         _locals = dict(outlist=outlist, self=self)
         print("grace interface:")

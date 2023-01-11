@@ -82,6 +82,6 @@ graph.set_different_linewidths(linewidthsList=linewidthsList)
 
 #xxxx this clearly is not working yet
 
-# print out the grace
+# print out the Project
 grace.saveall('10_dataset_features.agr')
 

@@ -35,7 +35,7 @@ if __name__ == '__main__':
             time.sleep(1)
 
     # tell xmgrace to save the data:
-    p('saveall "sample.agr"')
+    gr.saveall('process.agr')
 
     # close xmgrace:
     gr.exit()

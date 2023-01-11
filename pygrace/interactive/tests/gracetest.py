@@ -1,15 +1,10 @@
 #!/usr/bin/env python
 #
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#  gracetest.py
-#  
-#  4/7/2005 version 0.0.1a
-#  mmckerns@caltech.edu
-#  (C) 2005 All Rights Reserved
-# 
-#  <see __licence__ in pygrace.py>
-# 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Author: Mike McKerns (mmckerns @caltech and @uqfoundation)
+# Copyright (c) 2004-2016 California Institute of Technology.
+# Copyright (c) 2016-2023 The Uncertainty Quantification Foundation.
+# License: 3-clause BSD.  The full license text is available at:
+#  - https://github.com/pygrace/pygrace/blob/altmerge/LICENSE
 #
 from pygrace import grace
 from numpy import *

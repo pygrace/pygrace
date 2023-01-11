@@ -75,7 +75,6 @@ class SolidPixelatedShape(DataSet):
 
         # Sort
         print("Sorting data.", file=sys.stderr)
-        #print >> sys.stderr, "Sorting data."
         pixeldata = sorted(self.data, key=lambda x_y: (x_y[1],x_y[0]))
         
         # Determine pixel size
@@ -83,7 +82,6 @@ class SolidPixelatedShape(DataSet):
             step_x = step_y = pixelsize / 2.
         else:
             print("Acquiring pixel size.", file=sys.stderr)
-            #print >> sys.stderr, "Acquiring pixel size."
             pixelsizes_x, pixelsizes_y = set(), set()
             for i in range(len(pixeldata)-1):
                 x0,y0 = pixeldata[i]
@@ -114,7 +112,6 @@ class SolidPixelatedShape(DataSet):
         # Now we have pixel locations. Draw around the outer pixels,
         # ignore holes in the middle.
         print("Tracing the outline of the shape from given pixels.", file=sys.stderr)
-        #print >> sys.stderr, "Tracing the outline of the shape from given pixels."
         self.data = []
 
         # ---Bottom----------
@@ -235,7 +232,6 @@ class SolidPixelatedShape(DataSet):
         # --- Complete the shape by repeating the first ever point ---
         self.data.append(self.data[0])
         print("Tracing complete.", file=sys.stderr)
-        #print >> sys.stderr, "Tracing complete."
 
         self.symbol.configure(shape=0)
         self.line.configure(linewidth=0, color=color)
