@@ -1,5 +1,5 @@
 """
-plot.py -- A high-level Python interface to the Grace plotting package
+a high-level function interface to a xmgrace process
 
 The intended purpose of gracePlot is to allow easy programmatic and interactive
 command line plotting with convenience functions for the most common commands. 
@@ -24,19 +24,17 @@ stored in columns, so a matrix with three vectors x1, x2 and x3 would be:
 
 Here's a simple example of a gracePlot session:
 
-    >>> import gracePlot
-    >>> p = gracePlot.gracePlot()  # A grace session begins
+    >>> from pygrace.session import plot
+    >>> p = plot.gracePlot()  # A grace session begins
     >>> # Sequence arguments to plot() are X, Y, dy
     >>> p.plot( [1,2,3,4,5], [10, 4, 2, 4, 10], [0.1, 0.4, 0.2, 0.4, 0.1],
     ... symbols=1 )  # A plot with errorbars
          
-If you're doing a lot of histograms then you should get Konrad Hinsen's 
-Scientific Python package:
-         http://starship.python.net/crew/hinsen/scientific.html
+If you're using a lot of histograms then consider using Scientific Python:
+    http://starship.python.net/crew/hinsen/scientific.html
 
 histoPlot() knows how to automatically plot Histogram instances from the 
-Scientific.Statistics.Histogram module, so histogramming ends up being pretty 
-simple:
+Scientific.Statistics.Histogram module, so histogramming ends up being simple:
     
     >>> from Scientific.Statistics.Histogram import Histogram
     >>> joe = Histogram( some_data, 40 )  # 40 = number of bins
@@ -44,18 +42,19 @@ simple:
 
 An important thing to realize about gracePlot is that it only has a one-way
 communications channel with the Grace session.  This means that if you make
-changes to your plot interactively (such as changing the number/layout of
-graphs) then gracePlot will have NO KNOWLEDGE of the changes.  This should not
-often be an issue, since the only state that gracePlot saves is the number and
+changes to your plot in the GUI (e.g. by changing number/layout of graphs)
+then gracePlot will have NO KNOWLEDGE of the changes.  This should not often
+be an issue, since the only state that gracePlot saves is the number and
 layout of graphs, the number of Sets that each graph has, and the hold state
 for each graph.
 """
 # --UPDATES--
-# 03/02/09: ported to Numpy by Mike McKerns (mmckerns@caltech.edu)
+# 03/02/09: ported to numpy by Mike McKerns (mmckerns@caltech.edu)
+# 01/10/23: ported to python 3 by Mike McKerns (mmckerns@uqfoundation.org)
 
 __version__ = "0.5.2"
 __author__ = "Nathaniel Gray <n8gray@caltech.edu>"
-__date__ = "September 16, 2001"
+#__date__ = "September 16, 2001"
 
 from . import process
 import numpy as np
@@ -78,11 +77,9 @@ class gracePlot:
         self.focus(0,0)
         
     def _send(self, cmd): 
-        #print(cmd)
         self.grace.command(cmd)
         
     def _flush(self):
-        #print('flush()')
         self.grace.flush()
 
     def pexec(self, cmd):
@@ -193,12 +190,9 @@ class graceGraph:
         self.gID = gID
     
     def _send(self, cmd):
-        #print(cmd)
-        #raise NameErrorr("duh")
         self.grace.command(cmd)
         
     def _flush(self):
-        #print('flush()')
         self.grace.flush()
 
     def pexec(self, cmd):
