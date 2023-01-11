@@ -70,7 +70,7 @@ except ImportError:
 class gracePlot:
     
     def __init__(self):
-        self.grace = process.GraceProcess()
+        self.grace = process.Process()
         self.g = [ graceGraph(self.grace, 0) ]
         self.curr_graph = self.g[0]
         self.rows = 1
