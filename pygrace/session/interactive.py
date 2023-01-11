@@ -59,17 +59,8 @@ Instantiate the grace class     >>> pg = grace()
 Get help                        >>> pg.doc()
 '''
 
+from math import *
 from numpy import *
-try:
-    from numarray import array as numarr
-    hasnumarray = True
-except ImportError:
-    hasnumarray = False
-try:
-    from Numeric import array as oldarr
-    hasnumeric = True
-except ImportError:
-    hasnumeric = False
 
 
 class grace:   #Nathan Gray's gracePlot with interactive prompt added
@@ -95,7 +86,7 @@ Notes:
 '''
 
     def __init__(self):
-        from .gracePlot import gracePlot as grace_plot
+        from .plot import gracePlot as grace_plot
         self.session = grace_plot()
         self.whos = {}
         self.reserved = ['and','assert','break','class','continue','def','del',
@@ -106,10 +97,19 @@ Notes:
         return
 
     def __getattr__(self,name):
+        _locals = dict(self=self, name=name)
         try:
-            exec 'attr = self.session.'+name
+            code = 'from math import *; from numpy import *;'
+            code += 'attr = self.session.'+name
+            code = compile(code, '<string>', 'exec')
+            exec(code, _locals)
+            attr = _locals['attr']
         except:
-            exec 'attr = self.get("'+name+'")'
+            code = 'from math import *; from numpy import *;'
+            code += 'attr = self.get("'+name+'")'
+            code = compile(code, '<string>', 'exec')
+            exec(code, _locals)
+            attr = _locals['attr']
         return attr
 
     def __setattr__(self,name,value):
@@ -129,14 +129,14 @@ Notes:
         #a valid python name begins with a letter or underscore,
         #and can include only alphanumeric symbols and the underscore.
         #python also does not allow redefinition of reserved words.
-        if not name: raise NameError, "invalid name"
+        if not name: raise NameError("invalid name")
         import re
         if re.compile('[_a-zA-Z]').sub('',name[0]):
-            raise NameError, "invalid first character '%s'" % name[0]
+            raise NameError("invalid first character '%s'" % name[0])
         badc = re.compile('[_a-zA-Z0-9]').sub('',name)
-        if badc: raise NameError, "invalid name '%s'; remove '%s'" % (name,badc)
+        if badc: raise NameError("invalid name '%s'; remove '%s'" % (name,badc))
         if name.lower() in self.reserved:
-            raise NameError, "invalid name '%s'; is a reserved word" % name
+            raise NameError("invalid name '%s'; is a reserved word" % name)
         return
 
     def _putlocal(self,name,value):
@@ -147,10 +147,10 @@ Notes:
 
     def _getlocal(self,name,skip=True):
         '''_getlocal(name) --> return variable value from local store'''
-        if self.whos.has_key(name):
+        if name in self.whos:
             return self.whos[name]
         if skip: return #name not found in local store
-        raise NameError,"'%s' is not defined locally" % str(name)
+        raise NameError("'%s' is not defined locally" % str(name))
 
     def _poplocal(self,name):
         '''_poplocal(name) --> delete variable from local store, return value'''
@@ -158,7 +158,7 @@ Notes:
 
     def _wholist(self):
         '''_wholist() --> get list of strings containing grace variables''' 
-        return self.whos.keys()
+        return list(self.whos.keys())
 
     def _exists(self,name):
         '''_exists(name) --> True if is a variable in grace'''
@@ -182,18 +182,29 @@ Notes:
 
     def put(self,name,val):
         '''put(name,val) --> add variable to grace session'''
+        _locals = dict(self=self, name=name, val=val)
         if name.count('[') or name.count('.') or name.count('('):
             varlist = self._wholist()
             for var in varlist: #put whos into locals()
-                exec var+" = self._getlocal('"+var+"')"
-            if (type(val) is type(array([]))) or \
-               (hasnumarray and (type(val) is type(numarr([])))) or \
-               (hasnumeric and (type(val) is type(oldarr([])))):
+                code = 'from math import *; from numpy import *;'
+                code += var+" = self._getlocal('"+var+"')"
+                code = compile(code, '<string>', 'exec')
+                exec(code, _locals)
+                locals()[var] = _locals[var]
+            if (type(val) is type(array([]))):
                 val = val.tolist()
-                exec name+' = array('+str(val)+')'
-            else: exec name+' = '+str(val) #put new var value into locals()
+                code = 'from math import *; from numpy import *;'
+                code += name+' = array('+str(val)+')'
+            else: code = name+' = '+str(val)
+            code = compile(code, '<string>', 'exec')
+            exec(code, _locals)
+            locals()[name] = _locals[name]
             for var in varlist: #use varlist to update state variables
-                exec 'self._putlocal("'+var+'",locals()["'+var+'"])'
+                _locals[var] = locals()[var]
+                code = 'from math import *; from numpy import *;'
+                code += 'self._putlocal("'+var+'",locals()["'+var+'"])'
+                code = compile(code, '<string>', 'exec')
+                exec(code, _locals)
             return
         return self._putlocal(name,val)
 
@@ -201,10 +212,19 @@ Notes:
         '''get(name) --> value; get value from grace session'''
         #if name.count('+') or ...
         #if name.count('[') or name.count('.') or name.count('('):
+        _locals = dict(self=self, name=name)
         varlist = self._wholist()
         for var in varlist: #put whos into locals()
-            exec var+" = self._getlocal('"+var+"')"
-        exec '___ = '+name #get from locals() as temp variable
+            code = 'from math import *; from numpy import *;'
+            code += var+" = self._getlocal('"+var+"')"
+            code = compile(code, '<string>', 'exec')
+            exec(code, _locals)
+            locals()[var] = _locals[var]
+        code = 'from math import *; from numpy import *;'
+        code += '___ = '+name
+        code = compile(code, '<string>', 'exec')
+        exec(code, _locals)
+        ___ = _locals['___'] #get from _locals as temp variable
         return ___
         #return self._getlocal(name)
 
@@ -226,20 +246,26 @@ Notes:
     def eval(self,com):
         '''eval(command) --> execute a grace command'''
         outlist = []
+        _locals = dict(outlist=outlist, self=self, com=com)
         if self.whos: #add to outlist
-            for name,val in self.whos.items():
+            for name,val in list(self.whos.items()):
 #               if numerix:
-                if (type(val) is type(array([]))) or \
-                   (hasnumarray and (type(val) is type(numarr([])))) or \
-                   (hasnumeric and (type(val) is type(oldarr([])))):
+                if (type(val) is type(array([]))):
                     val = val.tolist()
-                    exec name+' = array('+str(val)+')'
-                else: exec name+' = '+str(val)
-                exec 'outlist.append("'+name+'")'
+                    code = 'from math import *; from numpy import *;'
+                    code += name+' = array('+str(val)+');'
+                else: code = name+' = '+str(val)+';'
+                code += 'outlist.append("'+name+'")'
+                code = compile(code, '<string>', 'exec')
+                exec(code, _locals)
+                locals()[name] = _locals[name]
+            outlist[:] = _locals['outlist']
         if com == 'exit':
             return
         try: #if intended for python
-            exec com
+            code = 'from math import *; from numpy import *;'
+            code = compile(code+com, '<string>', 'exec')
+            exec(code, _locals)
             if com.startswith('del '):
                 names = com.split('del ')[1].strip()
                 self.delete(names)
@@ -248,37 +274,49 @@ Notes:
                 name = com.split('=')[0].strip()
                 if not name.count('['):
                     outlist.append(name)
+                    locals()[name] = _locals[name]
         except:
             try: #if intended for gracePlot
-                exec 'self.session.'+com
+                code = 'from math import *; from numpy import *;'
+                code += 'self.session.'+com
+                code = compile(code, '<string>', 'exec')
+                exec(code, _locals)
             except:
                 try: #if intended for grace
                     self.session._send(com)
                 except: #is unknown command
-                    raise RuntimeError, com
+                    raise RuntimeError(com)
         for name in outlist: #use outlist to update state variables
-            if name in locals().keys():
-                exec 'self._putlocal("'+name+'",locals()["'+name+'"])'
+            if name in list(locals().keys()):
+                _locals[name] = locals()[name]
+                code = 'from math import *; from numpy import *;'
+                code += 'self._putlocal("'+name+'",locals()["'+name+'"])'
+                code = compile(code, '<string>', 'exec')
+                exec(code, _locals)
         return
 
     def prompt(self):
         '''an interactive grace session'''
         outlist = []
+        _locals = dict(outlist=outlist, self=self)
         print("grace interface:")
         if self.whos: #print 'put' variables, add to outlist
             print("vars=")
-            for name,val in self.whos.items():
+            for name,val in list(self.whos.items()):
 #               if numerix:
-                if (type(val) is type(array([]))) or \
-                   (hasnumarray and (type(val) is type(numarr([])))) or \
-                   (hasnumeric and (type(val) is type(oldarr([])))):
+                if (type(val) is type(array([]))):
                     val = val.tolist()
-                    exec name+' = array('+str(val)+')'
-                else: exec name+' = '+str(val)
-                exec 'print("     "+"'+name+'")'
-                exec 'outlist.append("'+name+'")'
+                    code = 'from math import *; from numpy import *;'
+                    code += name+' = array('+str(val)+');'
+                else: code = name+' = '+str(val)+';'
+                code += 'print("     "+"'+name+'");'
+                code += 'outlist.append("'+name+'")'
+                code = compile(code, '<string>', 'exec')
+                exec(code, _locals)
+                locals()[name] = _locals[name]
+            outlist[:] = _locals['outlist']
         while 1:
-            com = raw_input('grace> ')
+            com = input('grace> ')
 ##          print(com)
             if com == 'exit':
                 break
@@ -287,7 +325,9 @@ Notes:
                 break
             else:
                 try: #if intended for python
-                    exec com
+                    code = 'from math import *; from numpy import *;'
+                    code = compile(code+com, '<string>', 'exec')
+                    exec(code, _locals)
                     if com.startswith('del '):
                         names = com.split('del ')[1].strip()
                         vars = names.split(',')
@@ -298,43 +338,39 @@ Notes:
                         name = com.split('=')[0].strip()
                         if not name.count('['):
                             outlist.append(name)
+                            locals()[name] = _locals[name]
                 except:
                     try: #if intended for gracePlot
-                        exec 'self.session.'+com
+                        code = 'from math import *; from numpy import *;'
+                        code += 'self.session.'+com
+                        code = compile(code, '<string>', 'exec')
+                        exec(code, _locals)
                     except:
                         try: #if intended for grace
                             self.session._send(com)
                         except: #is unknown command
                             print("RuntimeError: %s" % com)
         for name in outlist: #use outlist to update state variables
-            if name in locals().keys():
-                exec 'self._putlocal("'+name+'",locals()["'+name+'"])'
+            if name in list(locals().keys()):
+                _locals[name] = locals()[name]
+                code = 'from math import *; from numpy import *;'
+                code += 'self._putlocal("'+name+'",locals()["'+name+'"])'
+                code = compile(code, '<string>', 'exec')
+                exec(code, _locals)
         return
 
 #           elif com.startswith('python('):
 #               pcom = com[7:-1]
 #               try:
-#                   exec pcom
+#                   exec(pcom)
 #               except:
 #                   print("PythonError: %s" % pcom)
 #           elif com.startswith('*'):
 #               pcom = com[1:]
 #               try:
-#                   exec 'self.session.'+pcom
+#                   exec('self.session.'+pcom)
 #               except:
 #                   print("GraceError: %s" % pcom)
 #           else:
 #               self.session._send(com)
 
-if __name__ == "__main__":
-    x = range(1,15)
-    y = []
-    for i in x:
-        y.append(i*i)
-    g = grace()
-    g.plot(x,y)
-    g.put('x',x)
-    g.put('y',y)
-    g.prompt()
-    print(g.who())
-    g.exit()

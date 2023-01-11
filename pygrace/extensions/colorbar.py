@@ -1,3 +1,4 @@
+
 import sys
 import math
 
@@ -15,7 +16,7 @@ class SolidRectangle(DataSet):
     def __init__(self, color, *args, **kwargs):
         DataSet.__init__(self, *args, **kwargs)
         if len(self.data) != 2:
-            raise TypeError, 'Data for SolidRectangle MUST contain 2 points'
+            raise TypeError('Data for SolidRectangle MUST contain 2 points')
         x0 = self.data[0][0]
         x1 = self.data[1][0]
         y0 = min(self.data[0][1], self.data[1][1])
@@ -35,7 +36,7 @@ class SolidOutlinedRectangle(DataSet):
     def __init__(self, color, outline_color=1, *args, **kwargs):
         DataSet.__init__(self, *args, **kwargs)
         if len(self.data) != 2:
-            raise TypeError, 'Data for SolidOutlinedRectangle MUST contain 2 points'
+            raise TypeError('Data for SolidOutlinedRectangle MUST contain 2 points')
         x0 = self.data[0][0]
         x1 = self.data[1][0]
         y0 = min(self.data[0][1], self.data[1][1])
@@ -73,14 +74,16 @@ class SolidPixelatedShape(DataSet):
         DataSet.__init__(self, *args, **kwargs)
 
         # Sort
-        print >> sys.stderr, "Sorting data."
-        pixeldata = sorted(self.data, key=lambda (x,y): (y,x))
+        print("Sorting data.", file=sys.stderr)
+        #print >> sys.stderr, "Sorting data."
+        pixeldata = sorted(self.data, key=lambda x_y: (x_y[1],x_y[0]))
         
         # Determine pixel size
         if pixelsize is not None:
             step_x = step_y = pixelsize / 2.
         else:
-            print >> sys.stderr, "Acquiring pixel size."
+            print("Acquiring pixel size.", file=sys.stderr)
+            #print >> sys.stderr, "Acquiring pixel size."
             pixelsizes_x, pixelsizes_y = set(), set()
             for i in range(len(pixeldata)-1):
                 x0,y0 = pixeldata[i]
@@ -110,7 +113,8 @@ class SolidPixelatedShape(DataSet):
 
         # Now we have pixel locations. Draw around the outer pixels,
         # ignore holes in the middle.
-        print >> sys.stderr, "Tracing the outline of the shape from given pixels."
+        print("Tracing the outline of the shape from given pixels.", file=sys.stderr)
+        #print >> sys.stderr, "Tracing the outline of the shape from given pixels."
         self.data = []
 
         # ---Bottom----------
@@ -230,7 +234,8 @@ class SolidPixelatedShape(DataSet):
 
         # --- Complete the shape by repeating the first ever point ---
         self.data.append(self.data[0])
-        print >> sys.stderr, "Tracing complete."
+        print("Tracing complete.", file=sys.stderr)
+        #print >> sys.stderr, "Tracing complete."
 
         self.symbol.configure(shape=0)
         self.line.configure(linewidth=0, color=color)
@@ -266,7 +271,7 @@ class ColorBar(Graph):
             if self.parent is None:
                 self.color_range = []
             else:
-                self.color_range = range(2,len(self.parent.colors))
+                self.color_range = list(range(2,len(self.parent.colors)))
                 self.color_range.reverse()
         else:
             self.color_range = color_range
@@ -339,7 +344,7 @@ class ColorBar(Graph):
                 y1 = ymin * math.pow(ymax/ymin,float(i+1)/float(len(self.color_range)))
             else:
                 message = "'%s' is an unknown axis type"%self.xaxis.scale
-                raise TypeError,message
+                raise TypeError(message)
             # add a three-point dataset to show-up as a solid rectangle
             the_dataset = self.add_dataset([(0, y0), (1, y1)],
                                            SolidRectangle,

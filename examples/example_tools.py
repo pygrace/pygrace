@@ -17,7 +17,7 @@ def calculate_cdf(data, normalized=True):
         except KeyError:
             countDict[item]  = 1
 
-    countX = countDict.items()
+    countX = list(countDict.items())
     countX.sort()
 
     unnormalized = []
@@ -45,7 +45,7 @@ def calculate_pdf(data, normalized=True):
         except KeyError:
             countDict[item]  = 1
 
-    frequencyList = countDict.items()
+    frequencyList = list(countDict.items())
     frequencyList.sort()
 
     total = float(sum(data))
@@ -60,8 +60,8 @@ def singleplot():
     x =  [10**(i/float(dn)) for i in range(-3*dn, 3*dn + 1)]
     y1 = [10**math.cos(math.log10(i)**2) for i in x]
     y2 = [10**math.sin(math.log10(i)**2) for i in x]
-    data1 = zip(x, y1)    
-    data2 = zip(x, y2)
+    data1 = list(zip(x, y1))    
+    data2 = list(zip(x, y2))
     return data1, data2
 
 def multiplot():
@@ -76,13 +76,13 @@ def multiplot():
     for x_i, r_i in zip(x, r):
         window.append((x_i, r_i))
         if len(window) >= l:
-            x_bar, r_bar = map(sum, zip(*window))
+            x_bar, r_bar = list(map(sum, list(zip(*window))))
             moving_average.append( (x_bar / float(l), r_bar / float(l)) )
             window.pop(0)
 
-    data1 = zip(x, y1)
-    data2 = zip(x, y0)
-    data3 = zip(x, r)
+    data1 = list(zip(x, y1))
+    data2 = list(zip(x, y0))
+    data3 = list(zip(x, r))
     data4 = moving_average
     data5 = r_cdf
     return data1, data2, data3, data4, data5
@@ -117,8 +117,8 @@ def colorplot():
     delta = 0.2
     f = lambda zs: floor(min(zs)/delta)*delta
     g = lambda zs: ceil(max(zs)/delta)*delta
-    xmin,ymin = map(f,zip(*data))
-    xmax,ymax = map(g,zip(*data))
+    xmin,ymin = list(map(f,list(zip(*data))))
+    xmax,ymax = list(map(g,list(zip(*data))))
     bins = []
     for i in range(int(xmin/delta),int(xmax/delta)):
         for j in range(int(ymin/delta),int(ymax/delta)):
@@ -135,7 +135,7 @@ def colorplot():
                 bin.lwrbnd[1]<=datum[1] and datum[1]<bin.uprbnd[1]):
             s = "bin not correctly identified" + \
                 str(bin.lwrbnd) + ' ' + str(bin.uprbnd) + ' ' + str(datum)
-            raise TypeError, s
+            raise TypeError(s)
         bin.pdf += 1.0
     minpdf,maxpdf = 1.0/float(len(data))/delta/delta, 0.0
     for bin in bins:

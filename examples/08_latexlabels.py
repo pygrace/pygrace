@@ -34,9 +34,9 @@ grace.add_drawing_object(DrawText, text='Currently available LaTeX characters',
 grace.add_drawing_object(DrawLine, start=(0.08, 0.915), end=(1.22, 0.915),
                          linewidth=1.0)
 
-mod = (len(CONVERT) / 5) + 1
+mod = (len(CONVERT) // 5) + 1
 for index, (latexString, graceString) in enumerate(sorted(CONVERT.items())):
-    x = 0.1 + 0.20 * (index / mod)
+    x = 0.1 + 0.20 * (index // mod)
     y = 0.895 - 0.0225 * (index % mod)
     latexString = latexString.replace('\\', r'\\')
     grace.add_drawing_object(DrawText, text=graceString, x=x, y=y,

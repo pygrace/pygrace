@@ -55,7 +55,7 @@ if has_setuptools:
 setup_code += """    
       )
 """
-exec setup_code
+exec(setup_code)
 
 # if dependencies are missing, print a warning
 try:

@@ -31,25 +31,28 @@ class GraceObject(object):
         # attribute
         self._formatting_template = {}
 
+    def __hash__(self):
+        return super().__hash__()
+
     def _set_kwargs_attributes(self, attrDict):
         """This sets all of the arguements that are given as default arguments
         as the attributes of the class."""
 
         # parent gets set in a separate function (and self doesn't need it)
         for reserved in ['self', 'parent', 'kwargs']:
-            if attrDict.has_key(reserved):
+            if reserved in attrDict:
                 del attrDict[reserved]
 
-        for key, value in attrDict.iteritems():
+        for key, value in list(attrDict.items()):
             setattr(self, key, value)
 
         # store default formatting attributes for later use
         for nonformat in ['index', 'data', 'colors']:
-            if attrDict.has_key(nonformat):
+            if nonformat in attrDict:
                 del attrDict[nonformat]
 
         # remove duplicates
-        self._defaultAttributes = dict.fromkeys(attrDict.keys())
+        self._defaultAttributes = dict.fromkeys(list(attrDict.keys()))
         
     def _link(self, parent):
         """If there is no parent, set self as root.  Otherwise, record who the
@@ -93,11 +96,11 @@ class GraceObject(object):
         
         # put named children alphabetically first in list
         result = [child for (name, child) 
-                  in sorted(self._namedChildren.iteritems())]
+                  in sorted(self._namedChildren.items())]
         
         # loop through dynamic children types in order
         for childType in DYNAMIC_CHILD_TYPES:
-            if self._dynamicChildren.has_key(childType):
+            if childType in self._dynamicChildren:
                 result.extend(self._dynamicChildren[childType])
 
         return result
@@ -299,12 +302,12 @@ class GraceObject(object):
             raise KeyError(message)
 
     def configure(self, **kwargs):
-        for attr, value in kwargs.iteritems():
+        for attr, value in list(kwargs.items()):
             setattr(self, attr, value)
 
     def configure_group(self, *args, **kwargs):
         for arg in args:
-            for attr, value in kwargs.iteritems():
+            for attr, value in list(kwargs.items()):
                 setattr(arg, attr, value)
 
     def scale_suffix(self, value, suffix, all=True):
@@ -365,14 +368,14 @@ class GraceObject(object):
         # other is a class, not an instance of a class
         if isinstance(other,type):
 
-#             print 'BBB', other
-#             print dir(other)
-#             print other.__init__
-#             print dir(other.__init__)
-#             print other.__init__.im_func.func_code.co_argcount
+#             print('BBB', other)
+#             print(dir(other))
+#             print(other.__init__)
+#             print(dir(other.__init__))
+#             print(other.__init__.im_func.func_code.co_argcount)
 
 #             args = [None] * (other.__init__.im_func.func_code.co_argcount - 1)
-#             print args
+#             print(args)
 #             x = other(*args)
 
             complete = False
@@ -427,10 +430,10 @@ class GraceObject(object):
                 # _defaultAttributes dictionary
                     
         # remove duplicates and sort each list
-        methodList = dict.fromkeys(methodList).keys()
+        methodList = list(dict.fromkeys(methodList).keys())
         methodList.sort()
 
-        attrList = dict.fromkeys(attrList).keys()
+        attrList = list(dict.fromkeys(attrList).keys())
         attrList.sort()
 
         # add the methods and attributes for this object into the reference
@@ -454,7 +457,7 @@ class GraceObject(object):
         # temporary private variable in the root node
         self.root._reference_list = {}
         self._make_reference_list()
-        sorted = self.root._reference_list.items()
+        sorted = list(self.root._reference_list.items())
         sorted.sort()
         del self.root._reference_list
 
@@ -476,10 +479,10 @@ class GraceObject(object):
         # if it appears the same number of times as there are total classes,
         # then it must be common to all classes, so add to global list
         globalMethodList, globalAttrList = [], []
-        for (method, count) in methodCount.iteritems():
+        for (method, count) in list(methodCount.items()):
             if count == len(sorted):
                 globalMethodList.append(method)
-        for (attr, count) in attrCount.iteritems():
+        for (attr, count) in list(attrCount.items()):
             if count == len(sorted):
                 globalAttrList.append(attr)
 
@@ -569,8 +572,7 @@ class GraceObject(object):
 
         # print latex page to outfile
         outStream = open(filename, 'w')
-        print >> outStream,'\n'.join(self._latex_friendly(line)
-                                     for line in result)
+        print('\n'.join(self._latex_friendly(line) for line in result), file=outStream)
         outStream.close()
 
 

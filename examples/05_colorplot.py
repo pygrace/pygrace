@@ -34,7 +34,7 @@ import example_tools
 data = example_tools.colorplot()
 
 # find bounds of pdf
-x0s,y0s,x1s,y1s,pdfs = zip(*data)
+x0s,y0s,x1s,y1s,pdfs = list(zip(*data))
 maxpdf=max(pdfs)
 minpdf = float("inf")
 for pdf in pdfs:

@@ -1,5 +1,5 @@
 """
-gracePlot.py -- A high-level Python interface to the Grace plotting package
+plot.py -- A high-level Python interface to the Grace plotting package
 
 The intended purpose of gracePlot is to allow easy programmatic and interactive
 command line plotting with convenience functions for the most common commands. 
@@ -57,10 +57,9 @@ __version__ = "0.5.2"
 __author__ = "Nathaniel Gray <n8gray@caltech.edu>"
 __date__ = "September 16, 2001"
 
-from . import grace_np
-import numpy, string
-N = numpy
-del numpy
+from . import process
+import numpy as np
+import string
 
 try:
     from Scientific.Statistics.Histogram import Histogram
@@ -71,7 +70,7 @@ except ImportError:
 class gracePlot:
     
     def __init__(self):
-        self.grace = grace_np.GraceProcess()
+        self.grace = process.GraceProcess()
         self.g = [ graceGraph(self.grace, 0) ]
         self.curr_graph = self.g[0]
         self.rows = 1
@@ -334,7 +333,7 @@ class graceGraph:
             return
         
         # this is going to be ugly
-        y = N.array(y)
+        y = np.array(y)
         if x_max is None:
             x_max = len(y)-1 + x_min
             edges = 0
@@ -345,24 +344,24 @@ class graceGraph:
         if dy is not None:
             if len(dy) != len(y):
                 raise RuntimeError('len(dy) != len(y)')
-            dy = N.array(dy)
+            dy = np.array(dy)
         
         if not self._hold: self.clear()
         
         if edges:
             # x_min and x_max are the outside edges of the first/last bins
             binwidth = (x_max-x_min)/float(len(y))
-            edge_x = N.arange(len(y)+1 , dtype='d')*binwidth + x_min
+            edge_x = np.arange(len(y)+1 , dtype='d')*binwidth + x_min
             cent_x = (edge_x + 0.5*binwidth)[0:-1]
         else:
             # x_min and x_max are the centers of the first/last bins
             binwidth = (x_max-x_min)/float(len(y)-1)
-            cent_x = N.arange(len(y), dtype='d')*binwidth + x_min
+            cent_x = np.arange(len(y), dtype='d')*binwidth + x_min
             edge_x = cent_x - 0.5*binwidth
-            edge_x = N.resize(edge_x, (len(cent_x)+1,))
+            edge_x = np.resize(edge_x, (len(cent_x)+1,))
             edge_x[-1] = edge_x[-2] + binwidth
-        edge_y = y.copy() #N.zeros(len(y)+1)
-        edge_y = N.resize(edge_y, (len(y)+1,))
+        edge_y = y.copy() #np.zeros(len(y)+1)
+        edge_y = np.resize(edge_y, (len(y)+1,))
         edge_y[-1] = 0
         
         # Draw the edges:
@@ -404,7 +403,7 @@ class graceGraph:
         if dy is None:
             dy = Y
             Y = X
-            X = N.arange(X.shape[0])
+            X = np.arange(X.shape[0])
             
         # Guarantee rank-2 matrices
         if len(X.shape) == 1:
@@ -475,16 +474,16 @@ class graceGraph:
         Setting styles=1 will give each dataset a unique linestyle
         """
 
-        X = N.array(X)
+        X = np.array(X)
         # if there's no Y, then just use X
         if Y is None:
             Y = X
-            X = N.arange(X.shape[0])
+            X = np.arange(X.shape[0])
         else:
-            Y = N.array(Y)
+            Y = np.array(Y)
         
         if dy is not None:
-            dy = N.array(dy)
+            dy = np.array(dy)
             self._errPlot(X, Y, dy, symbols=symbols, styles=styles)
             return
 
@@ -531,27 +530,3 @@ class graceGraph:
         
         self.nSets = self.nSets + Y.shape[1]
 
-def _test():
-    from time import sleep
-    p = gracePlot()
-    joe = N.arange(5,50)
-    p.plot(joe, joe**2, symbols=1)
-    p.title('Parabola')
-    sleep(2)
-    p.multi(2,2)
-    p.focus(1,1)
-    p.plot(joe, joe, styles=1)
-    p.hold(1)
-    p.plot(joe, N.log(joe), styles=1)
-    p.legend(['Linear', 'Logarithmic'])
-    p.xlabel('Abscissa')
-    p.ylabel('Ordinate')
-    sleep(2)
-    p.focus(1,0)
-    p.histoPlot(N.sin(joe*3.14/49.0), 5./49.*3.14, 3.14)
-    sleep(2)
-    p.exit()
-    
-if __name__=="__main__":
-    _test()
-    

@@ -39,13 +39,13 @@ __all__ = [
     'parser',
 	]
  
-import axis
-import colors
-import dataset
-import drawing_objects
-import fonts
-import graph
-import parser
+from . import axis
+from . import colors
+from . import dataset
+from . import drawing_objects
+from . import fonts
+from . import graph
+from . import parser
  
 # dealing with backward compatibility
 if __name__ == 'PyGrace':
@@ -57,8 +57,8 @@ elif __name__ == 'pygrace':
        __all__.append('plot')
        __all__.append('session')
 
-       import plot
-       import session
+       from . import plot
+       from . import session
 
        # backward compatibility for pygrace
        def grace():

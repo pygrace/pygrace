@@ -47,7 +47,7 @@ CONVERT = {
     r'$\ldots$': r'\f{Symbol}\c<\C\f{}',
     }
 
-SORTED_CONVERT = CONVERT.items()
+SORTED_CONVERT = list(CONVERT.items())
 SORTED_CONVERT = [(len(key), (key, value)) for (key, value) in SORTED_CONVERT]
 SORTED_CONVERT.sort(reverse=True)
 SORTED_CONVERT = [(key, value) for (len, (key, value)) in SORTED_CONVERT]
@@ -69,4 +69,4 @@ class LatexString(str):
 if __name__ == '__main__':
 
     s = LatexString(r'Q $\in$ 0.5')
-    print s
+    print(s)

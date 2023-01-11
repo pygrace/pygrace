@@ -2,7 +2,7 @@
 PyFig.  If errors occur, full Tracebacks of the errors are sent to standard
 out."""
 
-from sys import stderr, stdout
+from sys import stderr, stdout, executable
 from subprocess import Popen, PIPE
 from os.path import sep, splitext
 
@@ -26,11 +26,10 @@ exampleList = [
 
 if __name__ == '__main__':
 
-    PYTHON_PATH = '/usr/bin/env python' 
     SHOW_DETAILED_ERROR_OUTPUT = True
 
     # output title message to shell
-    print >> stderr, ('Running tests ' + '-' * 80)[:79]
+    print(('Running tests ' + '-' * 80)[:79], file=stderr)
 
     # initialize counters
     testNumber = 1
@@ -41,25 +40,25 @@ if __name__ == '__main__':
     for scriptPath in exampleList:
 
         # extract script path
-        print >> stderr, '%3i) %-67s' % (testNumber, scriptPath),
+        print('%3i) %-67s' % (testNumber, scriptPath), file=stderr, end=' ')
 
         # try to make figure using pyfig script (execute in shell)
-        command = '%s %s' % (PYTHON_PATH, scriptPath)
-        childProcess = Popen(command, shell=True, stderr=PIPE)
+        command = '%s %s' % (executable, scriptPath)
+        childProcess = Popen(command, shell=True, stderr=PIPE, text=True)
 
         # write output of error stream
         errorOutput = childProcess.stderr.read()
         if errorOutput:
             root, ext = splitext(scriptPath)
             errorStream = open('%s.log' % root, 'w')
-            print >> errorStream, errorOutput
+            print(errorOutput, file=errorStream)
             errorStream.close()
         
         # tell the shell whether the script successfully ran
         if childProcess.wait():
-            print >> stderr, 'failed'
+            print('failed', file=stderr)
         else:
-            print >> stderr, 'passed'
+            print('passed', file=stderr)
             nWork += 1
 
         testNumber += 1
@@ -72,14 +71,14 @@ if __name__ == '__main__':
 
     message = '\nTests %s: %i of %i were successful.' % \
               (allPassed, nWork, nTests)
-    print >> stderr, message
+    print(message, file=stderr)
 
     if allPassed == 'FAILED' and SHOW_DETAILED_ERROR_OUTPUT:
 
         message = """
 The output of standard error for each test script are stored in the same file
 as the output with a .log extension."""
-        print >> stderr, message
+        print(message, file=stderr)
 
     if allPassed == 'PASSED':
 
@@ -87,5 +86,5 @@ as the output with a .log extension."""
 All of the test scripts successfully ran, but make sure to check the figures
 that were created, as they may not look right even though the scripts did not
 throw an error."""
-        print >> stderr, message
+        print(message, file=stderr)
 

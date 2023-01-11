@@ -1,4 +1,4 @@
-from base import GraceObject 
+from .base import GraceObject 
 
 DRAWTEXT_JUSTIFICATIONS = {"l":0,
                            "r":1,
@@ -25,8 +25,8 @@ class DrawingObject(GraceObject):
         # these are needed for the parent checking by drawing objects, but
         # should not be imported everything else has been (to avoid a cycle
         # in the dependency graph)
-        import graph
-        import plot
+        from . import graph
+        from . import plot
 
         # if the drawing object is added by a Graph, then record the index of
         # the graph.  Otherwise the parent of the drawing object is the grace.
@@ -109,7 +109,7 @@ class DrawBox(DrawingObject):
         """Find the limits of a DrawBox for autoscaling axes (among
         other things?)
         """
-        x,y = zip(self.lowleft, self.upright)
+        x,y = list(zip(self.lowleft, self.upright))
         return min(x), min(y), max(x), max(y)
 
 class DrawText(DrawingObject):
@@ -210,7 +210,7 @@ class DrawLine(DrawingObject):
         """Find the limits of a DrawLine for autoscaling axes (among
         other things?)
         """
-        x,y = zip(self.start, self.end)
+        x,y = list(zip(self.start, self.end))
         return min(x), min(y), max(x), max(y)
 
 class DrawEllipse(DrawingObject):
@@ -247,7 +247,7 @@ class DrawEllipse(DrawingObject):
         """Find the limits of a DrawEllipse for autoscaling axes (among
         other things?)
         """
-        x,y = zip(self.lowleft, self.upright)
+        x,y = list(zip(self.lowleft, self.upright))
         return min(x), min(y), max(x), max(y)
 
 

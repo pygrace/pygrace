@@ -177,7 +177,7 @@ class MultiPlot(Plot):
             message = """
 Plot.autohide_multi_labels only works with a multigraph
 """
-            raise TypeError,message
+            raise TypeError(message)
 
         # iterate through each column of graphs
         for c in range(self.cols):
@@ -216,7 +216,7 @@ Plot.autohide_multi_labels only works with a multigraph
             message = """
 Plot.autohide_multi_labels only works with a multigraph
 """
-            raise TypeError,message
+            raise TypeError(message)
 
         # iterate through each column of graphs
         for c in range(self.cols):
@@ -268,7 +268,7 @@ Plot.autohide_multi_labels only works with a multigraph
             message = """
 Plot.autohide_multi_labels only works with a multigraph
 """
-            raise TypeError,message
+            raise TypeError(message)
 
         # iterate through each column of graphs
         for r in range(self.rows):
@@ -307,7 +307,7 @@ Plot.autohide_multi_labels only works with a multigraph
             message = """
 Plot.autohide_multi_labels only works with a multigraph
 """
-            raise TypeError,message
+            raise TypeError(message)
 
         # iterate through each column of graphs
         for r in range(self.rows):
@@ -394,7 +394,7 @@ Plot.autohide_multi_labels only works with a multigraph
 rowspan[0]>rowspan[1].  Must have rowspan[0]<=rowspan[1] in 
 set_row_xaxislabel.
 """
-            raise TypeError, message
+            raise TypeError(message)
 
         # turn off y-axis labels for all panels in this column
         for row in range(rowspan[0],rowspan[1]+1):
@@ -458,7 +458,7 @@ set_row_xaxislabel.
 colspan[0]>colspan[1].  Must have colspan[0]<=colspan[1] in 
 set_row_xaxislabel.
 """
-            raise TypeError, message
+            raise TypeError(message)
 
         # turn off y-axis labels for all panels in this column
         for col in range(colspan[0],colspan[1]+1):

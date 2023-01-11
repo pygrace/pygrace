@@ -67,7 +67,7 @@ network.add_node_set(nodeset1_xysize, type = 'xysize',
 
 
 # nodeset 2 ----------
-for id, (x,y) in nodeset2_xy.items():
+for id, (x,y) in list(nodeset2_xy.items()):
     # you don't need to define a size, but I'll make them big
     # to demonstrate curving of links to avoid node obstacles
     # This also demonstrates add_node (it adds a single node)
@@ -80,7 +80,7 @@ for id, (x,y) in nodeset2_xy.items():
 # nodeset 3 ----------
 # You don't have to define a size, nodes will have a
 # default size if your data is of type xy only.
-for id, data in nodeset3_xy.items():
+for id, data in list(nodeset3_xy.items()):
     network.add_node(id, data)
 # Note that you don't need the for loop, this also works:
 # network.add_node_set(nodeset3_xy)

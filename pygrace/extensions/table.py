@@ -66,4 +66,4 @@ if __name__ == '__main__':
 #     grace.add_drawing_object(DrawTable, [])
 
 
-    print grace
+    print(grace)

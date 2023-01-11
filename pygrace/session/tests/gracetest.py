@@ -46,15 +46,15 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
 
     def test_grace__getattr__(self):
         '''grace: call grace method if gracePlot method is implicit'''
-        self.assert_(self.session.redraw() == None,"implicit method not found ")
+        self.assertTrue(self.session.redraw() == None,"implicit method not found ")
         #self.assertRaises(AttributeError,self.session.foo,'x')
         return
 
     def test_grace_validate(self):
         '''grace: fail upon invalid name'''
-        self.assert_(self.session._validate("foo") == None,
+        self.assertTrue(self.session._validate("foo") == None,
                      "failure to validate a valid variable")
-        self.assert_(self.session._validate("f_o1o") == None,
+        self.assertTrue(self.session._validate("f_o1o") == None,
                      "failure to validate a valid variable")
         self.assertRaises(NameError,self.session._validate,'1foo')
         self.assertRaises(NameError,self.session._validate,'$foo')
@@ -66,17 +66,17 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
     def test_grace_putlocal(self):
         '''grace: add variable to local store'''
         Z = 666
-        self.assert_(self.session._putlocal("a",self.int) == None,
+        self.assertTrue(self.session._putlocal("a",self.int) == None,
                      "failure to add scalar to local store")
-        self.assert_(self.session._putlocal("b",self.list) == None,
+        self.assertTrue(self.session._putlocal("b",self.list) == None,
                      "failure to add list to local store")
-        self.assert_(self.session._putlocal("c",self.array) == None,
+        self.assertTrue(self.session._putlocal("c",self.array) == None,
                      "failure to add array to local store")
-        self.assert_(self.session._putlocal("n",self.none) == None,
+        self.assertTrue(self.session._putlocal("n",self.none) == None,
                      "failure to add None to local store")
-        self.assert_(self.session._putlocal("s",self.str) == None,
+        self.assertTrue(self.session._putlocal("s",self.str) == None,
                      "failure to add string to local store")
-        self.assert_(self.session._putlocal("z",Z) == None,
+        self.assertTrue(self.session._putlocal("z",Z) == None,
                      "failure to add to named local store")
         self.assertEqual(self.int, self.session.whos['a'])
         self.assertEqual(self.list, self.session.whos['b'])
@@ -134,7 +134,7 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
         self.session.eval("b = [1,2]")
         self.session.eval("s = 'foo'")
         self.session.put("n",None)
-        wholist = ['a', 's', 'b', 'n']
+        wholist = ['a', 'b', 's', 'n']
         self.assertEqual(wholist, self.session._wholist())
         return
 
@@ -148,23 +148,23 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
     def test_gracerestart(self):
         '''grace: restart a grace window'''
         self.session.eval('a = 1')
-        self.assert_(self.session.restart() == None,
+        self.assertTrue(self.session.restart() == None,
                      "failure to restart grace window")
         whos = {} #FIXME: {'a': 1} # session preserved across window close?
         self.assertEqual(whos, self.session.who())
-        self.assert_(self.session.redraw() == None,
+        self.assertTrue(self.session.redraw() == None,
                      "failure to reinitialize grace session")
         return
 
     def test_graceput(self):
         '''grace: pass a variable into grace'''
-        self.assert_(self.session.put("a",self.int) == None,
+        self.assertTrue(self.session.put("a",self.int) == None,
                      "failure to pass an int to grace")
-        self.assert_(self.session.put("b",self.list) == None,
+        self.assertTrue(self.session.put("b",self.list) == None,
                      "failure to pass a list to grace")
-        self.assert_(self.session.put("c",self.array) == None,
+        self.assertTrue(self.session.put("c",self.array) == None,
                      "failure to pass an array to grace")
-        self.assert_(self.session.put("s",self.str) == None,
+        self.assertTrue(self.session.put("s",self.str) == None,
                      "failure to pass a string to IDL")
         whos = {'a': self.int, 'c': self.array, 'b': self.list, 's': self.str}
         self.assertEqual(whos, self.session.who())
@@ -187,13 +187,13 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
         self.session.put("c",self.array)
         self.session.put("s",self.str)
         whos = {'a': self.int, 'c': self.array, 'b': self.list, 's': self.str}
-        self.assert_(self.session.get('a') == whos['a'],
+        self.assertTrue(self.session.get('a') == whos['a'],
                      "failure to extract an int from grace")
-        self.assert_(self.session.get('b') == whos['b'],
+        self.assertTrue(self.session.get('b') == whos['b'],
                      "failure to extract a list from grace")
-        self.assert_((self.session.get('c') == whos['c']).all(),
+        self.assertTrue((self.session.get('c') == whos['c']).all(),
                      "failure to extract an array from grace")
-        self.assert_(self.session.get('s') == whos['s'],
+        self.assertTrue(self.session.get('s') == whos['s'],
                      "failure to extract a string from grace")
         self.assertRaises(NameError,self.session.get,'x')
         self.assertRaises(NameError,self.session.get,'sin(x)')
@@ -229,19 +229,19 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
         self.session.put("a",1)
         self.session.put("b",2)
         self.session.put("c",3)
-        self.assert_(self.session.delete("c") == None,
+        self.assertTrue(self.session.delete("c") == None,
                      "failure to delete a grace variable")
         whos = {'a': 1, 'b': 2}
         self.assertEqual(whos, self.session.who())
-        self.assert_(self.session.delete("a, b") == None,
+        self.assertTrue(self.session.delete("a, b") == None,
                      "failure to delete a grace variable tuple")
         whos = {}
         self.assertEqual(whos, self.session.who())
-        self.assert_(self.session.delete("z") == None,
+        self.assertTrue(self.session.delete("z") == None,
                      "failure to skip delete for unknown variable")
         whos = {}
         self.assertEqual(whos, self.session.who())
-        self.assert_(self.session.delete("[0,1]") == None,
+        self.assertTrue(self.session.delete("[0,1]") == None,
                      "failure to skip delete for bad syntax")
         whos = {}
         self.assertEqual(whos, self.session.who())
@@ -253,13 +253,13 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
 
     def test_graceevalpython(self):
         '''grace: evaluate a python expression'''
-        self.assert_(self.session.eval("a = 1") == None,
+        self.assertTrue(self.session.eval("a = 1") == None,
                      "failure to eval an int")
-        self.assert_(self.session.eval("b = [1,2]") == None,
+        self.assertTrue(self.session.eval("b = [1,2]") == None,
                      "failure to eval a list")
-        self.assert_(self.session.eval("c = array([[1,2,3,4]])") == None,
+        self.assertTrue(self.session.eval("c = array([[1,2,3,4]])") == None,
                      "failure to eval a 2D array")
-        self.assert_(self.session.eval("import os") == None,
+        self.assertTrue(self.session.eval("import os") == None,
                      "failure to eval a python builtin")
         whos = {'a': 1, 'c': array([[1, 2, 3, 4]]).tolist(), 'b': [1, 2]}
         who_ = self.session.who()
@@ -269,9 +269,9 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
 
     def test_graceevalgrace(self):
         '''grace: evaluate a gracePlot expression'''
-        self.assert_(self.session.eval("redraw()") == None,
+        self.assertTrue(self.session.eval("redraw()") == None,
                      "failure to evaluate a gracePlot expression")
-        self.assert_(self.session.eval("s0 line color 2") == None,
+        self.assertTrue(self.session.eval("s0 line color 2") == None,
                      "failure to evaluate a grace expression")
         return
 
@@ -279,7 +279,7 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
         '''grace: do nothing upon 'exit' command'''
         self.session.eval('a = 1')
         whos = {'a': 1}
-        self.assert_(self.session.eval("exit") == None,
+        self.assertTrue(self.session.eval("exit") == None,
                      "failure to skip 'exit' command")
         self.assertEqual(whos, self.session.who())
         return
@@ -288,7 +288,7 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
         '''grace: exit a grace window upon 'exit()' command'''
         self.session.eval('a = 1')
         whos = {'a': 1}
-        self.assert_(self.session.eval("exit()") == None,
+        self.assertTrue(self.session.eval("exit()") == None,
                      "failure to exit grace window")
         self.assertEqual(whos, self.session.who())
         self.assertRaises(ValueError,self.session.plot,[1,2],[3,4])
@@ -299,7 +299,7 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
         self.session.eval("a = 1")
         self.session.eval("b = 2")
         self.session.eval("c = 3")
-        self.assert_(self.session.eval("del b, c") == None,
+        self.assertTrue(self.session.eval("del b, c") == None,
                      "failure to perform 'del' command")
         whos = {'a': 1}
         self.assertEqual(whos, self.session.who())
@@ -307,9 +307,9 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
 
     def test_graceevalundefined(self):
         '''grace: let grace catch all command errors internally'''
-        self.assert_(self.session.eval("foo()") == None,
+        self.assertTrue(self.session.eval("foo()") == None,
                      "failure of grace to catch command error internally")
-        self.assert_(self.session.eval("s = t") == None,
+        self.assertTrue(self.session.eval("s = t") == None,
                      "failure of grace to catch command error internally")
         whos = {}
         self.assertEqual(whos, self.session.who())

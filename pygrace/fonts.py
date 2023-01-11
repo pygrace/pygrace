@@ -1,4 +1,4 @@
-from base import BaseSet
+from .base import BaseSet
 
 class Font(object):
     """Object that stores a mapping between an index an a name for a font,

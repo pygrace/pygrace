@@ -17,7 +17,7 @@ class XYParser(optparse.OptionParser):
         self.supported_types = {
             'float': float,
             'int': int,
-            'long': long,
+            'long': int,
             'complex': complex,
             }
 

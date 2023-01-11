@@ -1,8 +1,8 @@
-from base import GraceObject
-from drawing_objects import DrawingObject
-from dataset import DataSet, SYMBOLS, INDEX2SYMBOLS, LINESTYLES, \
+from .base import GraceObject
+from .drawing_objects import DrawingObject
+from .dataset import DataSet, SYMBOLS, INDEX2SYMBOLS, LINESTYLES, \
     INDEX2LINESTYLES
-from axis import Axis,LINEAR_SCALE,LOGARITHMIC_SCALE
+from .axis import Axis,LINEAR_SCALE,LOGARITHMIC_SCALE
 import math
 
 INDEX_ORIGIN = 0  # zero or one (one is for losers)
@@ -382,7 +382,7 @@ class Graph(GraceObject):
             result = dataset.smallest_positive(only_visible=only_visible)
             all.append(result)
         if all:
-            xmins, ymins = zip(*all)
+            xmins, ymins = list(zip(*all))
             xmins = [i for i in xmins if not i is None and i > 0]
             ymins = [i for i in ymins if not i is None and i > 0]
             return min(xmins), min(ymins)
@@ -396,7 +396,7 @@ class Graph(GraceObject):
                 result = drawing_object.smallest_positive()
                 all.append(result)
         if all:
-            xmins, ymins = zip(*all)
+            xmins, ymins = list(zip(*all))
             xmins = [i for i in xmins if not i is None and i > 0]
             ymins = [i for i in ymins if not i is None and i > 0]
             return min(xmins), min(ymins)
@@ -407,7 +407,7 @@ class Graph(GraceObject):
         data_sp = self.data_smallest_positive(only_visible=only_visible)
         drawing_object_sp = self.drawing_object_smallest_positive()
         if None not in drawing_object_sp and None not in data_sp:
-            xmins, ymins = zip(data_sp,drawing_object_sp)
+            xmins, ymins = list(zip(data_sp,drawing_object_sp))
             return min(xmins), min(ymins)
         elif None not in drawing_object_sp:
             return drawing_object_sp
@@ -419,7 +419,7 @@ In Graph.smallest_positive()...
 There are no datasets or drawing_objects on which to determine the
 smallest positive number.
 """
-            raise TypeError, message
+            raise TypeError(message)
         
     def data_limits(self,only_visible=True):
         all = []
@@ -428,7 +428,7 @@ smallest positive number.
             if not None in result:
                 all.append(result)
         if len(all):
-            xmins, ymins, xmaxs, ymaxs = zip(*all)
+            xmins, ymins, xmaxs, ymaxs = list(zip(*all))
             return min(xmins), min(ymins), max(xmaxs), max(ymaxs)
         else:
             return None, None, None, None
@@ -440,7 +440,7 @@ smallest positive number.
             if drawing_object.loctype=="world" and not None in result:
                 all.append(result)
         if len(all):
-            xmins, ymins, xmaxs, ymaxs = zip(*all)
+            xmins, ymins, xmaxs, ymaxs = list(zip(*all))
             return min(xmins), min(ymins), max(xmaxs), max(ymaxs)
         else:
             return None, None, None, None
@@ -449,7 +449,7 @@ smallest positive number.
         data_limits = self.data_limits(only_visible=only_visible)
         drawing_object_limits = self.drawing_object_limits()
         if None not in drawing_object_limits and None not in data_limits:
-            xmins, ymins, xmaxs, ymaxs = zip(data_limits,drawing_object_limits)
+            xmins, ymins, xmaxs, ymaxs = list(zip(data_limits,drawing_object_limits))
             return min(xmins), min(ymins), max(xmaxs), max(ymaxs)
         elif None not in drawing_object_limits:
             return drawing_object_limits
@@ -460,7 +460,7 @@ smallest positive number.
 In Graph.limits()...
 There are no datasets or drawing_objects on which to determine the limits.
 """
-            raise TypeError, message
+            raise TypeError(message)
 
     def set_world_to_limits(self, epsilon=1e-12):
         xmin, ymin, xmax, ymax = self.limits()
@@ -739,7 +739,7 @@ There are no datasets or drawing_objects on which to determine the limits.
             lookup[item] = None
 
         # put symbols into a list
-        indices = INDEX2SYMBOLS.keys()
+        indices = list(INDEX2SYMBOLS.keys())
         indices.sort()
         if not symbolsList:
             symbolsList = []
@@ -775,7 +775,7 @@ There are no datasets or drawing_objects on which to determine the limits.
             lookup[item] = None
 
         # put line styles into a list
-        indices = INDEX2LINESTYLES.keys()
+        indices = list(INDEX2LINESTYLES.keys())
         indices.sort()
         if not linestylesList:
             linestylesList = []

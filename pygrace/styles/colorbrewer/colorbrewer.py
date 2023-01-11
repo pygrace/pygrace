@@ -192,13 +192,13 @@ class ColorBrewerScheme(object):
         """Returns the maximum number of classes that have been enumerated
         for this scheme.
         """
-        return max(self.data.iterkeys())
+        return max(self.data.keys())
 
     def min_number(self):
         """Returns the minimum number of classes that have been enumerated
         for this scheme.
         """
-        return min(self.data.iterkeys())
+        return min(self.data.keys())
 
     def get_max_colors(self, format='int'):
         """Returns the colors for the subscheme with the maximum number of

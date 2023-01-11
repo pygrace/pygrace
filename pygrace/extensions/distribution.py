@@ -25,7 +25,7 @@ class CDFGraph(DistributionGraph):
             # calculate position of other points, to show "real" CDF
             other = [(x0, y1) for (x0, y0), (x1, y1)
                      in zip(data[:-1], data[1:])]
-            other.append((x1, 0))
+            other.append((data[-1][0], 0))
             dotted = self._interlace(data, other)
             full = dotted[1:-1]
 

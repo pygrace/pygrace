@@ -1,4 +1,4 @@
-from base import GraceObject
+from .base import GraceObject
 
 SYMBOLS = {"None":0,
            "Circle":1,
@@ -14,7 +14,7 @@ SYMBOLS = {"None":0,
            "Char":11,
            }
 INDEX2SYMBOLS = {}
-for name,index in SYMBOLS.iteritems():
+for name,index in list(SYMBOLS.items()):
     INDEX2SYMBOLS[index] = name
 LINETYPES = {"None":0,
              "Straight":1,
@@ -23,7 +23,7 @@ LINETYPES = {"None":0,
              "Segments":4,
              "3-Segments":5}
 INDEX2LINETYPES = {}
-for name,index in LINETYPES.iteritems():
+for name,index in list(LINETYPES.items()):
     INDEX2LINETYPES[index] = name
 LINESTYLES = {"None":0,
               "--":1,
@@ -35,7 +35,7 @@ LINESTYLES = {"None":0,
               ". . - . . - ":7,
               "- - . - - . ":8}
 INDEX2LINESTYLES = {}
-for name,index in LINESTYLES.iteritems():
+for name,index in list(LINESTYLES.items()):
     INDEX2LINESTYLES[index] = name
 
 class Symbol(GraceObject):
@@ -318,7 +318,7 @@ class DataSet(GraceObject):
         x, y = [], []
         if self.data:
             if self.type=="xy" or self.type=="bar":
-                columns = zip(*self.data)
+                columns = list(zip(*self.data))
                 x, y = columns[:2]
             elif self.type=="xydx":
                 for datum in self.data:
@@ -373,11 +373,11 @@ class DataSet(GraceObject):
                               datum[1]+datum[2],
                               datum[1]-datum[3]])
             elif self.type=="xyhilo":
-                columns = zip(*self.data)
+                columns = list(zip(*self.data))
                 x = columns[0]
                 y = columns[1] + columns[2] + columns[3] + columns[4]
             elif self.type=="xyz":
-                columns = zip(*self.data)
+                columns = list(zip(*self.data))
                 x, y = columns[:2]
 #             elif self.type=="xyr": # xmgrace does not support
 #                 for datum in self.data:
@@ -386,10 +386,10 @@ class DataSet(GraceObject):
 #                     y.extend([datum[1]-datum[2],
 #                               datum[1]+datum[2]])
             elif self.type=="xysize":
-                columns = zip(*self.data)
+                columns = list(zip(*self.data))
                 x, y = columns[:2]
             elif self.type=="xycolor":
-                columns = zip(*self.data)
+                columns = list(zip(*self.data))
                 x, y = columns[:2]
 #             elif self.type=="xycolpat": # xmgrace does not support
 #                 pass
@@ -400,14 +400,14 @@ class DataSet(GraceObject):
                     y.extend([datum[1],
                               datum[1]+datum[3]])
             elif self.type=='xyboxplot':
-                col = zip(*self.data)
+                col = list(zip(*self.data))
                 x = col[0]
                 y = col[1] + col[2] + col[3] + col[4]
             else:
                 message = """
 Can not find limits of DataSet with type %s
 """%self.type
-                raise TypeError, message
+                raise TypeError(message)
         return x,y
 
     def limits(self,only_visible=True):

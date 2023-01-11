@@ -1,74 +1,18 @@
 #!/usr/local/bin/python -t
-# $Id: grace_np.py,v 2.6 1999/09/26 03:16:19 mhagger Exp $
-
-"""A python replacement for grace_np.c, a pipe-based interface to xmgrace.
-
-Copyright (C) 1999 Michael Haggerty
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or (at
-your option) any later version.  This program is distributed in the
-hope that it will be useful, but WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the GNU General Public License for more details; it is
-available at <http://www.fsf.org/copyleft/gpl.html>, or by writing to
-the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-Boston, MA 02111-1307, USA.
-
-Written by Michael Haggerty <mhagger@blizzard.harvard.edu>.  Based on
-the grace_np library distributed with grace, which was written by
-Henrik Seidel and the Grace Development Team.
-
-Grace (xmgrace) is a very nice X program for doing 2-D graphics.  It
-is very flexible, produces beautiful output, and has a graphical user
-interface.  It is available from
-<http://plasma-gate.weizmann.ac.il/Grace/>.  Grace is the successor to
-ACE/gr and xmgr.
+"""a pipe-based interface to xmgrace
 
 This module implements a pipe-based interface to grace similar to the
-one provided by the grace_np library included with grace.  I haven't
-used it very much so it is likely that it still has bugs.  I am
-releasing it in the hope that it might be of use to the community.  If
-you find a problem or have a suggestion, please let me know at
-<mhagger@blizzard.harvard.edu>.  Other feedback is also welcome.
+one provided by the grace_np library included with grace.
 
-For a demonstration, run this file by typing `python grace_np.py'.
-See the bottom of the file to see how the demonstration is programmed.
-
-About the module:
-
-At first I tried just to translate grace_np from C to python, but then
-I realized that it is possible to do a much nicer job using classes.
 The main class here is GraceProcess, which creates a running copy of
 the grace program, and creates a pipe connection to it.  Through an
 instance of this class you can send commands to grace.
-
-Note that grace interprets command streams differently depending on
-their source.  The pipe represented by this class is connected in such
-a way that grace expects `parameter-file'-style commands (without the
-@ or & or whatever).
-
-[Details: this class communicates to grace through a -dpipe which
-specified an open file descriptor from which it is to read commands.
-This is the same method used by the grace_np that comes with grace.  I
-thought that the -pipe option might be more convenient--just pipe
-commands to standard input.  However, grace interprets commands
-differently when it receives them from these two sources: -dpipe
-expects parameter-file information, whereas -pipe expects datafile
-information.  Also -pipe doesn't seem to respond to the `close'
-command (but maybe the same effect could be had by just closing the
-pipe).]
-
 """
-
-__version__ = '1.0'
-__cvs_version__ = 'CVS version $Revision: 2.6 $'
 
 import sys, os, signal, errno
 
 # global variables:
-OPEN_MAX = 64 # copied from C header file sys/syslimits.h ###
+OPEN_MAX = 64
 
 
 class Error(Exception):
@@ -84,16 +28,6 @@ class Disconnected(Error):
     clicking on the exit button), crashed, or sent an exit command."""
     pass
 
-
-# Three possible states for a GraceProcess, shown with their desired
-# indicators:
-#
-#   1. Healthy (pipe and pid both set)
-#   2. Disconnected but alive (pipe.closed is set, pid still set)
-#   3. Disconnected and dead (pipe.closed is set and pid is None)
-#
-# The error handling is such as to try to keep the above indicators
-# set correctly.
 
 class GraceProcess:
     """Represents a running xmgrace program."""
@@ -294,44 +228,4 @@ class GraceProcess:
                     raise
             os.waitpid(self.pid, 0)
             self.pid = None
-
-
-if __name__ == '__main__':
-    # Test
-    import time
-
-    g = GraceProcess()
-
-    # Send some initialization commands to Grace:
-    g('world xmax 100')
-    g('world ymax 10000')
-    g('xaxis tick major 20')
-    g('xaxis tick minor 10')
-    g('yaxis tick major 2000')
-    g('yaxis tick minor 1000')
-    g('s0 on')
-    g('s0 symbol 1')
-    g('s0 symbol size 0.3')
-    g('s0 symbol fill pattern 1')
-    g('s1 on')
-    g('s1 symbol 1')
-    g('s1 symbol size 0.3')
-    g('s1 symbol fill pattern 1')
-
-    # Display sample data
-    for i in range(1,101):
-        g('g0.s0 point %d, %d' % (i, i))
-        g('g0.s1 point %d, %d' % (i, i * i))
-        # Update the Grace display after every ten steps
-        if i % 10 == 0:
-            g('redraw')
-            # Wait a second, just to simulate some time needed for
-            # calculations. Your real application shouldn't wait.
-            time.sleep(1)
-
-    # Tell Grace to save the data:
-    g('saveall "sample.agr"')
-
-    # Close Grace:
-    g.exit()
 

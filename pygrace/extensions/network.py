@@ -1,3 +1,4 @@
+
 import sys
 
 from ..graph import Graph
@@ -23,8 +24,9 @@ class NodeSet(DataSet):
     def __init__(self, size=1, color=1, line_width=1, line_color=1, shape=1,
                  labels=False, *args, **kwargs):
         if size > 10:
-            print >> sys.stderr, 'WARNING: Node size > 10: ' + \
-                  'will be set to 10'
+            print('WARNING: Node size > 10: will be set to 10', file=sys.stdout)
+            #print >> sys.stderr, 'WARNING: Node size > 10: ' + \
+            #      'will be set to 10'
         DataSet.__init__(self, *args, **kwargs)
         for aNode in self.data:
             self.parent.node_xy[aNode] = self.data[aNode][0:2]
@@ -37,11 +39,11 @@ class NodeSet(DataSet):
         try:
             if labels:
                 self.data = [values + (label, )
-                             for label, values  in self.data.iteritems()]
+                             for label, values  in list(self.data.items())]
             else:
-                self.data = [values for label,values in self.data.iteritems()]
+                self.data = [values for label,values in list(self.data.items())]
         except:
-            raise TypeError, 'data for a NodeSet must be a dictionary'
+            raise TypeError('data for a NodeSet must be a dictionary')
         self.symbol.configure(size=size,
                               fill_color=color,
                               linewidth=line_width,
@@ -79,15 +81,13 @@ class LinkSet(DataSet):
                     theData.append((x2, y2))
                 except KeyError:
                     if ignore_missing:
-                        print >> sys.stderr, 'WARNING: ignoring link %s-%s' % (
-                            n1, n2
-                            )
+                        print('WARNING: ignoring link %s-%s' % (n1, n2), file=sys.stderr)
+                        #print >> sys.stderr, 'WARNING: ignoring link %s-%s' % (n1, n2)
                     else:
-                        raise KeyError, \
-                              'nodes should be added to the network first'
+                        raise KeyError('nodes should be added to the network first')
             self.data = theData
         except:
-            raise TypeError, 'data must be a list of node pairs'
+            raise TypeError('data must be a list of node pairs')
         self.symbol.shape = 0
         self.line.configure(type=4,
                             linestyle=1,
