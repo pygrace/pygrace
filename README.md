@@ -13,7 +13,7 @@ Build a Project File
 --------------------
 pygrace Project objects can be used to build complex project files.
 
-![pygrace project](docs/Diagram/crow_diagram.png)
+![pygrace project](docs/Diagrams/crow_diagram.pdf)
 
 start a pygrace project file::
 
@@ -50,6 +50,7 @@ for example::
 ![05_colorplot](docs/Diagrams/05_colorplot.png)
 
 and::
+
     $ python 08_latexlabels.py
     $ xmgrace 08_latexlabels.agr
 
