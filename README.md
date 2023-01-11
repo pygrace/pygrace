@@ -13,7 +13,7 @@ Build a Project File
 --------------------
 pygrace Project objects can be used to build complex project files.
 
-![pygrace project](docs/Diagrams/crow_diagram.pdf)
+![pygrace project](docs/Diagrams/crow_diagram.png)
 
 start a pygrace project file::
 
