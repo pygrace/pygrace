@@ -1,11 +1,15 @@
 #!/usr/bin/env python
-# 
-# Authors:
-#  Michael McKerns    (mmckerns@uqfoundation.org)
-#  Daniel B. Stouffer (daniel@stoufferlab.org)
-#  Dean Malmgren
-#  Mike Stringer
-
+#
+# Author: Mike McKerns (mmckerns @caltech and @uqfoundation)
+# Author: Daniel Stouffer (daniel @stoufferlab.org)
+# Author: Dean Malmgren
+# Author: Mike Stringer
+# Copyright (c) 2004-2016 California Institute of Technology.
+# Copyright (c) 2013 Daniel Stouffer.
+# Copyright (c) 2023 The Uncertainty Quantification Foundation.
+# License: 3-clause BSD.  The full license text is available at:
+#  - https://github.com/pygrace/pygrace/blob/altmerge/LICENSE
+#
 try: # see if easy_install is available
     from setuptools import setup
     has_setuptools = True
@@ -72,5 +76,3 @@ except ImportError:
     print("    Numpy %s" % numpy_version)
     print("    Grace %s" % grace_version)
     print("***********************************************************\n")
-
-# end of file

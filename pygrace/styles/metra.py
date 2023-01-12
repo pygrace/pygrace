@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+#
+# Author: Mike McKerns (mmckerns @uqfoundation)
+# Author: Daniel Stouffer (daniel @stoufferlab.org)
+# Copyright (c) 2013 Daniel Stouffer.
+# Copyright (c) 2023 The Uncertainty Quantification Foundation.
+# License: 3-clause BSD.  The full license text is available at:
+#  - https://github.com/pygrace/pygrace/blob/altmerge/LICENSE
+#
 from ..graph import Graph, INDEX_ORIGIN, Legend
 from ..dataset import DataSet
 from ..axis import Tick, TickLabel, Axis, AxisLabel, LINEAR_SCALE, LOGARITHMIC_SCALE
