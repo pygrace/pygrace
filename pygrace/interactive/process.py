@@ -15,7 +15,7 @@ OPEN_MAX = 64
 
 
 class Error(Exception):
-    """Default exception for pygrace.session.process"""
+    """Default exception for pygrace.interactive.process"""
     pass
 
 class Disconnected(Error):
@@ -30,8 +30,9 @@ class Disconnected(Error):
 class Process:
     """Interface to an instance of a running xmgrace program"""
 
-    def __init__(self, bufsize=-1, debug=0, fixedsize=None, ask=None, safe=None):
-        """Start xmgrace and read from the pipe controlled by the instance.
+    def __init__(self, bufsize=-1, debug=0, fixedsize=None,
+                 ask=None, safe=None, batch=None, project=None):
+        """Start xmgrace and read from the pipe controlled by pygrace.
 
         Input:
           bufsize -- int, size of the buffer used. xmgrace won't
@@ -40,7 +41,7 @@ class Process:
                      with buffering. Default is -1, which provdes full
                      buffering.  `bufsize=0` signifies no buffering.
           debug -- bool, if True, each command passed to xmgrace is
-                   also sent to stderr.
+                   also sent to stderr. Default is to not debug.
           fixedsize -- tuple, used to set the fixed size of the
                        grace canvas. Default is None, which causes
                        the grace window to be freely resizable.
@@ -48,11 +49,17 @@ class Process:
                  a file, clearing the display, etc. Default is to not ask.
           safe -- bool, if True, xmgrace will ignore commands like `saveall',
                   which write to files. Default is not to be overly safe.
+          batch -- str, path to command batch_file to be executed on startup
+                   of xmgrace. Default is to not use a batch file.
+          project -- str, path to xmgrace project file (.agr) to be executed
+                     on startup. Default is to use the xmgrace default project.
         """
         self.debug = debug
         self.fixedsize = fixedsize
         self.ask = ask
         self.safe = safe
+        self.batch = batch
+        self.project = project
 
         # build the command to launch xmgrace
         com = ('xmgrace',)
@@ -64,6 +71,11 @@ class Process:
             com = com + ('-noask',)
         if self.safe in (None, False):
             com = com + ('-nosafe',)
+        if self.batch not in (None, False, ''):
+            if not os.path.exists(self.batch):
+                open(self.batch, 'r') # raise FileNotFoundError
+            else:
+                com = com + ('-batch', self.batch)
 
         # Don't exit when xmgrace exits (e.g. user clicks `exit')
         signal.signal(signal.SIGCHLD, signal.SIG_IGN)
@@ -74,6 +86,13 @@ class Process:
             os.set_inheritable(fd_w, True)
             os.set_inheritable(fd_r, True)
         com = com + ('-dpipe', repr(fd_r))
+
+        # Open project file, if given [needs to be last]
+        if self.project not in (None, False, ''):
+            if not os.path.exists(self.project):
+                open(self.project, 'r') # raise FileNotFoundError
+            else:
+                com = com + (self.project,)
 
         # Fork the subprocess that starts xmgrace
         self.pid = os.fork()

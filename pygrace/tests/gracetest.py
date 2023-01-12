@@ -323,7 +323,5 @@ if __name__ == "__main__":
     alltests = unittest.TestSuite((suite0,))
     unittest.TextTestRunner(verbosity=2).run(alltests)
 
-# version
-__id__ = "$Id: gracetest.py,v 1.5 2005/06/20 20:28:06 mmckerns Exp $"
 
 #  End of file 

@@ -64,8 +64,9 @@ elif __name__ == 'pygrace':
        from . import interactive
 
        # backward compatibility for pygrace
-       def grace():
+       def grace(*args, **kwds):
                from pygrace import interactive
                return interactive.session()
+       grace.__doc__ = interactive.session.__doc__
 
 # EOF

@@ -1,16 +1,16 @@
 """
-a high-level function interface to a xmgrace process
+a high-level interface to a xmgrace project session
 
-The intended purpose of gracePlot is to allow easy programmatic and interactive
+The intended purpose of Project is to allow easy programmatic and interactive
 command line plotting with convenience functions for the most common commands. 
-The Grace UI (or the grace_np module) can be used if more advanced
-functionality needs to be accessed. 
+The Grace UI (or pygrace.interactive.process) can be used if more advanced
+low-level functionality needs to be accessed. 
 
-The data model in Grace, (mirrored in gracePlot) goes like this:  Each grace 
-session is like virtual sheet of paper called a Plot.  Each Plot can have 
-multiple Graphs, which are sets of axes (use gracePlot.multi() to get multiple
-axes in gracePlot).  Each Graph has multiple data Sets.  Data Sets are added to
-graphs with the plot and histoPlot functions in gracePlot.
+The data model in Grace, (mirrored in Project) goes like this:  Each grace 
+session is like virtual sheet of paper called a Project.  Each Project can have 
+multiple Graphs, which are sets of axes (use Project.multi() to get multiple
+axes in Project).  Each Graph has multiple data Sets.  Data Sets are added to
+graphs with the plot and histoPlot functions in Project.
 
 The main python functions are plot() and histoPlot().  See their docstrings 
 for usage information.  They can be called with any mix of Numpy arrays,
@@ -22,10 +22,10 @@ stored in columns, so a matrix with three vectors x1, x2 and x3 would be:
       [ x1[2], x2[2], x3[2] ],
       [ x1[3], x2[3], x3[3] ] ]
 
-Here's a simple example of a gracePlot session:
+Here's a simple example of a Project session:
 
-    >>> from pygrace.session import plot
-    >>> p = plot.gracePlot()  # A grace session begins
+    >>> from pygrace.interactive import project
+    >>> p = project.Project()  # A interactive grace project begins
     >>> # Sequence arguments to plot() are X, Y, dy
     >>> p.plot( [1,2,3,4,5], [10, 4, 2, 4, 10], [0.1, 0.4, 0.2, 0.4, 0.1],
     ... symbols=1 )  # A plot with errorbars
@@ -40,11 +40,11 @@ Scientific.Statistics.Histogram module, so histogramming ends up being simple:
     >>> joe = Histogram( some_data, 40 )  # 40 = number of bins
     >>> p.histoPlot( joe )  # A histogram plot with correct axis limits
 
-An important thing to realize about gracePlot is that it only has a one-way
+An important thing to realize about Project is that it only has a one-way
 communications channel with the Grace session.  This means that if you make
 changes to your plot in the GUI (e.g. by changing number/layout of graphs)
-then gracePlot will have NO KNOWLEDGE of the changes.  This should not often
-be an issue, since the only state that gracePlot saves is the number and
+then Project will have NO KNOWLEDGE of the changes.  This should not often
+be an issue, since the only state that Project saves is the number and
 layout of graphs, the number of Sets that each graph has, and the hold state
 for each graph.
 """
@@ -58,7 +58,6 @@ __author__ = "Nathaniel Gray <n8gray@caltech.edu>"
 
 from . import process
 import numpy as np
-import string
 
 try:
     from Scientific.Statistics.Histogram import Histogram
@@ -66,15 +65,16 @@ try:
 except ImportError:
     haveHisto = 0
 
-class gracePlot:
+class Project:
     
-    def __init__(self):
-        self.grace = process.Process()
-        self.g = [ graceGraph(self.grace, 0) ]
+    def __init__(self, *args, **kwds):
+        self.grace = process.Process(*args, **kwds)
+        self.g = [ Graph(self.grace, 0) ]
         self.curr_graph = self.g[0]
         self.rows = 1
         self.cols = 1
         self.focus(0,0)
+    __init__.__doc__ = process.Process.__init__.__doc__
         
     def _send(self, cmd): 
         self.grace.command(cmd)
@@ -93,7 +93,7 @@ class gracePlot:
         self.grace = None
 
     def exit(self):
-        """Nuke the grace session.  (more final than gracePlot.__del__())"""
+        """Nuke the grace session.  (more final than Project.__del__())"""
         self.grace.exit()
 
     def redraw(self):
@@ -111,7 +111,7 @@ class gracePlot:
         if rows*cols > len(self.g):
             nPlots = len(self.g)
             for i in range( nPlots, (rows*cols - nPlots)+1 ):
-                self.g.append( graceGraph(self.grace, i) )
+                self.g.append( Graph(self.grace, i) )
         # Should we trim the last graphs if we now have *fewer* than before?
         # I say yes.
         elif rows*cols < len(self.g):
@@ -119,7 +119,7 @@ class gracePlot:
         self._flush()
         self.redraw()
         
-    def save(self, filename, format='agr'):
+    def saveall(self, filename='xmgrace.agr', format=None):
         """Save the current plot
         Default format is Grace '.agr' file, but other possible formats
         are: x11, postscript, eps, pdf, mif, svg, pnm, jpeg, png, metafile
@@ -128,10 +128,15 @@ class gracePlot:
         devs = {'agr':'.agr', 'eps':'.eps', 'jpeg':'.jpeg', 'metafile':'',
                 'mif':'', 'pdf':'.pdf', 'png':'.png', 'pnm':'', 
                 'postscript':'.ps', 'svg':'', 'x11':''}
+        if format is None:
+            try:
+                format = filename.rsplit('.', 1)[1]
+            except IndexError:
+                format = ''
         try:
-            ext = devs[string.lower(format)]
+            ext = devs[str.lower(format)]
         except KeyError:
-            print('Unknown format.  Known formats are\n%s' % list(devs.keys()))
+            print('Unknown format. Known formats are\n%s' % list(devs.keys()))
             return
             
         if filename[-len(ext):] != ext:
@@ -139,7 +144,7 @@ class gracePlot:
         if ext == '.agr':
             self._send('saveall "%s"' % filename)
         else:
-            self._send('hardcopy device "%s"' % string.lower(format) )
+            self._send('hardcopy device "%s"' % str.lower(format) )
             self._send('print to "%s"' % filename)
             self._send('print')
         self._flush()
@@ -179,12 +184,11 @@ class gracePlot:
         else:
             raise TypeError('graph index must be integer or two integers')
 
-class graceGraph:
+class Graph:
     
     def __init__(self, grace, gID):
 
         self._hold = 0       # Set _hold=1 to add datasets to a graph
-
         self.grace = grace
         self.nSets = 0
         self.gID = gID

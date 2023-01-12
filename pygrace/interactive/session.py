@@ -6,52 +6,7 @@
 # License: 3-clause BSD.  The full license text is available at:
 #  - https://github.com/pygrace/pygrace/blob/altmerge/LICENSE
 #
-__license__ = """    
-Copyright (c) 2004-2016 California Institute of Technology.
-Copyright (c) 2016-2023 The Uncertainty Quantification Foundation.
-All rights reserved.
-
-This software is available subject to the conditions and terms laid
-out below. By downloading and using this software you are agreeing
-to the following conditions.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions
-are met::
-
-    - Redistribution of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-
-    - Redistribution in binary form must reproduce the above copyright
-      notice, this list of conditions and the following disclaimer in the
-      documentations and/or other materials provided with the distribution.
-
-    - Neither the names of the copyright holders nor the names of any of
-      the contributors may be used to endorse or promote products derived
-      from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
-TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
-OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
-OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-If you use this software to do productive scientific research that leads to
-publication, we ask that you acknowledge use of the software by citing the
-following in your publication:
-
-    "pygrace: python bindings to the Grace plotting package", Michael McKerns,
-    http://pygrace.github.io
-"""
-
-
-__author__='Mike McKerns'
+__author__ = 'Mike McKerns'
 __doc__ = '''Instructions for pygrace:
 Import the grace class          >>> from pygrace import grace
 Instantiate the grace class     >>> pg = grace()
@@ -61,18 +16,17 @@ Get help                        >>> pg.doc()
 from math import *
 from numpy import *
 
-
-class grace:   #Nathan Gray's gracePlot with interactive prompt added
-    '''Python-grace bindings
+# high-level interface to a grace Project, with an interactive grace prompt
+class grace:
+    '''Python interface to a xmgrace Project, with an interactive grace prompt
 Methods:
   prompt() --> start interactive session
-  eval(command) --> execute a xmgrace command
+  eval(command) --> execute a grace command
   put(name,val) --> put variable into interactive session
   get(name) --> get variable from interactive session
-  who([name]) --> return the existing xmgrace variables
-  delete(name) --> destroy selected xmgrace variables
+  who([name]) --> return the existing grace variables
+  delete(name) --> destroy selected grace variables
   restart() --> restart a xmgrace window
-  saveall(filename) --> save project to xmgrace.agr or given filename
 Notes:
   xmgrace and numpy must be installed, xmgrace also relies on (open)motif
 '''
@@ -81,19 +35,20 @@ Notes:
  _putlocal(name,value) --> add a variable to local store
  _getlocal(name) --> return variable value from local store
  _poplocal(name) --> delete variable from local store, return value
- _wholist() --> get list of strings containing xmgrace variables 
- _exists(name) --> True if is a variable in xmgrace
+ _wholist() --> get list of strings containing grace variables 
+ _exists(name) --> True if is a variable in grace
 '''
 
-    def __init__(self):
-        from .plot import gracePlot as grace_plot
-        self.session = grace_plot()
+    def __init__(self, *args, **kwds):
+        from .project import Project
+        self.session = Project(*args, **kwds)
         self.whos = {}
         self.reserved = ['and','assert','break','class','continue','def','del',
                          'elif','else','except','exec','finally','for','from',
                          'global','if','import','in','is','lambda','not','or',
                          'pass','print','raise','return','try','while','yield',
                          'as','None']
+        __doc__ = Project.__init__.__doc__
         return
 
     def __getattr__(self,name):
@@ -157,11 +112,11 @@ Notes:
         return self.whos.pop(name,None)
 
     def _wholist(self):
-        '''_wholist() --> get list of strings containing xmgrace variables''' 
+        '''_wholist() --> get list of strings containing grace variables''' 
         return list(self.whos.keys())
 
     def _exists(self,name):
-        '''_exists(name) --> True if is a variable in xmgrace'''
+        '''_exists(name) --> True if is a variable in grace'''
         exists = self._wholist().count(name)
         if exists: return True
         return False
@@ -182,7 +137,7 @@ Notes:
         return
 
     def put(self,name,val):
-        '''put(name,val) --> add variable to xmgrace session'''
+        '''put(name,val) --> add variable to grace session'''
         _locals = dict(self=self, name=name, val=val)
         if name.count('[') or name.count('.') or name.count('('):
             varlist = self._wholist()
@@ -210,7 +165,7 @@ Notes:
         return self._putlocal(name,val)
 
     def get(self,name):
-        '''get(name) --> value; get value from xmgrace session'''
+        '''get(name) --> value; get value from grace session'''
         #if name.count('+') or ...
         #if name.count('[') or name.count('.') or name.count('('):
         _locals = dict(self=self, name=name)
@@ -230,12 +185,12 @@ Notes:
         #return self._getlocal(name)
 
     def who(self,name=None):
-        '''who([name]) --> return the existing xmgrace variables'''
+        '''who([name]) --> return the existing grace variables'''
         if name: return self._getlocal(name,skip=False)
         return self.whos
 
     def delete(self,name):
-        '''delete(name) --> destroy selected xmgrace variables'''
+        '''delete(name) --> destroy selected grace variables'''
         if not name.count(','):
             self._poplocal(name)
             return
@@ -244,14 +199,8 @@ Notes:
             self.delete(var.strip())
         return
 
-    def saveall(self,filename=None):
-        '''saveall(filename) --> save project to xmgrace.agr or given filename'''
-        if filename is None: filename = 'xmgrace.agr'
-        com = 'saveall "%s"' % filename
-        return self.eval(com)
-
     def eval(self,com):
-        '''eval(command) --> execute a xmgrace command'''
+        '''eval(command) --> execute a grace command'''
         outlist = []
         _locals = dict(outlist=outlist, self=self, com=com)
         if self.whos: #add to outlist
@@ -303,7 +252,7 @@ Notes:
         return
 
     def prompt(self):
-        '''an interactive xmgrace session'''
+        '''an interactive grace session'''
         outlist = []
         _locals = dict(outlist=outlist, self=self)
         print("grace interface:")

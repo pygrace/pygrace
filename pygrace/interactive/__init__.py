@@ -8,11 +8,15 @@
 #
 from .session import __doc__ as gracedoc
 __doc__ = gracedoc
+del gracedoc
 
-def grace():
-    '''create an interactive instance of xmgrace'''
+from .project import Project, Graph
+from .process import Process
+
+def grace(*args, **kwds):
     from .session import grace as graceFactory
-    return graceFactory()
+    return graceFactory(*args, **kwds)
+grace.__doc__ = Project.__init__.__doc__
 
 session = grace
 

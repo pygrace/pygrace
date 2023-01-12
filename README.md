@@ -132,3 +132,7 @@ save current session to a project file, then exit::
     >>> pg.saveall('histoPlot.agr')
     >>> pg.exit()
 
+start a new interactive xmgrace session from the saved project::
+
+    >>> pg = grace(project='histoPlot.agr')
+
