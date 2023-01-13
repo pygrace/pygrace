@@ -123,10 +123,12 @@ class Project:
         
     def saveall(self, filename='xmgrace.agr', format=None):
         """Save the current plot
+
         Default format is Grace '.agr' file, but other possible formats
         are: x11, postscript, eps, pdf, mif, svg, pnm, jpeg, png, metafile
-        Note:  Not all drivers are created equal.  See the Grace documentation
-            for caveats that apply to some of these formats."""
+
+        Note: Not all drivers are created equal. See the Grace documentation
+        or caveats that apply to some of these formats."""
         devs = {'agr':'.agr', 'eps':'.eps', 'jpeg':'.jpeg', 'metafile':'',
                 'mif':'', 'pdf':'.pdf', 'png':'.png', 'pnm':'', 
                 'postscript':'.ps', 'svg':'', 'x11':''}
@@ -301,8 +303,7 @@ class Graph:
     def legend(self, labels):
         """Set the legend labels for the plot
         Takes a list of strings, one string per dataset on the graph.
-        Note:  <ctrl>-L allows you to reposition legends in Grace using
-                the mouse.
+        Note: <ctrl>-L allows you to reposition legends using the mouse.
         """
         if len(labels) != self.nSets:
             raise RuntimeError('Wrong number of legends (%s) for number' \
@@ -316,24 +317,20 @@ class Graph:
     def histoPlot(self, y, x_min=0, x_max=None, dy=None, edges=0, 
                   fillcolor=2, edgecolor=1, labeled=0):
         """Plot a histogram
-        
+
         y contains a vector of bin counts
-        By default bin counts are plotted against bin numbers unless 
-            x_min and/or x_max are specified
-        if edges == 0:   # This is the default
-            x_min and x_max specify the lower and upper edges of the first
-            and last bins, respectively
-        else:
-            x_min and x_max specify the centers of the first and last bins
-        
+        By default, bin counts are plotted against bin numbers unless 
+        x_min and/or x_max are specified.
+        By default, edges == 0, where x_min and x_max specify the lower
+        and upper edges of the first and last bins, respectively. Otherwise,
+        x_min and x_max specify the centers of the first and last bins.
         If dy is specified symmetric errorbars are plotted.
         fillcolor and edgecolor are color numbers (0-15)
         If labeled is set to 1 then labels are placed at each bin to show
-            the bin count
-        
+        the bin count.
+
         Note that this function can create *two* datasets in grace if you
         specify error bars."""
-        
         if haveHisto and isinstance(y, Histogram):
             self.histoPlot( y.array[:,1], x_min=y.min, x_max=y.max, edges=1,
                             dy=dy, fillcolor=fillcolor, edgecolor=edgecolor, 
@@ -472,12 +469,11 @@ class Graph:
 
         The arguments should be Numpy arrays of equal length.
         X, Y, and dy can be rank-1 or rank-2 arrays (vectors or matrices).
-        In rank-2 arrays each column is treated as a dataset.
-        X can be rank-1 even if Y and DY are rank-2, so long as
-            len(X) == len( Y[:,0] )
+        In rank-2 arrays, each column is treated as a dataset. X can be
+        rank-1, even if Y and DY are rank-2, as long as len(X) == len(Y[:,0]).
             
-        If dy is not None then it must be the same shape as Y, and symmetric 
-            error bars will be plotted with total height 2*dy.
+        If dy is not None then it must be the same shape as Y, and
+        symmetric error bars will be plotted with total height 2*dy.
         Setting symbols=1 will give each dataset a unique symbol.
         Setting styles=1 will give each dataset a unique linestyle
         """

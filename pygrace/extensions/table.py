@@ -7,11 +7,11 @@
 # License: 3-clause BSD.  The full license text is available at:
 #  - https://github.com/pygrace/pygrace/blob/altmerge/LICENSE
 #
-from ..drawing_objects import CompoundDrawingObject, DrawText
+from ..drawing_objects import DrawingObject, DrawText
 
 __all__ = ['DrawTable']
 
-class DrawTable(CompoundDrawingObject):
+class DrawTable(DrawingObject):
     def __init__(self, table,
                  char_size = 1.65,
                  xSpace = 0.1,
@@ -21,7 +21,7 @@ class DrawTable(CompoundDrawingObject):
                  lowleft = (0.5, 0.5),
                  loctype = 'view',
                  *args, **kwargs):
-        CompoundDrawingObject.__init__(self, *args, **kwargs)
+        DrawingObject.__init__(self, *args, **kwargs)
 
         multiplier = 0.03
 
@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
 #     a = [(DrawText, {'text': 'Gomer'}), (DrawText, {'text': 'Spiff'})]
 
-#     group = grace.add_drawing_object(CompoundDrawingObject)
+#     group = grace.add_drawing_object(DrawingObject)
 #     group.add_drawing_object(DrawText, text='test')
 #     group.add_drawing_object(DrawText, text='sdlkfj')
 # #     grace.add_drawing_object(TestText, 'a')

@@ -13,7 +13,7 @@ Build a Project File
 --------------------
 pygrace Project objects can be used to build complex project files.
 
-![pygrace project](docs/Diagrams/crow_diagram.png)
+![pygrace project](docs/source/_static/crow_diagram.png)
 
 start a pygrace project file::
 
@@ -38,23 +38,23 @@ then, open the project file with xmgrace::
 
     $ xmgrace 00_helloworld.agr
 
-![00_helloworld](docs/Diagrams/00_helloworld.png)
+![00_helloworld](docs/source/_static/00_helloworld.png)
 
-find out more about pygrace at http://pygrace.github.io or browse some more of the examples in [pygrace/examples](https://github.com/pygrace/pygrace/tree/master/pygrace/examples).
+find out more about pygrace at http://pygrace.github.io or browse some more of the examples at https://github.com/pygrace/pygrace/tree/master/pygrace/examples.
 
 for example::
 
     $ python 05_colorplot.py
     $ xmgrace 05_colorplot.agr
 
-![05_colorplot](docs/Diagrams/05_colorplot.png)
+![05_colorplot](docs/source/_static/05_colorplot.png)
 
 and::
 
     $ python 08_latexlabels.py
     $ xmgrace 08_latexlabels.agr
 
-![08_latexlabels](docs/Diagrams/08_latexlabels.png)
+![08_latexlabels](docs/source/_static/08_latexlabels.png)
 
 
 Interactive Session
@@ -70,7 +70,7 @@ use xmgrace methods directly from the python interpreter::
     >>> x = np.arange(21) * np.pi/10
     >>> pg.plot(x, np.sin(x))
 
-![sin](docs/Diagrams/sin.png)
+![sin](docs/source/_static/sin.png)
 
 push variables into xmgrace and interact with the xmgrace scripting language::
 
@@ -79,7 +79,7 @@ push variables into xmgrace and interact with the xmgrace scripting language::
     >>> pg.eval('s0 line color 2')
     >>> pg.eval('plot(x,y)')
 
-![cos](docs/Diagrams/cos.png)
+![cos](docs/source/_static/cos.png)
 
 use the interactive xmgrace prompt::
 
@@ -93,7 +93,7 @@ use the interactive xmgrace prompt::
     grace> redraw()
     grace> exit
 
-![histoPlot](docs/Diagrams/histoPlot.png)
+![histoPlot](docs/source/_static/histoPlot.png)
 
 check variables in xmgrace session::
 

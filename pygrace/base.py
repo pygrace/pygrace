@@ -140,40 +140,40 @@ class GraceObject(object):
                       (key, allowedString, actualString)
             raise TypeError(message)
 
-    def _check_range(self, key, value, min_, max_,
+    def _check_range(self, key, value, min, max,
                      includeMin=True, includeMax=True):
-        """Throw error if value is not in between min_ and max_."""
+        """Throw error if value is not in between min and max."""
 
         # check for lower bound (and make nice error message if it fails)
         gtString = '>'
-        if not min_ == None:
+        if not min == None:
             passMin = False
             if includeMin:
                 gtString = '>='
-                if value >= min_: passMin = True
+                if value >= min: passMin = True
             else:
-                if value > min_: passMin = True
+                if value > min: passMin = True
         else:
             passMin = True
-            min_ = '-inf'
+            min = '-inf'
 
         # check for upper bound (and make nice error message if it fails)
         ltString = '<'
-        if not max_ == None:
+        if not max == None:
             passMax = False
             if includeMax:
                 ltString = '<='
-                if value <= max_: passMax = True
+                if value <= max: passMax = True
             else:
-                if value < max_: passMax = True
+                if value < max: passMax = True
         else:
             passMax = True
-            max_ = '+inf'
+            max = '+inf'
             
         # throw an informative error if it fails either one
         if not (passMin and passMax):
             message = '%s does not satisfy %s %s %s %s %s' % \
-                      (value, min_, gtString, key, ltString, max_)
+                      (value, min, gtString, key, ltString, max)
             raise ValueError(message)
 
     def _check_membership(self, key, value, set):
