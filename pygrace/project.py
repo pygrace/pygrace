@@ -16,6 +16,8 @@ from .drawing_objects import DrawingObject
 from .colors import DefaultColorScheme
 from .fonts import default as default_fonts
 
+__all__ = ['HEADER_COMMENT','INDEX_ORIGIN','Project','Timestamp']
+
 HEADER_COMMENT = '# written with pygrace: python interface for xmgrace'
 INDEX_ORIGIN = 0  # zero or one; python uses zero...
 

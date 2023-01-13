@@ -9,6 +9,9 @@
 #
 from .base import GraceObject
 
+__all__ = ['SYMBOLS','Symbol','Line','Baseline','Fill','AnnotatedValue', \
+           'ErrorBar','DataSet']
+
 SYMBOLS = {"None":0,
            "Circle":1,
            "Square":2,

@@ -10,6 +10,8 @@
 from ..graph import Graph
 from ..extensions.latex_string import LatexString
 
+__all__ = ['DistributionGraph','CDFGraph','PDFGraph']
+
 class DistributionGraph(Graph):
     def __init__(self, data, *args, **kwargs):
         Graph.__init__(self, *args, **kwargs)

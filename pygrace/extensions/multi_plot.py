@@ -9,6 +9,8 @@
 #
 from ..project import Project
 
+__all__ = ['MultiPlotProject']
+
 class MultiPlotProject(Project):
     def __init__(self,rows=None,cols=None,hgap=0.1,vgap=0.1,
                  hoffset=(0.15,0.05),voffset=(0.05,0.15),

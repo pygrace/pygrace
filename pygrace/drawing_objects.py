@@ -9,6 +9,9 @@
 #
 from .base import GraceObject 
 
+__all__ = ['DRAWTEXT_JUSTIFICATIONS','DrawingObject','DrawBox','DrawText', \
+           'DrawLine','DrawElipse','LabelledPoint','MultiLegend']
+
 DRAWTEXT_JUSTIFICATIONS = {"l":0,
                            "r":1,
                            "c":2,

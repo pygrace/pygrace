@@ -10,6 +10,8 @@ import os
 import signal
 import errno
 
+__all__ = ['OPEN_MAX','Error','Disconnected','Process']
+
 # globals
 OPEN_MAX = 64
 

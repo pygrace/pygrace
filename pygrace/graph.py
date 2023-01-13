@@ -14,6 +14,9 @@ from .dataset import DataSet, SYMBOLS, INDEX2SYMBOLS, LINESTYLES, \
 from .axis import Axis,LINEAR_SCALE,LOGARITHMIC_SCALE
 import math
 
+__all__ = ['INDEX_ORIGIN','Subtitle','Title','View','World','Frame', \
+           'Legend','Graph']
+
 INDEX_ORIGIN = 0  # zero or one (one is for losers)
 
 class Subtitle(GraceObject):

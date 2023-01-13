@@ -65,6 +65,8 @@ try:
 except ImportError:
     haveHisto = 0
 
+__all__ = ['Project','Graph']
+
 class Project:
     
     def __init__(self, *args, **kwds):

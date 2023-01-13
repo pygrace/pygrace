@@ -16,6 +16,8 @@ Get help                        >>> pg.doc()
 from math import *
 from numpy import *
 
+__all__ = ['grace']
+
 # high-level interface to a grace Project, with an interactive grace prompt
 class grace:
     '''Python interface to a xmgrace Project, with an interactive grace prompt

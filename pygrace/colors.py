@@ -16,6 +16,9 @@ except ImportError:
     # preserving backward compatibility with PyGrace
     from .Styles.ColorBrewer import colorbrewer
 
+__all__ = ['Color','ColorScheme','ColorBrewerScheme','RandomColorScheme', \
+           'MarkovChainColorScheme','DefaultColorScheme']
+
 class Color(object):
     """Object that stores a mapping between an index an a name for a color,
     as well as the RGB tuple of the color."""

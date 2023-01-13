@@ -10,6 +10,8 @@
 import sys
 import optparse
 
+__all__ = ['XYParser']
+
 class XYParser(optparse.OptionParser):
 
     def __init__(self, *args, **kwargs):

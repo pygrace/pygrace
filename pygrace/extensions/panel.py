@@ -14,6 +14,8 @@ from .multi_plot import MultiPlotProject
 from .network import Network
 from .tree import Tree
 
+__all__ = ['PanelLabel','Panel','MultiPanelProject','NetworkPanel','TreePanel']
+
 class PanelLabel(DrawText):
     """This class is useful for adding panel labels to figures.  Note that
     dx and dy are automatically adjusted to correctly space the 

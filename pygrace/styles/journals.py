@@ -9,6 +9,9 @@
 #
 from ..extensions.panel import Panel, PanelLabel, MultiPanelProject
 
+__all__ = ['NaturePanelLabel','NaturePanel','NatureMultiPanelProject', \
+           'SciencePanelLabel','SciencePanel','ScienceMultiPanelProject']
+
 #------------------------------------------------------------------------------
 # Nature style
 #------------------------------------------------------------------------------

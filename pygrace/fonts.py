@@ -9,6 +9,8 @@
 #
 from .base import BaseSet
 
+__all__ = ['Font','FontSet','default']
+
 class Font(object):
     """Object that stores a mapping between an index an a name for a font,
     and outputs a string representation suitable for XMGrace."""

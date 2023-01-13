@@ -12,6 +12,8 @@ import sys
 from ..graph import Graph
 from ..dataset import DataSet
 
+__all__ = ['Tree']
+
 class Tree(Graph):
     """A graph to display trees (such as phylogenetic trees).
     """

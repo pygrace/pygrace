@@ -15,6 +15,9 @@ from ..dataset import DataSet
 from ..drawing_objects import DrawBox
 from ..axis import LINEAR_SCALE, LOGARITHMIC_SCALE
 
+__all__ = ['SolidRectangle','SolidOutlinedRectangle','SolidPixelatedShape', \
+           'ColorBar']
+
 class SolidRectangle(DataSet):
     """A dataset that shows up as a solid rectangle.
 

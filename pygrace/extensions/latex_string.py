@@ -6,7 +6,9 @@
 # Copyright (c) 2023 The Uncertainty Quantification Foundation.
 # License: 3-clause BSD.  The full license text is available at:
 #  - https://github.com/pygrace/pygrace/blob/altmerge/LICENSE
-#
+
+__all__ = ['CONVERT','SORTED_CONVERT','LatexString']
+
 CONVERT = {
     r'$\pm$': r'\f{Symbol}\c1\C\f{}',
     r'$\aleph$': r'\f{Symbol}\c@\C\f{}',

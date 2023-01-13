@@ -17,6 +17,12 @@ except ImportError: # for "legacy" pygrace
     from ..Extensions.colorbar import ColorBar
     from ..Extensions.panel import PanelLabel
 
+__all__ = ['ElRightStairsDataSet','ElLineDataSet','ElShadedDataSet', \
+           'ElCircleDataSet','ElTick','ElLinTick','ElLogTick','ElTickLabel', \
+           'ElLinTickLabel','ElLogTickLabel','ElAxisLabel','ElAxis', \
+           'ElLegend','ElGraph','ElSquareGraph','ElEmptyGraph', \
+           'ElEmptySquareGraph','ElColorBar','ElLinColorBar','ElLogColorBar']
+
 #------------------------------------------------------------------------------
 # The 'El' style of data sets
 #------------------------------------------------------------------------------

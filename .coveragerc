@@ -1,0 +1,53 @@
+[run]
+# source = pygrace
+include =
+    */pygrace/*
+    */pygrace/extensions/*
+    */pygrace/interactive/*
+    */pygrace/styles/*
+    */pygrace/styles/colorbrewer/*
+omit = 
+    */tests/*
+    */info.py
+    */grace.py
+    */plot.py
+branch = true
+# timid = true
+# parallel = true # and need to 'combine' data files
+# concurrency = multiprocessing # thread
+# data_file = $TRAVIS_BUILD_DIR/.coverage
+# debug = trace
+
+[paths]
+source =
+    pygrace
+    pygrace/extensions
+    pygrace/interactive
+    pygrace/styles
+    pygrace/styles/colorbrewer
+    */site-packages/pygrace
+    */site-packages/pygrace/extensions
+    */site-packages/pygrace/interactive
+    */site-packages/pygrace/styles
+    */site-packages/pygrace/styles/colorbrewer
+    */site-packages/pygrace-*/pygrace
+    */site-packages/pygrace-*/pygrace/extensions
+    */site-packages/pygrace-*/pygrace/interactive
+    */site-packages/pygrace-*/pygrace/styles
+    */site-packages/pygrace-*/pygrace/styles/colorbrewer
+
+[report]
+include =
+    */pygrace/*
+    */pygrace/extensions/*
+    */pygrace/interactive/*
+    */pygrace/styles/*
+    */pygrace/styles/colorbrewer/*
+exclude_lines =
+    pragma: no cover
+    raise NotImplementedError
+    if __name__ == .__main__.:
+# show_missing = true
+ignore_errors = true
+# pragma: no branch
+# noqa

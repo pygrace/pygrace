@@ -9,6 +9,8 @@
 #
 import sys
 
+__all__ = ['NAMED_CHILD_TYPES','DYNAMIC_CHILD_TYPES','GraceObject','BaseSet']
+
 NAMED_CHILD_TYPES = dict.fromkeys(
     ['Timestamp', 'Legend', 'Frame', 'xAxis', 'yAxis', 'altxAxis', 'altyAxis',
      'AxisBar', 'AxisLabel', 'Tick', 'TickLabel', 'Title', 'Subtitle', 'View',

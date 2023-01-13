@@ -9,6 +9,8 @@
 #
 from ..drawing_objects import CompoundDrawingObject, DrawText
 
+__all__ = ['DrawTable']
+
 class DrawTable(CompoundDrawingObject):
     def __init__(self, table,
                  char_size = 1.65,

@@ -17,6 +17,14 @@ except ImportError: # for "legacy" PyGrace
     from ..Extensions.colorbar import ColorBar
     from ..Extensions.panel import PanelLabel
 
+__all__ = ['MetraRightStairsDataSet','MetraLineDataSet', \
+           'MetraShadedDataSet','MetraCircleDataSet','MetraTick', \
+           'MetraLinTick','MetraLogTick','MetraTickLabel', \
+           'MetraLinTickLabel','MetraLogTickLabel','MetraAxisLabel', \
+           'MetraAxis','MetraLegend','MetraGraph','MetraSquareGraph', \
+           'MetraEmptyGraph','MetraEmptySquareGraph','MetraColorBar', \
+           'MetraLinColorBar','MetraLogColorBar']
+
 #------------------------------------------------------------------------------
 # The 'Metra' style of data sets
 #------------------------------------------------------------------------------

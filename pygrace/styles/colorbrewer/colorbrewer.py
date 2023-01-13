@@ -77,13 +77,13 @@ Sequential      YlGn        9
 Sequential      YlGnBu      9
 Sequential      YlOrBr      9
 Sequential      YlOrRd      9
-
+"""
+"""
 Mike Stringer
 Northwestern University
 February 28, 2008
 """
 import os
-
 
 
 class ColorBrewerScheme(object):
