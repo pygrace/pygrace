@@ -7,7 +7,6 @@
 #  - https://github.com/pygrace/pygrace/blob/altmerge/LICENSE
 #
 print("build python list")
-from .session import __doc__ as gracedoc
 print('''>>> from numpy import *
 >>> from numpy import newaxis as NewAxis
 >>> x = pi*arange(21)/10.
