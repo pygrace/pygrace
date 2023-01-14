@@ -45,6 +45,7 @@ cache:
 
 before_install:
     - sudo apt-get -y install xorg openbox grace
+    - DISPLAY=:0.0 xmgrace #Can't open display; Failed initializing GUI, exiting
     - set -e  # fail on any error
     - if [[ $COVERAGE == "true" ]]; then pip install coverage; fi
     - if [[ $CYTHON == "true" ]]; then pip install "cython<0.29.25"; fi #FIXME
