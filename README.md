@@ -8,7 +8,7 @@ About Pygrace
 
 ``pygrace`` ``Project`` objects are used to construct and save ``xmgrace`` project files (.agr). ``Project`` files capture the state of a ``xmgrace`` session, including the figures, settings, and current variables.
 
-![pygrace project](https://github.com/uqfoundation/pygrace/blob/master/docs/source/_static/crow_diagram.png)
+![pygrace project](https://github.com/uqfoundation/pygrace/raw/master/docs/source/_static/crow_diagram.png)
 
 A more detailed diagram of all the attributes of ``pygrace`` template objects can be found at https://github.com/uqfoundation/pygrace/blob/master/docs/diagrams/diagram.pdf, while a handy cheatsheet of the methods and attributes of each ``pygrace`` template class can be found at https://github.com/uqfoundation/pygrace/blob/master/docs/diagrams/cheatsheet.pdf. This cheatsheet can be dynamically generated through use of the ``write_cheatsheet`` method, available from the ``Project`` class.
 
@@ -100,7 +100,7 @@ then, open the project file with xmgrace::
 
     $ xmgrace 00_helloworld.agr
 
-![00_helloworld](https://github.com/uqfoundation/pygrace/blob/master/docs/source/_static/00_helloworld.png)
+![00_helloworld](https://github.com/uqfoundation/pygrace/raw/master/docs/source/_static/00_helloworld.png)
 
 find out more about ``pygrace`` at http://pygrace.rtfd.io or browse some more of the examples at https://github.com/uqfoundation/pygrace/tree/master/examples.
 
@@ -109,14 +109,14 @@ for example::
     $ python 05_colorplot.py
     $ xmgrace 05_colorplot.agr
 
-![05_colorplot](https://github.com/uqfoundation/pygrace/blob/master/docs/source/_static/05_colorplot.png)
+![05_colorplot](https://github.com/uqfoundation/pygrace/raw/master/docs/source/_static/05_colorplot.png)
 
 and::
 
     $ python 08_latexlabels.py
     $ xmgrace 08_latexlabels.agr
 
-![08_latexlabels](https://github.com/uqfoundation/pygrace/blob/master/docs/source/_static/08_latexlabels.png)
+![08_latexlabels](https://github.com/uqfoundation/pygrace/raw/master/docs/source/_static/08_latexlabels.png)
 
 
 we can also work in an interactive xmgrace session::
@@ -130,7 +130,7 @@ use xmgrace methods directly from the python interpreter::
     >>> x = np.arange(21) * np.pi/10
     >>> pg.plot(x, np.sin(x))
 
-![sin](https://github.com/uqfoundation/pygrace/blob/master/docs/source/_static/sin.png)
+![sin](https://github.com/uqfoundation/pygrace/raw/master/docs/source/_static/sin.png)
 
 push variables into xmgrace and interact with the xmgrace scripting language::
 
@@ -139,7 +139,7 @@ push variables into xmgrace and interact with the xmgrace scripting language::
     >>> pg.eval('s0 line color 2')
     >>> pg.eval('plot(x,y)')
 
-![cos](https://github.com/uqfoundation/pygrace/blob/master/docs/source/_static/cos.png)
+![cos](https://github.com/uqfoundation/pygrace/raw/master/docs/source/_static/cos.png)
 
 use the interactive xmgrace prompt::
 
@@ -153,7 +153,7 @@ use the interactive xmgrace prompt::
     grace> redraw()
     grace> exit
 
-![histoPlot](https://github.com/uqfoundation/pygrace/blob/master/docs/source/_static/histoPlot.png)
+![histoPlot](https://github.com/uqfoundation/pygrace/raw/master/docs/source/_static/histoPlot.png)
 
 check variables in xmgrace session::
 
