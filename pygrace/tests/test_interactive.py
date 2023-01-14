@@ -12,7 +12,7 @@ from numpy import *
 import unittest
 import time
 
-class PyGrace_PyGrace_TestCase(unittest.TestCase):
+class PyGrace_Missing_TestCase(unittest.TestCase):
     def setUp(self):
         '''grace: instantiate a grace session'''
         time.sleep(1)
@@ -33,54 +33,6 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
         self.session.exit()
         self.session = None
         return #FIXME: do I want a new session for each test?
-
-#   def test_gracedependancy(self):
-#       '''grace: check package dependancies'''
-#       self.assert_(exec 'import numpy' == None,"failure to import numpy")
-#       return
-
-    def test_grace__getattr__(self):
-        '''grace: call grace method if gracePlot method is implicit'''
-        self.assertTrue(self.session.redraw() == None,"implicit method not found ")
-        #self.assertRaises(AttributeError,self.session.foo,'x')
-        return
-
-    def test_grace_validate(self):
-        '''grace: fail upon invalid name'''
-        self.assertTrue(self.session._validate("foo") == None,
-                     "failure to validate a valid variable")
-        self.assertTrue(self.session._validate("f_o1o") == None,
-                     "failure to validate a valid variable")
-        self.assertRaises(NameError,self.session._validate,'1foo')
-        self.assertRaises(NameError,self.session._validate,'$foo')
-        self.assertRaises(NameError,self.session._validate,'f.oo')
-        self.assertRaises(NameError,self.session._validate,'foo!')
-        self.assertRaises(NameError,self.session._validate,'for')
-        return
-
-    def test_grace_putlocal(self):
-        '''grace: add variable to local store'''
-        Z = 666
-        self.assertTrue(self.session._putlocal("a",self.int) == None,
-                     "failure to add scalar to local store")
-        self.assertTrue(self.session._putlocal("b",self.list) == None,
-                     "failure to add list to local store")
-        self.assertTrue(self.session._putlocal("c",self.array) == None,
-                     "failure to add array to local store")
-        self.assertTrue(self.session._putlocal("n",self.none) == None,
-                     "failure to add None to local store")
-        self.assertTrue(self.session._putlocal("s",self.str) == None,
-                     "failure to add string to local store")
-        self.assertTrue(self.session._putlocal("z",Z) == None,
-                     "failure to add to named local store")
-        self.assertEqual(self.int, self.session.whos['a'])
-        self.assertEqual(self.list, self.session.whos['b'])
-        self.assertEqual(self.array.tolist(), self.session.whos['c'].tolist())
-        self.assertEqual(self.none, self.session.whos['n'])
-        self.assertEqual(self.str, self.session.whos['s'])
-        self.assertEqual(Z, self.session.whos['z'])
-        self.assertRaises(NameError,self.session._putlocal,'foo!',69)
-        return
 
     def test_grace_getlocal(self):
         '''grace: return variable value from local store'''
@@ -123,6 +75,140 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
         self.assertEqual({},self.session.whos)
         return
 
+    def test_grace_validate(self):
+        '''grace: fail upon invalid name'''
+        self.assertTrue(self.session._validate("foo") == None,
+                     "failure to validate a valid variable")
+        self.assertTrue(self.session._validate("f_o1o") == None,
+                     "failure to validate a valid variable")
+        self.assertRaises(NameError,self.session._validate,'1foo')
+        self.assertRaises(NameError,self.session._validate,'$foo')
+        self.assertRaises(NameError,self.session._validate,'f.oo')
+        self.assertRaises(NameError,self.session._validate,'foo!')
+        self.assertRaises(NameError,self.session._validate,'for')
+        return
+
+    def test_gracedelete(self):
+        '''grace: delete grace variables'''
+        self.session.put("a",1)
+        self.session.put("b",2)
+        self.session.put("c",3)
+        self.assertTrue(self.session.delete("c") == None,
+                     "failure to delete a grace variable")
+        whos = {'a': 1, 'b': 2}
+        self.assertEqual(whos, self.session.who())
+        self.assertTrue(self.session.delete("a, b") == None,
+                     "failure to delete a grace variable tuple")
+        whos = {}
+        self.assertEqual(whos, self.session.who())
+        self.assertTrue(self.session.delete("z") == None,
+                     "failure to skip delete for unknown variable")
+        whos = {}
+        self.assertEqual(whos, self.session.who())
+        self.assertTrue(self.session.delete("[0,1]") == None,
+                     "failure to skip delete for bad syntax")
+        whos = {}
+        self.assertEqual(whos, self.session.who())
+        return
+
+    def test_graceevalgrace(self):
+        '''grace: evaluate a gracePlot expression'''
+        self.assertTrue(self.session.eval("redraw()") == None,
+                     "failure to evaluate a gracePlot expression")
+        self.assertTrue(self.session.eval("s0 line color 2") == None,
+                     "failure to evaluate a grace expression")
+        return
+
+    def test_gracerestart(self):
+        '''grace: restart a grace window'''
+        self.session.eval('a = 1')
+        self.assertTrue(self.session.restart() == None,
+                     "failure to restart grace window")
+        whos = {} #FIXME: {'a': 1} # session preserved across window close?
+        self.assertEqual(whos, self.session.who())
+        self.assertTrue(self.session.redraw() == None,
+                     "failure to reinitialize grace session")
+        return
+
+    def test_gracewho(self):
+        '''grace: inquire who are the grace variables'''
+        self.session.put('a',self.int)
+        self.session.put('b',self.list)
+        self.session.put('c',self.array)
+        self.session.put('s',self.str)
+        whos = {'a':self.int, 'b':self.list, 's':self.str, 'c':self.array}
+        self.assertEqual(self.int,self.session.who('a'))
+        self.assertEqual(self.list,self.session.who('b'))
+        self.assertEqual(self.array.tolist(),self.session.who('c').tolist())
+        self.assertEqual(self.str,self.session.who('s'))
+        self.assertEqual(whos,self.session.who())
+        whos['n'] = self.none
+        self.session.put('n',None)
+        self.assertEqual(self.none,self.session.who('n'))
+        self.assertEqual(whos,self.session.who())
+        self.assertRaises(NameError,self.session.who,'x')
+        self.assertRaises(NameError,self.session.who,'a, b') #XXX: allow this?
+        self.assertEqual(whos,self.session.who())
+        return
+
+
+class PyGrace_Installed_TestCase(unittest.TestCase):
+    def setUp(self):
+        '''grace: instantiate a grace session'''
+        time.sleep(1)
+        self.session = grace()
+        self.int = 1
+        self.list = [1,2]
+        self.array = array(self.list)
+        self.dict = {}
+        self.matrix = [[1,2,3],[4,5,6]]
+        self.none = None
+        self.str = 'foo'
+        self.bytearray = array(self.str)
+        self.strlist = ["hello", "world"]
+        return #FIXME: do I want a new session for each test?
+
+    def tearDown(self):
+        '''grace: destroy a grace session'''
+        self.session.exit()
+        self.session = None
+        return #FIXME: do I want a new session for each test?
+
+#   def test_gracedependancy(self):
+#       '''grace: check package dependancies'''
+#       self.assert_(exec 'import numpy' == None,"failure to import numpy")
+#       return
+
+    def test_grace__getattr__(self):
+        '''grace: call grace method if gracePlot method is implicit'''
+        self.assertTrue(self.session.redraw() == None,"implicit method not found ")
+        #self.assertRaises(AttributeError,self.session.foo,'x')
+        return
+
+    def test_grace_putlocal(self):
+        '''grace: add variable to local store'''
+        Z = 666
+        self.assertTrue(self.session._putlocal("a",self.int) == None,
+                     "failure to add scalar to local store")
+        self.assertTrue(self.session._putlocal("b",self.list) == None,
+                     "failure to add list to local store")
+        self.assertTrue(self.session._putlocal("c",self.array) == None,
+                     "failure to add array to local store")
+        self.assertTrue(self.session._putlocal("n",self.none) == None,
+                     "failure to add None to local store")
+        self.assertTrue(self.session._putlocal("s",self.str) == None,
+                     "failure to add string to local store")
+        self.assertTrue(self.session._putlocal("z",Z) == None,
+                     "failure to add to named local store")
+        self.assertEqual(self.int, self.session.whos['a'])
+        self.assertEqual(self.list, self.session.whos['b'])
+        self.assertEqual(self.array.tolist(), self.session.whos['c'].tolist())
+        self.assertEqual(self.none, self.session.whos['n'])
+        self.assertEqual(self.str, self.session.whos['s'])
+        self.assertEqual(Z, self.session.whos['z'])
+        self.assertRaises(NameError,self.session._putlocal,'foo!',69)
+        return
+
     def test_grace_wholist(self):
         '''grace: check list of string names for all grace variables'''
         self.session.eval("a = 1")
@@ -138,17 +224,6 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
         self.session.eval("a = 1")
         self.assertEqual(True, self.session._exists('a'))
         self.assertEqual(False, self.session._exists('b'))
-        return
-
-    def test_gracerestart(self):
-        '''grace: restart a grace window'''
-        self.session.eval('a = 1')
-        self.assertTrue(self.session.restart() == None,
-                     "failure to restart grace window")
-        whos = {} #FIXME: {'a': 1} # session preserved across window close?
-        self.assertEqual(whos, self.session.who())
-        self.assertTrue(self.session.redraw() == None,
-                     "failure to reinitialize grace session")
         return
 
     def test_graceput(self):
@@ -198,50 +273,6 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
         self.assertRaises(SyntaxError,self.session.get,'x[]')
         return
 
-    def test_gracewho(self):
-        '''grace: inquire who are the grace variables'''
-        self.session.put('a',self.int)
-        self.session.put('b',self.list)
-        self.session.put('c',self.array)
-        self.session.put('s',self.str)
-        whos = {'a':self.int, 'b':self.list, 's':self.str, 'c':self.array}
-        self.assertEqual(self.int,self.session.who('a'))
-        self.assertEqual(self.list,self.session.who('b'))
-        self.assertEqual(self.array.tolist(),self.session.who('c').tolist())
-        self.assertEqual(self.str,self.session.who('s'))
-        self.assertEqual(whos,self.session.who())
-        whos['n'] = self.none
-        self.session.put('n',None)
-        self.assertEqual(self.none,self.session.who('n'))
-        self.assertEqual(whos,self.session.who())
-        self.assertRaises(NameError,self.session.who,'x')
-        self.assertRaises(NameError,self.session.who,'a, b') #XXX: allow this?
-        self.assertEqual(whos,self.session.who())
-        return
-
-    def test_gracedelete(self):
-        '''grace: delete grace variables'''
-        self.session.put("a",1)
-        self.session.put("b",2)
-        self.session.put("c",3)
-        self.assertTrue(self.session.delete("c") == None,
-                     "failure to delete a grace variable")
-        whos = {'a': 1, 'b': 2}
-        self.assertEqual(whos, self.session.who())
-        self.assertTrue(self.session.delete("a, b") == None,
-                     "failure to delete a grace variable tuple")
-        whos = {}
-        self.assertEqual(whos, self.session.who())
-        self.assertTrue(self.session.delete("z") == None,
-                     "failure to skip delete for unknown variable")
-        whos = {}
-        self.assertEqual(whos, self.session.who())
-        self.assertTrue(self.session.delete("[0,1]") == None,
-                     "failure to skip delete for bad syntax")
-        whos = {}
-        self.assertEqual(whos, self.session.who())
-        return
-
 #   def test_graceeval(self):
 #       '''grace: eval TESTS NOT IMPLEMENTED'''
 #       pass
@@ -260,14 +291,6 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
         who_ = self.session.who()
         who_['c'] = who_['c'].tolist() # assertEqual with lists not arrays
         self.assertEqual(whos, who_)
-        return
-
-    def test_graceevalgrace(self):
-        '''grace: evaluate a gracePlot expression'''
-        self.assertTrue(self.session.eval("redraw()") == None,
-                     "failure to evaluate a gracePlot expression")
-        self.assertTrue(self.session.eval("s0 line color 2") == None,
-                     "failure to evaluate a grace expression")
         return
 
     def test_graceevalexit(self):
@@ -321,10 +344,14 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
 if __name__ == "__main__":
     import shutil
     installed = bool(shutil.which('xmgrace'))
-
-    suite0 = unittest.makeSuite(PyGrace_PyGrace_TestCase)
-    alltests = unittest.TestSuite((suite0,))
+    suite0 = unittest.makeSuite(PyGrace_Missing_TestCase)
+    alltests = (suite0,)
+    if installed:
+        suite1 = unittest.makeSuite(PyGrace_Installed_TestCase)
+        alltests += (suite1,)
+    else:
+        print('xmgrace was not found on $PATH')
+    alltests = unittest.TestSuite(alltests)
     unittest.TextTestRunner(verbosity=2).run(alltests)
-    
 
 #  End of file 
