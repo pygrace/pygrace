@@ -20,3 +20,9 @@ graph.add_drawing_object(DrawLine)
 graph.add_drawing_object(DrawEllipse)
 
 grace.cheatsheet('cheatsheet.tex')
+
+import shutil
+import os
+if shutil.which('pdflatex') and os.path.exists('cheatsheet.tex'):
+    os.system('pdflatex cheatsheet.tex >& cheatsheet.out')
+
