@@ -319,9 +319,12 @@ class PyGrace_PyGrace_TestCase(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    import shutil
+    installed = bool(shutil.which('xmgrace'))
+
     suite0 = unittest.makeSuite(PyGrace_PyGrace_TestCase)
     alltests = unittest.TestSuite((suite0,))
     unittest.TextTestRunner(verbosity=2).run(alltests)
-
+    
 
 #  End of file 

@@ -13,23 +13,28 @@ import glob
 files = ['*.agr', '*.pyc', '*.pyo', '*.log', '*~', 'cheatsheet.*']
 cache = '__pycache__'
 
-# remove the generated files
-for pattern in files:
-    for file in glob.glob(pattern):
+def clean_generated():
+    # remove the generated files
+    for pattern in files:
+        for file in glob.glob(pattern):
+            try:
+                os.unlink(file)
+            except (OSError, PermissionError):
+                pass
+
+    # empty the cache directory
+    for file in glob.glob(cache + os.path.sep + '*'):
         try:
             os.unlink(file)
         except (OSError, PermissionError):
             pass
 
-# empty the cache directory
-for file in glob.glob(cache + os.path.sep + '*'):
+    # remove the empty cache directory
     try:
-        os.unlink(file)
+        os.rmdir('__pycache__')
     except (OSError, PermissionError):
         pass
 
-# remove the empty cache directory
-try:
-    os.rmdir('__pycache__')
-except (OSError, PermissionError):
-    pass
+
+if __name__ == '__main__':
+    clean_generated()

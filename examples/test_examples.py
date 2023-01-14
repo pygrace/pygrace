@@ -33,10 +33,7 @@ exampleList = [
     './14_phylogenetic_tree.py',
     ]
 
-if __name__ == '__main__':
-
-    SHOW_DETAILED_ERROR_OUTPUT = True
-
+def test_runner(VERBOSE=True):
     # output title message to shell
     print(('Running tests ' + '-' * 80)[:79], file=stderr)
 
@@ -82,7 +79,7 @@ if __name__ == '__main__':
               (allPassed, nWork, nTests)
     print(message, file=stderr)
 
-    if allPassed == 'FAILED' and SHOW_DETAILED_ERROR_OUTPUT:
+    if allPassed == 'FAILED' and VERBOSE:
 
         message = """
 The output of standard error for each test script are stored in the same file
@@ -96,4 +93,10 @@ All of the test scripts successfully ran, but make sure to check the figures
 that were created, as they may not look right even though the scripts did not
 throw an error."""
         print(message, file=stderr)
+
+    return allPassed
+
+
+if __name__ == '__main__':
+    test_runner()
 
