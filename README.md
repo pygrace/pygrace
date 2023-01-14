@@ -1,20 +1,75 @@
 pygrace
 =======
-``pygrace`` is a set of Python bindings and wrappers for Grace.
+Python bindings to xmgrace.
 
-Installation
-------------
-``pygrace`` can be installed by cloning the code from github, then running::
+About Pygrace
+-------------
+``pygrace`` was designed to enable the construction and use of ``xmgrace`` projects from python.  ``pygrace`` provides a collection of classes that serve as editable templates for elements of a xmgrace project. The inheritance structure of ``pygrace`` mirrors the structure of ``xmgrace``.
 
-    $ python setup.py build
-    $ python setup.py install
-
-Build a Project File
---------------------
-``pygrace`` ``Project`` objects can be used to build complex project files.
+``pygrace`` ``Project`` objects are used to construct and save ``xmgrace`` project files (.agr). ``Project`` files capture the state of a ``xmgrace`` session, including the figures, settings, and current variables.
 
 ![pygrace project](docs/source/_static/crow_diagram.png)
 
+A more detailed diagram of all the attributes of ``pygrace`` template objects can be found at https://github.com/uqfoundation/pygrace/blob/master/docs/diagrams/diagram.pdf, while a handy cheatsheet of the methods and attributes of each ``pygrace`` template class can be found at https://github.com/uqfoundation/pygrace/blob/master/docs/diagrams/cheatsheet.pdf. This cheatsheet can be dynamically generated through use of the ``write_cheatsheet`` method, available from the ``Project`` class.
+
+``pygrace`` is in active development, so any user feedback, bug reports, comments, or suggestions are highly appreciated.  A list of issues is located at https://github.com/uqfoundation/pygrace/issues, with a legacy list maintained at https://github.com/pygrace/pygrace/issues.
+
+
+Major Features
+--------------
+``pygrace`` provides an object-oriented python interface for the efficient construction of ``xmgrace`` projects (e.g. highly-customizable publication-quality single and multi-figure plots). ``pygrace`` provides:
+
+* an object-relational mapping from python objects to a ``xmgrace`` project
+* an interactive python-based ``grace>`` prompt for ``xmgrace`` commands
+* a set of high-level python functions for drawing ``xmgrace`` ``Graphs``
+
+Current Release
+[![Downloads](https://static.pepy.tech/personalized-badge/pygrace?period=total&units=international_system&left_color=grey&right_color=blue&left_text=pypi%20downloads)](https://pepy.tech/project/pygrace)
+---------------
+The latest released version of ``pygrace`` is available from:
+    https://pypi.org/project/pygrace
+
+``pygrace`` is distributed under a 3-clause BSD license.
+
+Development Version
+[![Support](https://img.shields.io/badge/support-the%20UQ%20Foundation-purple.svg?style=flat&colorA=grey&colorB=purple)](http://www.uqfoundation.org/pages/donate.html)
+[![Documentation Status](https://readthedocs.org/projects/pygrace/badge/?version=latest)](https://pygrace.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.com/uqfoundation/pygrace.svg?label=build&logo=travis&branch=master)](https://travis-ci.com/github/uqfoundation/pygrace)
+[![codecov](https://codecov.io/gh/uqfoundation/pygrace/branch/master/graph/badge.svg)](https://codecov.io/gh/uqfoundation/pygrace)
+-------------------
+You can get the latest development version with all the shiny new features at:
+    https://github.com/uqfoundation
+
+If you have a new contribution, please submit a pull request.
+
+
+Installation
+------------
+``pygrace`` can be installed with ``pip``::
+
+    $ pip install pygrace
+
+It is assumed ``xmgrace`` is already installed and on the user's ``$PATH``.  ``xmgrace`` is available at:
+    https://plasma-gate.weizmann.ac.il/pub/grace/src/
+
+
+Requirements
+------------
+``pygrace`` requires:
+
+* ``python`` (or ``pypy``), **>=3.7**
+* ``setuptools``, **>=42**
+* ``cython``, **>=0.29.30**
+* ``numpy``, **>=1.0**
+* ``mpmath``, **>=0.19**
+
+Additional requirements:
+
+* ``xmgrace``, **>=5.1.14**
+
+
+Basic Usage
+-----------
 start a ``pygrace`` project file::
 
     >>> from pygrace.project import Project
@@ -57,8 +112,6 @@ and::
 ![08_latexlabels](docs/source/_static/08_latexlabels.png)
 
 
-Interactive Session
--------------------
 we can also work in an interactive xmgrace session::
 
     >>> from pygrace import grace
@@ -136,3 +189,28 @@ start a new interactive xmgrace session from the saved project::
 
     >>> pg = grace(project='histoPlot.agr')
 
+
+More Information
+----------------
+Probably the best way to get started is to look at the documentation at
+http://pygrace.rtfd.io. Also see ``pygrace.tests`` for a set of scripts that
+demonstrate several of the many features of ``pygrace``.
+You can run the test suite with ``python -m pygrace.tests``. 
+Also see ``pygrace.examples`` for examples that demonstrate the construction
+of ``xmgrace`` project files (.agr). ``pygrace.examples.interactive`` includes
+examples of using ``python`` to interact with a live ``xmgrace`` session.
+The source code is relatively well documented, so some questions may be resolved by inspecting the code itself.  However, please feel free to submit a ticket on github, or ask a question on stackoverflow (**@Mike McKerns**).
+If you would like to share how you use ``pygrace`` in your work, please send
+an email (to **mmckerns at uqfoundation dot org**).
+
+
+Citation 
+--------
+If you use ``pygrace`` to do research that leads to publication, we ask that you
+acknowledge use of ``pygrace`` by citing the following in your publication::
+
+    Michael McKerns, Dean Malmgren, Mike Stringer, and Daniel Stouffer,
+    "pygrace: python bindings to xmgrace", 2005- ;
+    https://github.com/uqfoundation/pygrace
+
+Please see https://pygrace.github.io/ for further information on an earlier version of ``pygrace`` developed by Dean Malmgren, Mike Stringer, and members of the Amaral Lab, and later maintained by Daniel Stouffer and members of the Stouffer Lab. This code has been merged into the original ``pygrace`` developed by Mike McKerns.

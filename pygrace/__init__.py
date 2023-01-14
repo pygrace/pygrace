@@ -66,7 +66,7 @@ def license():
 
 def citation():
     """print citation"""
-    print(__doc__[-516:-118])
+    print(__doc__[-498:-330])
     return
 
 # EOF
