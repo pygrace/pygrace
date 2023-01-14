@@ -11,26 +11,26 @@ Installation
 
 Build a Project File
 --------------------
-pygrace Project objects can be used to build complex project files.
+``pygrace`` ``Project`` objects can be used to build complex project files.
 
 ![pygrace project](docs/source/_static/crow_diagram.png)
 
-start a pygrace project file::
+start a ``pygrace`` project file::
 
     >>> from pygrace.project import Project
     >>> plot = Project()
 
-add a Graph to the Project instance::
+add a ``Graph`` to the ``Project`` instance::
 
     >>> graph = plot.add_graph()
     >>> graph.title.text = 'Hello, world!'
 
-add a DataSet to the graph::
+add a ``DataSet`` to the graph::
 
     >>> data = [(0, 0), (0.5, 0.75), (1, 1)]
     >>> dataset = graph.add_dataset(data)
 
-save the Project to a xmgrace project file (.agr format)::
+save the ``Project`` to a xmgrace project file (.agr format)::
 
     >>> plot.saveall('00_helloworld.agr')
 
@@ -40,7 +40,7 @@ then, open the project file with xmgrace::
 
 ![00_helloworld](docs/source/_static/00_helloworld.png)
 
-find out more about pygrace at http://pygrace.rtfd.io or browse some more of the examples at https://github.com/uqfoundation/pygrace/tree/master/examples.
+find out more about ``pygrace`` at http://pygrace.rtfd.io or browse some more of the examples at https://github.com/uqfoundation/pygrace/tree/master/examples.
 
 for example::
 
@@ -127,7 +127,7 @@ delete variables from xmgrace::
     >>> pg.delete('x')
     >>> pg.delete('y')
 
-save current session to a project file, then exit::
+save the current session to a project file, then exit::
 
     >>> pg.saveall('histoPlot.agr')
     >>> pg.exit()
