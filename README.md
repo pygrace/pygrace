@@ -40,7 +40,7 @@ then, open the project file with xmgrace::
 
 ![00_helloworld](docs/source/_static/00_helloworld.png)
 
-find out more about pygrace at http://pygrace.rtfd.io or browse some more of the examples at https://github.com/uqfoundation/pygrace/tree/master/pygrace/examples.
+find out more about pygrace at http://pygrace.rtfd.io or browse some more of the examples at https://github.com/uqfoundation/pygrace/tree/master/examples.
 
 for example::
 
