@@ -324,9 +324,10 @@ if __name__ == "__main__":
     if installed:
         suite0 = unittest.makeSuite(PyGrace_PyGrace_TestCase)
         alltests = (suite0,)
+        alltests = unittest.TestSuite(alltests)
+        unittest.TextTestRunner(verbosity=2).run(alltests)
     else:
         print('xmgrace was not found on $PATH')
-    alltests = unittest.TestSuite(alltests)
-    unittest.TextTestRunner(verbosity=2).run(alltests)
+
 
 #  End of file 
