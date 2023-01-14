@@ -12,7 +12,7 @@ from numpy import *
 import unittest
 import time
 
-class PyGrace_Missing_TestCase(unittest.TestCase):
+class PyGrace_PyGrace_TestCase(unittest.TestCase):
     def setUp(self):
         '''grace: instantiate a grace session'''
         time.sleep(1)
@@ -150,29 +150,6 @@ class PyGrace_Missing_TestCase(unittest.TestCase):
         self.assertRaises(NameError,self.session.who,'a, b') #XXX: allow this?
         self.assertEqual(whos,self.session.who())
         return
-
-
-class PyGrace_Installed_TestCase(unittest.TestCase):
-    def setUp(self):
-        '''grace: instantiate a grace session'''
-        time.sleep(1)
-        self.session = grace()
-        self.int = 1
-        self.list = [1,2]
-        self.array = array(self.list)
-        self.dict = {}
-        self.matrix = [[1,2,3],[4,5,6]]
-        self.none = None
-        self.str = 'foo'
-        self.bytearray = array(self.str)
-        self.strlist = ["hello", "world"]
-        return #FIXME: do I want a new session for each test?
-
-    def tearDown(self):
-        '''grace: destroy a grace session'''
-        self.session.exit()
-        self.session = None
-        return #FIXME: do I want a new session for each test?
 
 #   def test_gracedependancy(self):
 #       '''grace: check package dependancies'''
@@ -344,11 +321,9 @@ class PyGrace_Installed_TestCase(unittest.TestCase):
 if __name__ == "__main__":
     import shutil
     installed = bool(shutil.which('xmgrace'))
-    suite0 = unittest.makeSuite(PyGrace_Missing_TestCase)
-    alltests = (suite0,)
     if installed:
-        suite1 = unittest.makeSuite(PyGrace_Installed_TestCase)
-        alltests += (suite1,)
+        suite0 = unittest.makeSuite(PyGrace_PyGrace_TestCase)
+        alltests = (suite0,)
     else:
         print('xmgrace was not found on $PATH')
     alltests = unittest.TestSuite(alltests)
