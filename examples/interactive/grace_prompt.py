@@ -4,7 +4,7 @@
 # Copyright (c) 2004-2016 California Institute of Technology.
 # Copyright (c) 2023 The Uncertainty Quantification Foundation.
 # License: 3-clause BSD.  The full license text is available at:
-#  - https://github.com/pygrace/pygrace/blob/altmerge/LICENSE
+#  - https://github.com/uqfoundation/pygrace/blob/master/LICENSE
 #
 x = [1,2,3,4,5]
 y = [1,4,9,16,25]

@@ -63,7 +63,7 @@ copyright = u'%d, The Uncertainty Quantification Foundation' % year
 author = u'Mike McKerns'
 
 # extension config
-github_project_url = "https://github.com/pygrace/pygrace"
+github_project_url = "https://github.com/uqfoundation/pygrace"
 autoclass_content = 'both'
 autodoc_typehints = 'description'
 napoleon_include_init_with_doc = True

@@ -8,7 +8,7 @@
 # Copyright (c) 2013 Daniel Stouffer.
 # Copyright (c) 2023 The Uncertainty Quantification Foundation.
 # License: 3-clause BSD.  The full license text is available at:
-#  - https://github.com/pygrace/pygrace/blob/altmerge/LICENSE
+#  - https://github.com/uqfoundation/pygrace/blob/master/LICENSE
 
 import os
 import sys
@@ -52,12 +52,12 @@ setup_kwds = dict(
     maintainer_email = AUTHOR_EMAIL,
     license = 'BSD-3-Clause',
     platforms = ['Linux', 'Mac'],
-    url = 'https://github.com/pygrace/pygrace',
+    url = 'https://github.com/uqfoundation/pygrace',
     download_url = 'https://pypi.org/project/pygrace/#files',
     project_urls = {
         'Documentation':'http://pygrace.rtfd.io',
-        'Source Code':'https://github.com/pygrace/pygrace',
-        'Bug Tracker':'https://github.com/pygrace/pygrace/issues',
+        'Source Code':'https://github.com/uqfoundation/pygrace',
+        'Bug Tracker':'https://github.com/uqfoundation/pygrace/issues',
     },
     python_requires = '>=3.7',
     classifiers = [

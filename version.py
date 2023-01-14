@@ -3,7 +3,7 @@
 # Author: Mike McKerns (mmckerns @caltech and @uqfoundation)
 # Copyright (c) 2023 The Uncertainty Quantification Foundation.
 # License: 3-clause BSD.  The full license text is available at:
-#  - https://github.com/pygrace/pygrace/blob/altmerge/LICENSE
+#  - https://github.com/uqfoundation/pygrace/blob/master/LICENSE
 
 __version__ = '1.1.dev0'
 __author__ = 'Mike McKerns'
@@ -69,7 +69,7 @@ def write_info_file(dirpath, modulename, **info):
 # Author: Mike McKerns (mmckerns @caltech and @uqfoundation)
 # Copyright (c) 2023 The Uncertainty Quantification Foundation.
 # License: 3-clause BSD.  The full license text is available at:
-#  - https://github.com/pygrace/%s/blob/altmerge/LICENSE
+#  - https://github.com/uqfoundation/%s/blob/master/LICENSE
 ''' % modulename #XXX: author and email are hardwired in the header
     doc = info.get('doc', None)
     version = info.get('version', None)
