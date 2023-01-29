@@ -201,14 +201,15 @@ More Information
 ----------------
 Probably the best way to get started is to look at the documentation at
 http://pygrace.rtfd.io. Also see ``pygrace.tests`` for a set of scripts that
-demonstrate several of the many features of ``pygrace``.
-You can run the test suite with ``python -m pygrace.tests``. 
-Also see ``pygrace.examples`` for examples that demonstrate the construction
-of ``xmgrace`` project files (.agr). ``pygrace.examples.interactive`` includes
-examples of using ``python`` to interact with a live ``xmgrace`` session.
-The source code is relatively well documented, so some questions may be resolved by inspecting the code itself.  However, please feel free to submit a ticket on github, or ask a question on stackoverflow (**@Mike McKerns**).
-If you would like to share how you use ``pygrace`` in your work, please send
-an email (to **mmckerns at uqfoundation dot org**).
+demonstrate several of the many features of ``pygrace``. You can run the test
+suite with ``python -m pygrace.tests``. Also see https://github.com/uqfoundation/pygrace/tree/master/examples for examples that demonstrate the construction
+of ``xmgrace`` project files (.agr). https://github.com/uqfoundation/pygrace/tree/master/examples/interactive includes examples of using ``python`` to interact
+with a live ``xmgrace`` session. The source code is relatively well documented,
+so some questions may be resolved by inspecting the code itself.  However,
+please feel free to submit a ticket on github, or ask a question on
+stackoverflow (**@Mike McKerns**). If you would like to share how you use
+``pygrace`` in your work, please send an email (to **mmckerns at uqfoundation
+dot org**).
 
 
 Citation 
