@@ -4,9 +4,7 @@ pygrace package documentation
 =============================
 
 .. automodule:: pygrace
-    :members:
-    :undoc-members:
-    :show-inheritance:
+..  :exclude-members: +
 
 .. toctree::
     :maxdepth: 2
