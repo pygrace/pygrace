@@ -1,10 +1,10 @@
 pygrace
 =======
-Python bindings to xmgrace.
+Python bindings to xmgrace
 
 About Pygrace
 -------------
-``pygrace`` was designed to enable the construction and use of ``xmgrace`` projects from python.  ``pygrace`` provides a collection of classes that serve as editable templates for elements of a xmgrace project. The inheritance structure of ``pygrace`` mirrors the structure of ``xmgrace``.
+``pygrace`` was designed to enable the construction and use of ``xmgrace`` projects from Python.  ``pygrace`` provides a collection of classes that serve as editable templates for elements of a xmgrace project. The inheritance structure of ``pygrace`` mirrors the structure of ``xmgrace``.
 
 ``pygrace`` ``Project`` objects are used to construct and save ``xmgrace`` project files (.agr). ``Project`` files capture the state of a ``xmgrace`` session, including the figures, settings, and current variables.
 
@@ -17,11 +17,11 @@ A more detailed diagram of all the attributes of ``pygrace`` template objects ca
 
 Major Features
 --------------
-``pygrace`` provides an object-oriented python interface for the efficient construction of ``xmgrace`` projects (e.g. highly-customizable publication-quality single and multi-figure plots). ``pygrace`` provides:
+``pygrace`` provides an object-oriented Python interface for the efficient construction of ``xmgrace`` projects (e.g. highly-customizable publication-quality single and multi-figure plots). ``pygrace`` provides:
 
-* an object-relational mapping from python objects to a ``xmgrace`` project
-* an interactive python-based ``grace>`` prompt for ``xmgrace`` commands
-* a set of high-level python functions for drawing ``xmgrace`` ``Graphs``
+* an object-relational mapping from Python objects to a ``xmgrace`` project
+* an interactive Python-based ``grace>`` prompt for ``xmgrace`` commands
+* a set of high-level Python functions for drawing ``xmgrace`` ``Graphs``
 
 Current Release
 [![Downloads](https://static.pepy.tech/personalized-badge/pygrace?period=total&units=international_system&left_color=grey&right_color=blue&left_text=pypi%20downloads)](https://pepy.tech/project/pygrace)
@@ -124,7 +124,7 @@ we can also work in an interactive xmgrace session::
     >>> from pygrace import grace
     >>> pg = grace()
 
-use xmgrace methods directly from the python interpreter::
+use xmgrace methods directly from the Python interpreter::
 
     >>> import numpy as np
     >>> x = np.arange(21) * np.pi/10
@@ -166,7 +166,7 @@ check variables in xmgrace session::
            4.71238898, 5.02654825, 5.34070751, 5.65486678, 5.96902604,
            6.28318531])
 
-get variables back into python from xmgrace::
+get variables back into Python from xmgrace::
 
     >>> cosx = pg.get('y')
 
@@ -218,7 +218,7 @@ If you use ``pygrace`` to do research that leads to publication, we ask that you
 acknowledge use of ``pygrace`` by citing the following in your publication::
 
     Michael McKerns, Dean Malmgren, Mike Stringer, and Daniel Stouffer,
-    "pygrace: python bindings to xmgrace", 2005- ;
+    "pygrace: Python bindings to xmgrace", 2005- ;
     https://github.com/uqfoundation/pygrace
 
 Please see https://pygrace.github.io/ for further information on an earlier version of ``pygrace`` developed by Dean Malmgren, Mike Stringer, and members of the Amaral Lab, and later maintained by Daniel Stouffer and members of the Stouffer Lab. This code has been merged into the original ``pygrace`` developed by Mike McKerns.

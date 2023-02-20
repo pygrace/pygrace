@@ -44,7 +44,7 @@ except ImportError:
 setup_kwds = dict(
     name='pygrace',
     version=__version__,
-    description='Python interface to xmgrace and xmgrace project files',
+    description='Python bindings to xmgrace',
     long_description = README.strip(),
     author = __author__,
     author_email = AUTHOR_EMAIL,
