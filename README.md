@@ -25,6 +25,7 @@ Major Features
 
 Current Release
 [![Downloads](https://static.pepy.tech/personalized-badge/pygrace?period=total&units=international_system&left_color=grey&right_color=blue&left_text=pypi%20downloads)](https://pepy.tech/project/pygrace)
+[![Stack Overflow](https://img.shields.io/badge/stackoverflow-get%20help-black.svg)](https://stackoverflow.com/questions/tagged/pygrace)
 ---------------
 The latest released version of ``pygrace`` is available from:
     https://pypi.org/project/pygrace
