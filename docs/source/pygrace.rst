@@ -34,14 +34,14 @@ drawing_objects module
 extensions module
 -----------------
 
-.. automodule:: pygrace.extensions
-..  :exclude-members: +
-
 .. toctree::
+    :titlesonly:
     :maxdepth: 2
-    :caption: Contents:
 
     extensions
+
+.. automodule:: pygrace.extensions
+..  :exclude-members: +
 
 fonts module
 ------------
@@ -58,14 +58,14 @@ graph module
 interactive module
 ------------------
 
-.. automodule:: pygrace.interactive
-..  :exclude-members: +
-
 .. toctree::
+    :titlesonly:
     :maxdepth: 2
-    :caption: Contents:
 
     interactive
+
+.. automodule:: pygrace.interactive
+..  :exclude-members: +
 
 parser module
 -------------
@@ -82,11 +82,12 @@ project module
 styles module
 -------------
 
+.. toctree::
+    :titlesonly:
+    :maxdepth: 2
+
+    styles
+
 .. automodule:: pygrace.styles
 ..  :exclude-members: +
 
-.. toctree::
-    :maxdepth: 2
-    :caption: Contents:
-
-    styles

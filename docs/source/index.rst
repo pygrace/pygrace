@@ -3,15 +3,16 @@
 pygrace package documentation
 =============================
 
-.. automodule:: pygrace
-..  :exclude-members: +
-
 .. toctree::
+    :hidden:
     :maxdepth: 2
-    :caption: Contents:
 
+    self
     pygrace
     scripts
+
+.. automodule:: pygrace
+..  :exclude-members: +
 
 Indices and tables
 ==================

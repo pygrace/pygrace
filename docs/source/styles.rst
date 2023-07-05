@@ -4,14 +4,14 @@ pygrace.styles module documentation
 colorbrewer module
 ------------------
 
-.. automodule:: pygrace.styles.colorbrewer
-..  :exclude-members: +
-
 .. toctree::
+    :titlesonly:
     :maxdepth: 2
-    :caption: Contents:
 
     colorbrewer
+
+.. automodule:: pygrace.styles.colorbrewer
+..  :exclude-members: +
 
 el module
 ---------
